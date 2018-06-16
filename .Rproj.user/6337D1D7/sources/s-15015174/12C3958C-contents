@@ -1,0 +1,235 @@
+# Including more species in TROLL simulations
+
+## Summary
+
+We included more species to the existing dataset used for TROLL simulations. This choice was motivated by both theoretical and practical reasons. The aims were either to enhance the coverage (in number of trees) for Paracou simulations (see next section) and to have enough species to simulate large plots, for the logging experiment. We hierarchically inferred species-specific means for leaf traits, stem traits and allometric parameters, with the BRIDGE dataset. We estimated maximum diameters from the whole Guyafor dataset, pooled with BRIDGE. We used Predictive Mean Matching to complete the dataset beforehand, due to a variable -Pmass- that considerably limited our possibilities. 
+
+## Introduction
+
+The importance of biodiversity (in its most generic assertion) in ecosystem functioning[add ref] is well recognized. It affects most of the ecosystemic characteristics, among others productivity  [@Loreau2010], stability [@Loreau2001], resistance to invasion [@Lyons2001]. Recent advances in Functional Ecology suggest that the most relevant component of communities decription to study ecosystem functioning is its functional composition, that can be assessed using functional traits. Functional traits are formally defined as morpho-physio-phenological traits that indirectly impact fitness via their effect on growth, survival, and reproduction [@Violle2007]. 
+
+Accounting for functional traits and their effects on processes, instead of overall rates, is necessary to model forest dynamics with a finer accuracy. Classical models often use a limited number of species groups defined according to restrictive criteria. TROLL directly uses 5 functional traits (LMA, Nmass, Pmass, and wsg) and 2 allometric parameters at the species-specific level. All were obtained from real data,. TROLL is one of the few models that depicts forests' functional compositions with such finesse and accuracy, thus allowing finer-scales investigation (@Marechaux2017, @Marechaux2017b, also see @FyllasREF for a continuum-based approach).
+
+The two primary goals of this work were to assess TROLL's capacity to simulate post-logging ecosystem trajectories from real censuses, and to simulate silviculture as currently done in French Guiana. For the first, we used real forest censuses from the Paracou Disturbance Experiment site. For the second, we simulated forests *in silico*. Given the number of species present at Paracou (>800), and in French Guianean forests in general, we wondered whether the 163 species included in TROLL's current list were numerous enough to achieve our goals. The actual need to include more species emerged when we explored Paracou individual plots (6.25 ha), that had a variable but generally large (20-50%) proportion of individuals belonging to species not included in TROLL's list (hereafter referred to as *missing species*).
+
+We used the BRIDGE and Guyafor datasets to include new species for our simulations. Because the dataset had few non-missing values of Pmass, we infered missing values with an approach based on Predictive Mean Matching, taking advantage of the correlations between traits. We then used hierarchical models to infer species means for Nmass, Pmass, LMA, and wsg, including all complete observations. Maximum diameters (dmax) were the 99th percentiles taken from both BRIDGE and Guyafor datasets. For allometric parameters, we used a Michaelis-Menten version of the same hierarchical models. The model blueprints were generously provided by Fabian Fisched (EDB, Toulouse).  
+
+## Context and Problem
+```{r loads, echo = FALSE}
+library(tidyverse)
+bridge <- read.csv("C:/Users/nino.page/Desktop/TrollR_data/BRIDGE/bridge.csv", sep = ";", dec = ".")
+sp <- read.table("C:/Users/nino.page/Desktop/TrollR_data/species.txt", header = T)
+
+bridge2 <- read.csv("C:/Users/nino.page/Desktop/TROLL project/data/traits/BRIDGE_data_ind_2013_10_29.csv", header = T, sep = ";")
+
+for(i in 1:nrow(bridge2)){
+if(!is.na(bridge2$traits_surf_area[i])){
+bridge2$LA[i] <- bridge2$traits_surf_area[i]
+}
+else{
+bridge2$LA[i] <- (bridge2$ind_surf_area[i])/3
+}
+}
+bridge2 <- bridge2 %>% mutate(LMA = 10000*dry_mass/LA)
+bridge2 <- bridge2 %>% filter(Family != "Arecaceae")
+bridge2 <- bridge2 %>% mutate(species = paste(Genus, species, sep = "_")) %>% 
+  rename(wsg = sapwood_dens, Nmass = N, Pmass = P, dbh = DBH) %>% 
+  select(species, LMA, wsg,Nmass,Pmass, Height,dbh) %>%
+  mutate(LA = NA)
+
+
+
+baseline <- read.table("file:///C:/Users/nino.page/Desktop/TROLL project/logging/input_forests/baseline/baseline.txt",header = T)
+
+miced_bridge <- read.csv("C:/Users/nino.page/Desktop/TROLL project/data/traits/miced_dataset_straight.csv", header = T, sep = ",")
+```
+### The initial species list
+
+TROLL's current species-specific trait dataset contains 8 variables: $LMA$, $Nmass$, $Pmass$, $wsg$, $hmax$, $dmax$, $ah$, and $Freg$ (see table \@ref(tab:traits), in the previous section). We decided to let apart Freg (the regional frequency of a species) which are adapted for each simulation depending on the forest composition and simulation aims.
+
+The actual maximum height a tree can reach in TROLL model depends on both its maximum diameter, and the H-dbh allometry at the species level.It is given by: $h_{max[real]} = \frac{1.5*h_{max}*d_{max}}{(1.5*d_{max}+ah)}$. With hmax and ah, the parameters of a Michaelis Menten equation (for details, see corresponding inference section). These parameters are highly correlated [@Schmitt2017]. Although its name may be quite confusing, hmax corresponds to an asymptotic height, which rigourously means that this height will never be reacher by any tree of a given species. 
+
+```{r distritrolll,out.width = "0.8\\textwidth", fig.cap = "distributions of six functional traits in TROLL species list: LMA, Nmass, Pmass, wsg, dmax, and hmax(real), this one being the outcome of both allometries and maximum diameters. Details on the traits are available in the model description section.", fig.height=6, fig.width=10, echo=FALSE}
+sp %>% rename(species = X....) %>%
+  mutate(hrealmax = 1.5*hmax*dmax/(1.5*dmax+ah)) %>%
+  select(-seedvolume,-Freg, -ah , -hmax) %>%
+  reshape2::melt(id.var = "species",
+       variable.name = "trait") %>% 
+  # filter(trait == "LMA") %>% 
+  ggplot(aes(value)) +
+  geom_histogram() +
+  facet_wrap(~trait, scales = "free")
+```
+### Can we represent Paracou forests with TROLL species list ?
+
+#### Missing species and individuals
+
+#### Representativity of the subsets
+
+## Methods
+
+## Data used
+
+## The BRIDGE trait database
+
+We used the BRIDGE trait database (@Baraloto2010, @Baraloto2012) which was further completed by the Toulouse EDB team (@Marechaux2017a, @Marechaux2017b XXX REF). 
+The BRIDGE dataset contains measurements for ten leaf and stem traits, with a total of 4709 individuals. One of the strengths of BRIDGE is that nine plots were sampled exhaustively, thus providing an exceptional representation of the French Guianean forests functional composition for >10cm dbh trees. However, another feature of the BRIDGE dataset is that the plots sampled are tropical rainforest: the dataset contains numerous species with a majority of rare (>4 observations) and a minority of highly dominant (> 200 observations) species.We used six individual-level traits and characteristics, namely: LMA, Nmass, Pmass, wsg, H, d (@tablebridge). Trait distributions are shown in \@ref(fig:tablebridge).
+
+```{r tablebridge2, fig.cap='Summary table of the trait data obtained from the BRIDGE database', echo = F}
+n_species <- c(0,0,0,0,0,0)
+traits <- c("LMA","Nmass","Pmass","wsg","Height","dbh")
+for(i in 1:length(traits)){
+  col <- which(names(bridge2) == traits[i])
+  n_species[i] <- bridge2[which(!is.na(bridge2[,col])),"species"] %>% unique %>% length
+}
+
+total <- bridge2 %>% filter(!is.na(LMA) &
+                              !is.na(Nmass)&
+                              !is.na(Pmass)&
+                              !is.na(wsg)&
+                              !is.na(Height)&
+                              !is.na(dbh))
+completerows <- total %>% nrow
+completesp <- total %>% select(species) %>% unique %>% nrow
+
+totalwP <- bridge2 %>% filter(!is.na(LMA) &
+                              !is.na(Nmass)&
+                              !is.na(wsg)&
+                              !is.na(Height)&
+                              !is.na(dbh))
+completerowsP <- totalwP %>% nrow
+completespP <- totalwP %>% select(species) %>% unique %>% nrow
+
+totalrow = c("Total","complete\ observations","\ -\ ", completerows, "\ -\ ", completesp)
+totalrowP = c("LMA, N, wsg","complete\ observations\ (Pmass\ excluded)","\ -\ ", completerowsP, "\ -\ ", completespP)
+
+tabs <- bridge2 %>%
+  select(species,LMA, Nmass, Pmass, wsg, Height, dbh) %>%
+  reshape2::melt(id.var = "species",
+       variable.name = "trait") %>% 
+  mutate(isna = if_else(is.na(value), 1, 0))%>% 
+  group_by(trait) %>% 
+  summarize(missing = sum(isna), complete = sum(if_else(isna == 0, 1, 0))) %>% 
+  mutate(trait = paste0('', trait, '')) %>% 
+  mutate(dataset_unit = c("g.cm^{2}", "mg.g^{-1}","mg.g^{-1}", "g.cm^{-3}","m","m")) %>% 
+  mutate(full_name = c("leaf\ mass\ per\ areaa",
+                       "leaf\ nitrogen\ content\ per\ dry\ mass",
+                       "leaf\ phosphorous\ content\ per\ dry\ mass",
+                       "wood \ specific\ gravity",
+                       "tree\ height",
+                       "diameter at breast hight"))%>% 
+  rowwise() %>% 
+  cbind(n_species) %>%
+  select(trait, full_name, dataset_unit, complete, missing, n_species) %>% 
+  rename_("Full\ name" = "full_name",
+          "Trait" = "trait",
+          "Unit" = "dataset_unit",
+          "N\ (complete)" = "complete",
+          "Missing\ data" = "missing",
+          "Species" = "n_species"
+          ) 
+tabs%>% 
+  rbind(totalrow) %>% 
+  rbind(totalrowP) %>% 
+  knitr::kable("pandoc") 
+
+
+
+```
+ The dataset we used contains large amounts of missing data, as the majority of functional trait databases (@Taugourdeau2014).Still, we can infer a great number of species means for LMA, Nmass, wsg and height-diameter allometries. For Pmass, however, very few observations are available compared to other variables(Table \@ref(tab:phosphorus)). It is by far the most limiting variable. Indeed, out of the 270 specie, the overwhelming majority of them are singletons (\@ref(fig:phosphorous)). @Marechaux2017b have apparently further completed this dataset, probably with TRY database (@Kattge2011) to achieve parametrization for 163 species in TROLL. 
+
+```{r phosphorus, fig.cap = 'Histogram of the number of observations per species for Pmass. Most species are singletons.', echo = F,out.width = "0.5\\textwidth"}
+bridge2 %>%  
+  filter(!is.na(Pmass)) %>% 
+  group_by(species) %>% 
+  summarise(n = n()) %>% 
+  arrange(desc(n)) %>% 
+  ggplot(aes(x = n))+
+  geom_histogram(binwidth = 1)+
+  xlab("Number of observatons")+
+  ylab("Species count")
+  
+```
+
+
+## Preliminary completion 
+
+## Simple hierarchical models
+
+## Michaelis-Menten hierarchical model
+
+In TROLL model, the allometries used to model trees height/dbh relationship is a Michaeli-Menten form, defined as:
+
+\begin{equation}
+  \hat h = log(\frac{1}{(\frac{1}{h_{max_{sp[i]}}}+\frac{1}{\beta_{sp[i]}*dbh[i]})})
+  (\#eq:michaelis)
+\end{equation}
+
+
+Originally, the model provided by Fabian has the form:
+\begin{equation}
+  [log(h_i) |sp_i; dbh_i] \sim \mathcal{N}([\hat h_i | sp_i; dbh_i], \sigma)
+  (\#eq:michaelis2)
+\end{equation}
+
+Where $h$ is the observed height for tree $i$, which varies lognormally around $\hat h_i$, the expectation of its height knowing its species $sp_i$ and diameter $dbh_i$, with variance $\sigma$. $\hat h_i$ is computed with: 
+
+\begin{equation}
+  [\hat h_i | sp_i; dbh_i] = log(\frac{1}{(\frac{1}{h_{max_{sp_i}}}+\frac{1}{\beta_{sp_i}*dbh_i})})
+  (\#eq:leaftraits1)
+\end{equation}
+
+Where $h_{max_{sp_i}}$ is the asymptotic height of species $i$, and \beta_{sp_i}, a shape parameter of the model.
+\begin{equation}
+  \beta_{sp[i]}  \sim \mathcal{N}(\bar \beta, \sigma_{\beta}) \\ h_{max_{sp[i]}}  \sim \mathcal{N}(\bar h_{max}, \sigma_{\beta}) 
+  (\#eq:michaelis2)
+\end{equation}
+with 
+
+beta_species = beta + beta_dev_species ;
+    hmax_species = hmax + hmax_dev_species ;
+
+Which can be rewritten to the classical Michaelis-Menten form:
+\begin{equation}
+  \hat h = log(\frac{h_{max_{sp[i]}}*dbh[i]}{dbh[i]+\frac{h_{max_{sp[i]}}}{\beta_{sp[i]}}}
+  (\#eq:leaftraits1)
+\end{equation}
+
+Thus, with $\frac{h_{max_{sp[i]}}}{\beta_{sp}}$ corresponding to $a_h$ in equation \@ref(eq:michaelis)
+
+
+
+    
+    
+h_{max_{sp}}
+
+h_log ~ normal(h_hat, sigma)
+h_hat[i] = log(1/(1/hm_sp[i] + 1/(be_sp[i]*dbh_adjusted[i])))
+
+### Leaf and stem traits
+
+To infer species mean traits, we used two types of hierarchical models. Both accounted for two layers only, for reasons of parsimony: adding grouping variables (Genus or Family) did not bring significant improvement considering the number of parameters added.
+
+We used the following model: 
+
+\begin{equation}
+  X_{sp} \sim \mathcal{N}(\mu_{sp}, \sigma_{intra})
+  (\#eq:leaftraits1)
+\end{equation}
+
+Where, for individuals belonging to species $s$, and a given trait of log-transformed trait $X$, the $X$ attribute of these individual follows a $Gaussian$ prodability distribution, of parameters $\mu_{sp}$, a species-level trait mean, and $sigma_{intra}$, the intraspecific variance (here assumer to be homogen among species). Moreover:
+
+\begin{equation}
+  \mu_{sp} \sim \mathcal{N}(\mu_{tot}, \sigma
+  (\#eq:leaftraits2)
+\end{equation}
+
+The species mean $\mu_{sp}$ itself is normally distributed, depending on an overall mean $\mu_{tot}$ and an overall variance $\sigma$.
+
+ 
+
+
+
+
+
+

@@ -1,0 +1,378 @@
+## calcul Densité d'arbres à diffrents voisinage parcelle de Paracou
+
+
+library(dplyr)
+library(ads)
+
+
+#### Chargement donnees arbres ##### 
+load("Paracou2018.Rdata") # chargement de l'extration de Guyafor DataParacouV6_st.R  1887076 mesures 30 variables
+
+#### 1 # parametres ##### 
+diam_cpt <- 30 # diamètre de précomptage
+rmax<-30
+rpas<-1
+pas_grille<-30
+Parcelles<-as.character(seq(1:12))
+annee<-1992
+
+
+#### 2 # selection donnees arbres ##### 
+
+#2.1 selection des arbres dans la bas Guyafor : 
+tabMesures<-Paracou %>%           
+  filter(Plot%in%Parcelles) %>%       
+  filter(CensusYear==annee) %>% 
+  mutate(Diam=CircCorr/pi) %>% 
+  filter(!is.na(Diam)) %>% 
+  select(idTree,Xfield,Yfield,Diam,Plot) %>% 
+  filter(Diam>=diam_cpt)
+           
+
+
+#2.2 analyse ads paracou
+#i<-1
+sauvLr<-list()
+for(i in 1:length(Parcelles)) {
+  tarbres<-filter(tabMesures,Plot==Parcelles[i])
+  pattern<-spp(x=tarbres$Xfield,y=tarbres$Yfield,c(0,0,250,250))
+  spst<-kfun(pattern,rmax,rpas,nsim=10000)
+  sauvLr<-c(sauvLr,list(spst))
+}
+
+
+save(sauvLr,file='kfunParacou.Rdata')
+
+load("C:/Users/nino.page/Desktop/stephane/kfuntroll.Rdata")
+load("C:/Users/nino.page/Desktop/stephane/kfunParacou.Rdata")
+
+# pour faire un graphe
+X<-sauvLr[[2]][["r"]]
+nOBS<-sauvLr[[2]][["n"]]$obs
+nSUP<-sauvLr[[2]][["n"]]$sup
+nINF<-sauvLr[[2]][["n"]]$inf
+lOBS<-sauvLr[[2]][["l"]]$obs
+lSUP<-sauvLr[[2]][["l"]]$sup
+lINF<-sauvLr[[2]][["l"]]$inf
+
+
+#2.2 analyse ads troll
+#☺i<-1
+sauvLr_troll<-list()
+for(i in 1:length(Parcelles)) {
+  tarbres<-read.csv2(file=paste("inventories/plot_",Parcelles[i],".txt",sep=""),sep="\t",dec=".") %>% 
+  mutate(Diam=dbh/10) %>% 
+  filter(Diam>=diam_cpt)
+  pattern<-spp(x=tarbres$x,y=tarbres$y,c(0,0,250,250))
+  spst<-kfun(pattern,rmax,rpas,nsim=10000)
+  sauvLr_troll<-c(sauvLr_troll,list(spst))
+}
+sauvLr
+# install.packages("ads")
+library(ads)
+plot(sauvLr[[2]])
+plot(sauvLr_troll[[2]])
+# save(sauvLr_troll,file='kfuntroll.Rdata')
+
+View(sauvLr[[2]])
+X<-sauvLr[[2]][["r"]]
+nOBS<-sauvLr[[2]][["n"]]$obs
+nSUP<-sauvLr[[2]][["n"]]$sup
+nINF<-sauvLr[[2]][["n"]]$inf
+lOBS<-sauvLr[[2]][["l"]]$obs
+lSUP<-sauvLr[[2]][["l"]]$sup
+lINF<-sauvLr[[2]][["l"]]$inf
+
+
+DOE_spatial = matrix(NA, ncol =9)
+DOE_spatial <- as.data.frame(DOE_spatial)
+names(DOE_spatial) <- c("origin","plot","stat","r","obs","theo","sup","inf","pval")
+origins = c("real", "troll")
+stats = c("g","n","k","l")
+for(ori in 1:2){
+  if(origins[ori] == "real"){
+    dat <- sauvLr
+  }
+  else{
+    dat <- sauvLr_troll  
+  }
+  for(i in 1:12){
+    for(j in 1:length(stats)){
+      temp = as.data.frame(dat[[i]][stats[j]])
+      names(temp)<- unname(sapply(names(temp), function(it) return(BBmisc::explode(it, "\\.")[2])))
+      temp <- temp %>% mutate(origin = origins[ori],plot = i, stat = stats[j], r = 1:30)
+      temp <- temp %>% select(origin,plot,stat,r,obs,theo,sup,inf,pval)
+      DOE_spatial=rbind(DOE_spatial, temp)
+      print(paste("done for origin",ori,"plot",i,"table",j))
+    }
+  }
+}
+DOE_spatial <- DOE_spatial %>% na.omit
+rownames(DOE_spatial) = 1:nrow(DOE_spatial)
+
+save(DOE_spatial, file = "C:/Users/nino.page/Desktop/stephane/DOE_spatial.Rdata" )
+
+obs <- DOE_spatial %>%
+  filter(plot == 2 & origin=="troll" & stat == "g") %>% 
+  select(-inf,-sup,-pval,-theo) 
+theo <- DOE_spatial %>%
+  filter(plot == 2 & origin=="troll" & stat == "g") %>% 
+  select(-inf,-sup,-pval,obs)
+
+pval <-  DOE_spatial %>%
+  filter(plot == 2 & origin=="troll" & stat == "g") %>% 
+  select(-inf,-sup,-obs,-theo) %>% 
+  filter(pval < 0.01) %>% 
+  mutate(pval = 0)
+
+# is.na(pval$signif)
+
+
+  ggplot()+
+    geom_ribbon(data = rib,
+                aes(x = rrib, ymin=inf, ymax=sup, fill = "dark green"), alpha = 0.3)+
+    scale_fill_identity(name = '99% CI (CSR)', guide = 'legend',labels = c('Null hypothesis')) +
+  geom_line(data = theo, aes(x = r, y = theo,color = "black"),linetype = 4, size = 1.3)+
+  geom_line(data = obs, aes(x = r, y = obs,color = "red"),linetype = 1)+
+    scale_colour_manual(name = 'Distributions', values=c("black" = "red","red"="black"), labels = c('Theoretical (CSR)','Observed'))+
+  geom_point(data = pval, aes(x=r,y = pval,shape = 'ezr'))+
+    scale_shape_manual(name = 'Significance', values=c("ezr"=8), labels = c('p < 0.01'))
+
+  
+  
+  
+  
+  rib <- DOE_spatial %>%
+    filter(plot == 2 & origin=="real" & stat == "g") %>% select(r, inf, sup) %>% rename(rrib=r)
+  
+DOE_spatial %>%
+  filter(plot == 2 & origin=="real" & stat == "g") %>%
+  ggplot(aes(x = r))+
+  geom_line(data=theo,aes(y=theo), color="red", linetype = 4, size = 1.3)+
+  geom_line(data=obs,aes(y=obs), color="black", linetype=1)+
+  geom_ribbon(aes(ymin=inf, ymax=sup), fill = "green", color = "dark green", linetype=2, alpha = 0.2)+
+  scale_color_manual(labels = c("a","b","c"))+
+  ylab("g(r)")+
+  xlab("distance (r)")
+# + facet_wrap(~stat, scales = "free")
+
+DOE_spatial %>%
+  filter(plot == 2) %>%
+  ggplot(aes(x = r))+
+  geom_line(aes(y=theo, color=origin), linetype = 4, size = 1.3)+
+  geom_line(aes(y=obs, color = origin), linetype=1)+
+  geom_ribbon(aes(ymin=inf, ymax=sup, color=origin), fill = "green", linetype=2, alpha = 0.2)+ facet_wrap(~stat, scales = "free")
+
+rm(list = ls())
+library(tidyverse)
+library(cowplot)
+load(file = "C:/Users/nino.page/Desktop/stephane/DOE_spatial.Rdata")
+pvalues <- c("p01","p001")
+plots <- paste0("Plot_",1:12)
+for(p in 1:2){
+for(i in 1:12){
+ pvalues 
+  filen <- paste0(pvalues[p],'/',plots[i],'.pdf')
+  
+  # i= 1
+  temp <- DOE_spatial %>% 
+    filter(origin == "real" & plot == i)
+  
+  temp_troll <- DOE_spatial %>% 
+    filter(origin == "troll" & plot == i)
+  
+# real plots --------------------------------------------------------------
+
+  
+  obs_real <- temp %>%
+    filter(stat != "k" & stat != "n") %>% 
+    select(-inf,-sup,-pval,-theo) 
+  theo_real <- temp %>%
+    filter(stat != "k" & stat != "n") %>% 
+    select(-inf,-sup,-pval,obs)
+  
+  if(p == 1){
+    pval_real <-  temp %>%
+      filter(stat != "k" & stat != "n") %>% 
+      select(-inf,-sup,-theo) %>% 
+      filter(pval < 0.01) %>% 
+      mutate(pval = 0)
+  }
+  else{
+    pval_real <-  temp %>%
+      filter(stat != "k" & stat != "n") %>% 
+      select(-inf,-sup,-theo) %>% 
+      filter(pval < 0.001) %>% 
+      mutate(pval = 0)
+  }
+  
+  p_l_real <- pval_real %>% mutate(pval = min(obs)-0.1) %>% select(-obs)
+  
+  rib_real <- temp %>%
+    filter(stat != "k" & stat != "n") %>% select(r, inf, sup, stat) 
+
+  if(nrow(pval_real%>% filter(stat=="g"))> 0){
+    g_real_g <- ggplot()+
+      geom_ribbon(data = rib_real%>% filter(stat=="g"),
+                  aes(x = r, ymin=inf, ymax=sup, fill = "dark green"), alpha = 0.3)+
+      scale_fill_identity(name = '99% CI', guide = 'legend',labels = c('Null hypothesis')) +
+      geom_line(data = theo_real%>% filter(stat=="g"), aes(x = r, y = theo,color = "black"),linetype = 4, size = 1.3)+
+      geom_line(data = obs_real%>% filter(stat=="g"), aes(x = r, y = obs,color = "red"),linetype = 1)+
+      scale_colour_manual(name = 'Distributions', values=c("black" = "red","red"="black"), labels = c('Theoretical','Observed'))+
+      geom_point(data = pval_real%>% filter(stat=="g"), aes(x=r,y = pval,shape = 'ezr'))+
+      scale_shape_manual(name = 'Significance', values=c("ezr"=8), labels = c('p < 0.01'))+
+      ylab("g(r)")+
+      xlab("distance (r, meters)")
+    print("graph1")
+  }
+  else{
+    g_real_g <- ggplot()+
+      geom_ribbon(data = rib_real%>% filter(stat=="g"),
+                  aes(x = r, ymin=inf, ymax=sup, fill = "dark green"), alpha = 0.3)+
+      scale_fill_identity(name = '99% CI', guide = 'legend',labels = c('Null hypothesis')) +
+      geom_line(data = theo_real%>% filter(stat=="g"), aes(x = r, y = theo,color = "black"),linetype = 4, size = 1.3)+
+      geom_line(data = obs_real%>% filter(stat=="g"), aes(x = r, y = obs,color = "red"),linetype = 1)+
+      scale_colour_manual(name = 'Distributions', values=c("black" = "red","red"="black"), labels = c('Theoretical','Observed'))+
+      ylab("g(r)")+
+      xlab("distance (r, meters)")
+    print("graph1")
+  }
+  
+  
+  
+  if(nrow(pval_real%>% filter(stat=="l"))){
+    g_real_l <- ggplot()+
+      geom_ribbon(data = rib_real%>% filter(stat=="l"),
+                  aes(x = r, ymin=inf, ymax=sup, fill = "dark green"), alpha = 0.3)+
+      scale_fill_identity(name = '99% CI', guide = 'legend',labels = c('Null hypothesis')) +
+      geom_line(data = theo_real%>% filter(stat=="l"), aes(x = r, y = theo,color = "black"),linetype = 4, size = 1.3)+
+      geom_line(data = obs_real%>% filter(stat=="l"), aes(x = r, y = obs,color = "red"),linetype = 1)+
+      scale_colour_manual(name = 'Distributions', values=c("black" = "red","red"="black"), labels = c('Theoretical','Observed'))+
+      geom_point(data = p_l_real%>% filter(stat=="l"), aes(x=r,y = pval,shape = 'ezr'))+
+      scale_shape_manual(name = 'Significance', values=c("ezr"=8), labels = c('p < 0.01'))+
+      ylab("L(r)")+
+      xlab("distance (r, meters)")
+    print("graph2")
+  }
+  else{
+    g_real_l <- ggplot()+
+      geom_ribbon(data = rib_real%>% filter(stat=="l"),
+                  aes(x = r, ymin=inf, ymax=sup, fill = "dark green"), alpha = 0.3)+
+      scale_fill_identity(name = '99% CI', guide = 'legend',labels = c('Null hypothesis')) +
+      geom_line(data = theo_real%>% filter(stat=="l"), aes(x = r, y = theo,color = "black"),linetype = 4, size = 1.3)+
+      geom_line(data = obs_real%>% filter(stat=="l"), aes(x = r, y = obs,color = "red"),linetype = 1)+
+      scale_colour_manual(name = 'Distributions', values=c("black" = "red","red"="black"), labels = c('Theoretical','Observed'))+
+      ylab("L(r)")+
+      xlab("distance (r, meters)")
+    print("graph2")
+  }
+  
+  
+  # cowplot::plot_grid(g_real_l, g_real_g)
+
+# troll  ------------------------------------------------------------------
+
+  obs_troll <- temp_troll %>%
+    filter(stat != "k" & stat != "n") %>% 
+    select(-inf,-sup,-pval,-theo) 
+  theo_troll <- temp_troll %>%
+    filter(stat != "k" & stat != "n") %>% 
+    select(-inf,-sup,-pval,obs)
+  
+  if(p == 1){
+    pval_troll <-  temp_troll %>%
+      filter(stat != "k" & stat != "n") %>% 
+      select(-inf,-sup,-theo) %>% 
+      filter(pval < 0.01) %>% 
+      mutate(pval = 0)
+  }
+  else{
+    pval_troll <-  temp_troll %>%
+      filter(stat != "k" & stat != "n") %>% 
+      select(-inf,-sup,-theo) %>% 
+      filter(pval < 0.001) %>% 
+      mutate(pval = 0)
+  }
+  p_l_troll <- pval_troll %>% mutate(pval = min(obs)-0.1) %>% select(-obs)
+  
+  rib_troll <- temp_troll %>%
+    filter(stat != "k" & stat != "n") %>% select(r, inf, sup,stat) 
+  
+  # is.na(pval$signif)
+  
+  if(nrow(pval_troll%>% filter(stat=="g"))> 0){
+    g_troll_g <- ggplot()+
+      geom_ribbon(data = rib_troll%>% filter(stat=="g"),
+                  aes(x = r, ymin=inf, ymax=sup, fill = "dark green"), alpha = 0.3)+
+      scale_fill_identity(name = '99% CI', guide = 'legend',labels = c('Null hypothesis')) +
+      geom_line(data = theo_troll%>% filter(stat=="g"), aes(x = r, y = theo,color = "black"),linetype = 4, size = 1.3)+
+      geom_line(data = obs_troll%>% filter(stat=="g"), aes(x = r, y = obs,color = "red"),linetype = 1)+
+      scale_colour_manual(name = 'Distributions', values=c("black" = "red","red"="black"), labels = c('Theoretical','Observed'))+
+      geom_point(data = pval_troll%>% filter(stat=="g"), aes(x=r,y = pval,shape = 'ezr'))+
+      scale_shape_manual(name = 'Significance', values=c("ezr"=8), labels = c('p < 0.01'))+
+      ylab("g(r)")+
+      xlab("distance (r, meters)")
+    print("graph3")
+  }
+  else{
+    g_troll_g <- ggplot()+
+      geom_ribbon(data = rib_troll%>% filter(stat=="g"),
+                  aes(x = r, ymin=inf, ymax=sup, fill = "dark green"), alpha = 0.3)+
+      scale_fill_identity(name = '99% CI', guide = 'legend',labels = c('Null hypothesis')) +
+      geom_line(data = theo_troll%>% filter(stat=="g"), aes(x = r, y = theo,color = "black"),linetype = 4, size = 1.3)+
+      geom_line(data = obs_troll%>% filter(stat=="g"), aes(x = r, y = obs,color = "red"),linetype = 1)+
+      scale_colour_manual(name = 'Distributions', values=c("black" = "red","red"="black"), labels = c('Theoretical','Observed'))+
+      ylab("g(r)")+
+      xlab("distance (r, meters)")
+    print("graph3")
+  }
+  if(nrow(pval_troll%>% filter(stat=="l"))> 0){
+    g_troll_l <- ggplot()+
+      geom_ribbon(data = rib_troll%>% filter(stat=="l"),
+                  aes(x = r, ymin=inf, ymax=sup, fill = "dark green"), alpha = 0.3)+
+      scale_fill_identity(name = '99% CI', guide = 'legend',labels = c('Null hypothesis')) +
+      geom_line(data = theo_troll%>% filter(stat=="l"), aes(x = r, y = theo,color = "black"),linetype = 4, size = 1.3)+
+      geom_line(data = obs_troll%>% filter(stat=="l"), aes(x = r, y = obs,color = "red"),linetype = 1)+
+      scale_colour_manual(name = 'Distributions', values=c("black" = "red","red"="black"), labels = c('Theoretical','Observed'))+
+      geom_point(data = p_l_troll%>% filter(stat=="l"), aes(x=r,y = pval,shape = 'ezr'))+
+      scale_shape_manual(name = 'Significance', values=c("ezr"=8), labels = c('p < 0.01'))+
+      ylab("L(r)")+
+      xlab("distance (r, meters)")
+    print("graph4")
+  }
+  else{
+    g_troll_l <- ggplot()+
+      geom_ribbon(data = rib_troll%>% filter(stat=="l"),
+                  aes(x = r, ymin=inf, ymax=sup, fill = "dark green"), alpha = 0.3)+
+      scale_fill_identity(name = '99% CI', guide = 'legend',labels = c('Null hypothesis')) +
+      geom_line(data = theo_troll%>% filter(stat=="l"), aes(x = r, y = theo,color = "black"),linetype = 4, size = 1.3)+
+      geom_line(data = obs_troll%>% filter(stat=="l"), aes(x = r, y = obs,color = "red"),linetype = 1)+
+      scale_colour_manual(name = 'Distributions', values=c("black" = "red","red"="black"), labels = c('Theoretical','Observed'))+
+      ylab("L(r)")+
+      xlab("distance (r, meters)")
+    print("graph4")
+  }
+  
+  
+test <- cowplot::plot_grid(g_troll_g+theme(legend.position="none"),
+                     g_real_g+theme(legend.position="none"),
+                     g_troll_l+theme(legend.position="none"),
+                     g_real_l+theme(legend.position="none"),
+                     labels = LETTERS[1:4])
+  
+  # test
+library(ggplot2)
+g_troll_g
+g_real_g 
+g_real_l
+g_troll_l
+  legend <- cowplot::get_legend(g_troll_g)
+  print("antesave")
+  plo <-cowplot::plot_grid( test, legend, rel_widths = c(2, .3))
+  ggsave(plo, file = paste0("./plots/",filen), device = "pdf")
+  dev.off()
+  print("postsave")
+# filen
+}
+}
+

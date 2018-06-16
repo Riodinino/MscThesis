@@ -1,0 +1,142 @@
+# Selective Logging experiment
+
+
+## Experiment design
+
+In French Guiana, 77% of carbon emissions would be due to deforestation and selective logging would account for 5% of these emissions, although uncertainties are high [@Cabon2015]. Nowadays, about 80 000 m3 of wood are harvested by selective logging each year in French Guiana. This quantity slowly increases year by year. Current demographic growth in French Guyana is at a level which arguably can lean to a double increase of the population by 2030. Given this estimate, and a general aim to develop wood industry (the only possibly sustainable lucrative activity in French Guiana, opposed to gold mining), current projections aim at 200 000m3 of timber harvested per year, to be reached by 2025, along with a substantial quantity of fuelwood to supply biomass-fueled power station. This involves either an increased need to designate areas for logging, or an increase in harvest intensities. 
+
+The fuelwood supply is a problematic of growing interest in the region. Three solutions could answer the increasing demand of wood for energy supply :
+* Valorize the wastes that are usually left on the ground during timber extraction
+* Dedicate plots for this particular activity
+* Take advantage of plantation wood and local species to minimize pressure on natural forests.
+
+The implementation of fuelwood outputs in TROLL was motivated by this need, because the quantities that can be obtained from logging wastes are still uncertain.
+
+### Simulated forests
+
+
+### Diversification of the harvested species
+
+The choice of harvested trees is essential to allow for regrowth of merchantable timber species instead of pioneer trees. The diversification of harvested species has long been proposed as a solution to mitigate the adverse demographic impacts of logging of these species [@Guitet2011]. 
+
+In French Guiana, more than 100 tree species are recognized for their technological qualities, and are referred to as commercial species. However, only a handful of species constitute the majority the overall extracted timber volume [every information on timber species is in @Guitet2011]. Commercial species are classified according to 4 categories: 
+* Principal Major Commercial Timbers (ECMP)
+* Other Major Commercial Timbers (ECMA)
+* Precious Timbers (BP)
+* Other Commercial Timbers (AEC)
+Currently, only every ECMPs and one ECMA (*Bagassa guianensis*) are subject to designation to be harvested. One the one hand, the ONF insist on the need to diversify the set of harvested species, without what current choices can only lead to ressource depletion within a few cutting cycles. On the other hand, they have to collaborate with logging companies to ensure the operations economical viability, which is impossible if too much non-demanded timbers, that can't be sold in the current market context, are designated.
+ 
+ 
+We simulated three situations of preferences starting from the actual preferences to ideal, total diversification, resulting in three cases which we refer to as "realistic", "intermediate" and "diverse". Diversification is modelled with a species-specific interest variable, and our 3 modalities correspond to three cases: 
+
+* Species interest are split into three rank levels :
+  + 1: the few species that are overharvested in reality
+  + 2: species that are occasionally harvested as a complement of the firsts
+  + 3: species that are generally avoided, *i.e.* the majority.
+* Species interest are split into two rank levels
+  + 1: the previous first and second categories, i.e. the diversification occurs on the species that loggers currently accept only.
+  + 2: the often-avoided species set
+* Every commercial species have the same rank
+  + This is the ideal diversification, the case where every technically usable species would be valorised.
+  
+### Silvicultural parameters
+
+#### Both types of selective logging
+
+We simulated both Reduced Impact Logging and “improved” conventional logging, as implemented in the new version of the silviculture module. The reason of this choice is that both logging types can still happen in French Guiana: logging companies undergo a rapid turnover, and the degree of collaboration with the ONF is not constantly ideal. Careless operations, yet supposed to follow EFI guidelines, can lead to unoptimized skidding tracks opening and be, in terms of damages, relatable to conventional logging (Laurent Descroix, pers. com.). 
+
+#### Target and designated volumes
+ 
+Current harvests in French Guiana target timber volumes of 25m3 per hectare in average, and the actual quantity of wood that is extracted is generally around 20 m3 due to rotten trees that are not yet valorised. This can however have advantages, such as conserving carbon stocks and seeding trees.
+
+In the present regional and international contexts, harvest intensity is a central element of forest management, and can be influenced by  two adverse forces: human needs or ecological concern. A growing body of evidence suggests that harvests must be regulated at low intensities, to make selective logging less harmful to the ecosystem. However, in a region such as French Guiana, experiencing high demographic growth and with ambitions relative to timber valorisation, there is a pressure to either uprise logging intensities, or log more forest areas.
+
+We thus tested two target harvesting intensities:
+
+- 20 $m^3$, which is in agreement with the current practices
+- 30 $m^3$, which may be a future target according to GFClim scenarii
+
+Since the overall proportion of rotten trees is about one third of the total designated trees, we parametrized the module accounting for this. The total designated volumes thus were uprisen to 30 and 45 $m^3$, to obtain the target volume at the first rotation, in average.
+
+#### Cutting cycles
+
+The cutting cycle duration is equally a key parameter in sustainable management. It varies widely in the Tropics depending on the continent, region, or even the country. In the Amazon, most of the cutting cycles are currently set to 40 approximately (XXX check exact values). French Guiana is somehow an exception, with cutting cycles fixed at 65 years for the moment. This exception is thought to be the minimum time that should elapse between two cutting operations, but this is often inadequate considering economic and development purposes. This situation may change in French Guiana someday, if logging is to be intensified in the region.
+
+We tested two durations for a complete cutting cycle: 35 years, which is the duration that matches most current practices in neighboring countries (for example Brasil); and 65 years, the choice currently adopted by the ONF in French Guiana.
+To assess the alleged sustainability of such cutting cycles, we simulated logging operations, and stopped the simulations just before the sixth. This resulted in 175 years of simulation for the short cycle, and 325 years for the long one.
+
+
+#### Seed-rain scaling: personal choices
+Most of tree species rely on animal pollinators and dispersers to perpetuate their lineage. Selective logging has adverse effects on these animals [@Zimmerman2012]. The remaining reproductive adult trees are probably the major dispersers of seeds in logged plots. Since regeneration processes and timber species autecology remain mysterious, the way we model seed dispersion has an impact on the simulation outcome.
+
+The default value of the seed-rain scaling constant -used in TROLL to model external seed arrival- overestimates the actual regeneration potential in the case of logged forests. It is not adapted to simulate regeneration from  logged forests, in which we assume a more enclosed demographic functioning. 
+
+Moreover, in our experiment, we assume that our simulated logged plots are surrounded by equally logged plots, that thus cannot supply a high number of seeds to neighboring areas. Thus, we believe that it would be safer to underestimate the seedrain than overestimate it. We set TROLL's seed-rain constant on an arbitrary 5% of its value (2500 seeds/ha/mmonth)
+
+#### Replication of the experiment
+
+The experiment is constrained by time and high computational costs. The present experiment design already yields a total of 48 factor combinations. We replicated each simulation 5 times with a distinct random seed, resulting in 240 simulations.
+
+
+## Results
+
+
+### Model features
+```{r disturbance, echo = FALSE, message=FALSE, warning=FALSE, fig.cap="Summary of the logging damages caused by main and secondary tracks opening in our simulations (logged and rotten trees are excluded), plotted against the corresponding actual harvested timber volume: removed Basal area (m²), damaged stem count, removed Above Ground Biomass (kgC/ha), and Fuelwood volume (the volume of damaged trees over 20cm dbh). In the model, every damaged tree is at every cutting cycle. Points are all the observations for every scenario tested and all cutting cycles (1200 observations: 240 simulations - 2 forests, 2 target volumes, 2 cutting cycles, 3 designation modes, and 2 logging techniques; with 5 replicated each)."}
+load("./images/Output_disturbance.RData")
+g_disturbance
+```
+
+Unsurprisingly, conventional logging (CL) always caused significantly higher tracks damages than reduced impact logging (RIL), be it in terms of above-ground biomass, basal area or stem number (Figure \@ref(fig:disturbance)). The most discriminant indicator, for the two logging techniques, is the number of damaged stems (over 1 cm dbh), which is equally unsurprinsing because it is an excellent proxy of the tracks area[^1], that strongly differ between CL and RIL. For BA and AGB, the difference between CL and RIL is less pronounced. Each of the four variables is strongly related to the actual harvested timber volume. Including logged trees makes this relationship tightly linear, within the range of our harvested volumes, for BA and AGB (see suplementary material S XXX). Averaging the whole simulated dataset, we noticed that about one third of damaged trees died due to the main tracks, and another third due to secondary tracks. The differences observed between both logging types are more strongly related to secondary tracks, because the main track length only depends on the target volume, in our model.  Additionally, the absence of replication of the experiment on several other initial forests, simulated with different random seeds, may be a source of biais in estimating main track damages for the first cutting cycles (after which regeneration occurr at random): it is traced at the same place on the map for every simulation,with only variations of length according to target volumes. Thus, differences between CL and RIL might be more marked if examined on a bigger set of simulations
+
+[^1]: The maps shown in the precedent chapter are actually made with the coordinates of destroyed stems, for which the cause of the death is registered.
+
+
+### Selective logging sustainability
+```{r totalvolumes, echo = FALSE, message=FALSE, warning=FALSE, fig.cap="Simulated evolution of the timber stocks over 5 complete cutting cycles, for two contrasted (rich and poor) initial forests -in terms of initial timber stock, cf. the facets labels-, with cutting cycles of 35 and 65 years, and target volumes of 20 (red) and 30 (blue) cubic meters. Lines represent the mean trajectory of 30 simulatons each, and color bands, confidence intervals delimited by the 1st and 99th percentile computed for the 30 observations at each timestep."}
+load("./images/Output_total_timbervolume_forest.RData")
+g_total_volume
+```
+
+
+Conventional and reduced impact logging only had a marginal impact on wood quantity (not shown), probably due to the high harvest intensities in our simulations. Thus, we pooled these simulations and decided to emphasize on cutting cycle, target volume, and initial forests. 
+
+Our two simulated forests started from 48.5m3 or 74.3 m3 of harvestable timber. This initial difference did not have a significant effect on the final outcome over 5 rotations.  Total timber volumes importantly decrease over harvests. The volumes available before the second harvest strongly differ according to target volumes, and initial timber stocks: they are higher in the initially rich fores for the lowest harvest intensity. Cutting cycle length have a marginal influence on timber volumes for the second rotation. Likely, the initially present and uncut trees are logged at the second harvest. Trajectories seem to be stable after 3 of 4 cutting cycles. From there onwards, timber volumes available at harvest time barely reach 5 and 10 $m^3$ for 35 and 65 years cutting cycles, respectively.
+
+
+### Diversification
+
+Diversification was simulated by making vary the equitability of interest ranks for merchantable species. Figure \@ref(fig:diversification) shows the merchantable volume for ECMPs, which are the actual most valuable timbers. The relaxation of the loggers' preferences has nearly no effect on the proportion of ECMP (\@ref(fig:diversification)), that decreases, probably because of high harvested volume. In each case, the proportion of this category of commercial timbers (the most valued) sinks drastically over rotations. In our forests, the majority of the timber species (in term of volume) initially belong to this category, but we simulated a weak external seed-rain, thus letting the regeneration be more influenced by trees that are in the plot. 
+
+```{r diversification, echo=FALSE, fig.cap= "Total proportion of the merchantable volume (trees over 55 cm dbh) for Major Principal Commercial Timber species (ECMPs) over time (years). Diversity corresponds to our 3 designation choice scenarii: Diverse - all species have equal interests; Intermediate - ECMP and ECMAs are preferred over BPs and AEC; Realistic - ECMPs are preferred over every other categories, ECMAs are preferred over BPs and AECs. Color bands are confidence intervals obtained by pooling replicates"}
+
+load("./images/Output_diversity.RData")
+gdiv
+```
+
+### Carbon
+
+```{r carbon, out.width = "0.7\\textwidth", echo=FALSE,fig.cap="Simulated effects of selective logging on Ecosystem carbon stocks over time with 5 complete cutting cycles. Simulations are pooled to focus on two keys variables - Cutting cycle, and target volume." }
+load("./images/Output_agb.RData")
+g_biomass
+```
+
+Logging, and post-logging mortality applied one year post-harvest, cause considerable loss in AGG in any case. For both cutting cycle durations, the regain in AGB is significantly higher for plot logged at the lower intensity (20$m^3$). After the second cut, intensively harvested plots seem to regrow their AGB stock faster than less severly logged ones, once again for both cycles duration, yet this effect is of unlikely to be significant. From the third harvest onwards, the differences in harvest intensity is insufficient to change the ecosystem fate: both trajectories converge towards a  maximum value of 250 $TC/ha$ at the very end of the last cutting cycle, *i.e.* around 30$\%$ less than the original *ca.* 350 $TC/ha$. The carbon loss is more progressive for plots harvested each 65 years than those cut every 35 years. The last regrowths, for both, seem likely to stabilize AGB at a lower level than the initial 350 $TC/ha$, althought longer regrowth simulation would be needed to confirm this trend.
+
+ 
+
+## Discussion
+
+### Timber volumes are not sustained
+
+Our *preliminary* results indicate that selective logging, as currently carried out, is unsustainable in terms of timber yields. Ecosystem fates were similar in that every treatment led to a depletion of timber stocks. Short cutting cycles considerably accelerate this phenomenon. All factors contribute to the available wood volume at the **second** harvest. However, this quantity is best explained by the initial timber stocks and the target volume than by the length of the cutting cycles. This dependence on the initial conditions is explained by unsufficient regeneration of timber stocks, that fails to compensate for the harvest intensities we simulated. At the second cut, plots were left with no remaining timber stock in every scenarii. Diversification of the harvested species had a low impact on the stock of first grade timbers, which reduced over years in any case. This is probably due to high harvest intensities. Moreover, elementary protection rules are currently applied in the field to protect seeding trees for valuable timbers [@Guitet2011]. We did not include it in our model. Our preliminary results match previous findings from simulation studies. In his most optimistic scenarios, @Sist2007 predicted a recovery of 50$\%$ the initial timber stocks at the second harvest for 30 years cycles, starting from an intensity of $20 m^3/ha$. They also estimated an average 10-14 $m^3/h$ for available timber after 40 years of regrowth. @Dauber2005 estimated that 4 to 28$\%$ the initial total timber volume is recovered before the second cycle, with similar intensities and duration to those we simulated. In a case study on *Dicorynia guianensis*, by far the most harvested timber species in French Guiana, @Gourlet2005 estimated a maximum 60$\%$ of volume recovered in any case they tested. @Valle2007 presented more optimistic results, estimating to 30-40 and 60 years the time needed to recover commercial volumes for CL and RIL, with similar intensities. They however concluded that selective logging is unsustainable without adapted silvicultural treatments.
+  
+  
+### Carbon stocks decrease
+
+  Simulated forests undergo a spectacular above-ground biomass (AGB) loss because of logging and the simulated post-logging mortality. It is difficult to estimate if this effect is overestimated or not: in reality, logging damages do not cause an immediate decrease in AGB, but rather yields extra mortality for several years, less visible because buffered by  regrowth [see @Piponiot2016]. In our model, post-logging mortality is simulated 1 year after logging, and integrates damages for a 10-year period. This should be revised in the next version of the model. The total AGB globally decreases over time and harvests (\@ref(fig:carbon)), and the AGB recovery is decelerating after each harvest. This may be due to a shift in community composition from shade-tolerant, slow growing tree species to heliophilous, fast growing stands. @Huth2003, as well as @Valle2007 observed this effect in their own simulations. We did not study the evolution in species composition and diversity, but this shift is likely to happen, because we simulated low external seed incomes. Thus, we gave more importance to the surviving trees for reproduction, which seems more reasonable than a constant, huge arrival of seeds in the plot. However, our simulations indicate that AGB stocks are partly retained, and recover faster than other attribute, consistently with other authors findings [@Rutishauser2015]. @Sist2015 suggested that AGB can be fully recovered 125 after logging, but they did not assess the effect of multiple harvests.
+  
+### In a nutshell
+
+Our preliminary simulations indicate that selective logging may be unsustainable regarding many aspects. Current practices may allow neither to sustain overall timber stocks nor high value timber yields, nor fundamental ecosystemic services such as holding carbon stocks. Current cutting cycles are too short, even in French Guiana, to allow for sufficient timber species recovery. Harvested volumes are too high, and guarantee substantial decrease in commercial trees that are not compensated by remaining trees growth, recruitment, and external seed incomes. However, our results lack replication and may been interpreted with precaution.
+* 

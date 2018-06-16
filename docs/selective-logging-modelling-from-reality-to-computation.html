@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Master thesis</title>
+  <meta name="description" content="Master thesis">
+  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
+
+  <meta property="og:title" content="Master thesis" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:image" content="images/main.png" />
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Master thesis" />
+  
+  
+  <meta name="twitter:image" content="images/main.png" />
+
+<meta name="author" content="Nino PAGE">
+
+
+<meta name="date" content="2018-06-13">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="the-module.html">
+<link rel="next" href="including-more-species-in-trolls-dataset.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+<link rel="stylesheet" href="html\style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Master thesis</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
+<li class="chapter" data-level="" data-path="resume.html"><a href="resume.html"><i class="fa fa-check"></i>Résumé</a></li>
+<li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
+<li class="chapter" data-level="2" data-path="troll-model.html"><a href="troll-model.html"><i class="fa fa-check"></i><b>2</b> TROLL model</a><ul>
+<li class="chapter" data-level="2.1" data-path="troll-model.html"><a href="troll-model.html#overview"><i class="fa fa-check"></i><b>2.1</b> Overview</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="including-more-species-in-troll-simulations.html"><a href="including-more-species-in-troll-simulations.html"><i class="fa fa-check"></i><b>3</b> Including more species in TROLL simulations</a><ul>
+<li class="chapter" data-level="3.1" data-path="including-more-species-in-troll-simulations.html"><a href="including-more-species-in-troll-simulations.html#summary"><i class="fa fa-check"></i><b>3.1</b> Summary</a></li>
+<li class="chapter" data-level="3.2" data-path="including-more-species-in-troll-simulations.html"><a href="including-more-species-in-troll-simulations.html#introduction-1"><i class="fa fa-check"></i><b>3.2</b> Introduction</a></li>
+<li class="chapter" data-level="3.3" data-path="including-more-species-in-troll-simulations.html"><a href="including-more-species-in-troll-simulations.html#context-and-problem"><i class="fa fa-check"></i><b>3.3</b> Context and Problem</a><ul>
+<li class="chapter" data-level="3.3.1" data-path="including-more-species-in-troll-simulations.html"><a href="including-more-species-in-troll-simulations.html#the-initial-species-list"><i class="fa fa-check"></i><b>3.3.1</b> The initial species list</a></li>
+<li class="chapter" data-level="3.3.2" data-path="including-more-species-in-troll-simulations.html"><a href="including-more-species-in-troll-simulations.html#can-we-represent-paracou-forests-with-troll-species-list"><i class="fa fa-check"></i><b>3.3.2</b> Can we represent Paracou forests with TROLL species list ?</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="including-more-species-in-troll-simulations.html"><a href="including-more-species-in-troll-simulations.html#methods"><i class="fa fa-check"></i><b>3.4</b> Methods</a></li>
+<li class="chapter" data-level="3.5" data-path="including-more-species-in-troll-simulations.html"><a href="including-more-species-in-troll-simulations.html#data-used"><i class="fa fa-check"></i><b>3.5</b> Data used</a></li>
+<li class="chapter" data-level="3.6" data-path="including-more-species-in-troll-simulations.html"><a href="including-more-species-in-troll-simulations.html#the-bridge-trait-database"><i class="fa fa-check"></i><b>3.6</b> The BRIDGE trait database</a></li>
+<li class="chapter" data-level="3.7" data-path="including-more-species-in-troll-simulations.html"><a href="including-more-species-in-troll-simulations.html#preliminary-completion"><i class="fa fa-check"></i><b>3.7</b> Preliminary completion</a></li>
+<li class="chapter" data-level="3.8" data-path="including-more-species-in-troll-simulations.html"><a href="including-more-species-in-troll-simulations.html#simple-hierarchical-models"><i class="fa fa-check"></i><b>3.8</b> Simple hierarchical models</a></li>
+<li class="chapter" data-level="3.9" data-path="including-more-species-in-troll-simulations.html"><a href="including-more-species-in-troll-simulations.html#michaelis-menten-hierarchical-model"><i class="fa fa-check"></i><b>3.9</b> Michaelis-Menten hierarchical model</a><ul>
+<li class="chapter" data-level="3.9.1" data-path="including-more-species-in-troll-simulations.html"><a href="including-more-species-in-troll-simulations.html#leaf-and-stem-traits"><i class="fa fa-check"></i><b>3.9.1</b> Leaf and stem traits</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="can-troll-simulate-real-forests-and-post-logging-trajectories.html"><a href="can-troll-simulate-real-forests-and-post-logging-trajectories.html"><i class="fa fa-check"></i><b>4</b> Can TROLL simulate real forests and post-logging trajectories ?</a><ul>
+<li class="chapter" data-level="4.1" data-path="can-troll-simulate-real-forests-and-post-logging-trajectories.html"><a href="can-troll-simulate-real-forests-and-post-logging-trajectories.html#introduction-2"><i class="fa fa-check"></i><b>4.1</b> Introduction</a></li>
+<li class="chapter" data-level="4.2" data-path="can-troll-simulate-real-forests-and-post-logging-trajectories.html"><a href="can-troll-simulate-real-forests-and-post-logging-trajectories.html#methods-1"><i class="fa fa-check"></i><b>4.2</b> Methods</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="can-troll-simulate-real-forests-and-post-logging-trajectories.html"><a href="can-troll-simulate-real-forests-and-post-logging-trajectories.html#handling-missing-species"><i class="fa fa-check"></i><b>4.2.1</b> Handling missing species</a></li>
+<li class="chapter" data-level="4.2.2" data-path="can-troll-simulate-real-forests-and-post-logging-trajectories.html"><a href="can-troll-simulate-real-forests-and-post-logging-trajectories.html#residual-mortality-after-logging-where-to-start-from"><i class="fa fa-check"></i><b>4.2.2</b> Residual mortality after logging: where to start from ?</a></li>
+<li class="chapter" data-level="4.2.3" data-path="can-troll-simulate-real-forests-and-post-logging-trajectories.html"><a href="can-troll-simulate-real-forests-and-post-logging-trajectories.html#coordinates-and-duplicates"><i class="fa fa-check"></i><b>4.2.3</b> Coordinates and duplicates</a></li>
+<li class="chapter" data-level="4.2.4" data-path="can-troll-simulate-real-forests-and-post-logging-trajectories.html"><a href="can-troll-simulate-real-forests-and-post-logging-trajectories.html#missing-understorey"><i class="fa fa-check"></i><b>4.2.4</b> Missing understorey</a></li>
+<li class="chapter" data-level="4.2.5" data-path="can-troll-simulate-real-forests-and-post-logging-trajectories.html"><a href="can-troll-simulate-real-forests-and-post-logging-trajectories.html#simulation-parameters"><i class="fa fa-check"></i><b>4.2.5</b> Simulation parameters</a></li>
+<li class="chapter" data-level="4.2.6" data-path="can-troll-simulate-real-forests-and-post-logging-trajectories.html"><a href="can-troll-simulate-real-forests-and-post-logging-trajectories.html#spatial-structure-analysis"><i class="fa fa-check"></i><b>4.2.6</b> Spatial structure analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="can-troll-simulate-real-forests-and-post-logging-trajectories.html"><a href="can-troll-simulate-real-forests-and-post-logging-trajectories.html#results-and-discussion"><i class="fa fa-check"></i><b>4.3</b> Results and discussion</a><ul>
+<li class="chapter" data-level="4.3.1" data-path="can-troll-simulate-real-forests-and-post-logging-trajectories.html"><a href="can-troll-simulate-real-forests-and-post-logging-trajectories.html#simulated-trajectories"><i class="fa fa-check"></i><b>4.3.1</b> Simulated trajectories</a></li>
+<li class="chapter" data-level="4.3.2" data-path="can-troll-simulate-real-forests-and-post-logging-trajectories.html"><a href="can-troll-simulate-real-forests-and-post-logging-trajectories.html#spatial-statistics"><i class="fa fa-check"></i><b>4.3.2</b> Spatial statistics</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="modelling-silviculture-with-troll-from-reality-to-simulations.html"><a href="modelling-silviculture-with-troll-from-reality-to-simulations.html"><i class="fa fa-check"></i><b>5</b> Modelling silviculture with TROLL: from reality to simulations</a><ul>
+<li class="chapter" data-level="5.1" data-path="modelling-silviculture-with-troll-from-reality-to-simulations.html"><a href="modelling-silviculture-with-troll-from-reality-to-simulations.html#introduction-3"><i class="fa fa-check"></i><b>5.1</b> Introduction</a></li>
+<li class="chapter" data-level="5.2" data-path="modelling-silviculture-with-troll-from-reality-to-simulations.html"><a href="modelling-silviculture-with-troll-from-reality-to-simulations.html#choosing-area-and-trees"><i class="fa fa-check"></i><b>5.2</b> Choosing area and trees</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="modelling-silviculture-with-troll-from-reality-to-simulations.html"><a href="modelling-silviculture-with-troll-from-reality-to-simulations.html#harvestable-areas"><i class="fa fa-check"></i><b>5.2.1</b> Harvestable areas</a></li>
+<li class="chapter" data-level="5.2.2" data-path="modelling-silviculture-with-troll-from-reality-to-simulations.html"><a href="modelling-silviculture-with-troll-from-reality-to-simulations.html#designation"><i class="fa fa-check"></i><b>5.2.2</b> Designation</a></li>
+<li class="chapter" data-level="5.2.3" data-path="modelling-silviculture-with-troll-from-reality-to-simulations.html"><a href="modelling-silviculture-with-troll-from-reality-to-simulations.html#tree-probing"><i class="fa fa-check"></i><b>5.2.3</b> Tree Probing</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="modelling-silviculture-with-troll-from-reality-to-simulations.html"><a href="modelling-silviculture-with-troll-from-reality-to-simulations.html#then-harvesting"><i class="fa fa-check"></i><b>5.3</b> Then, harvesting</a><ul>
+<li class="chapter" data-level="5.3.1" data-path="modelling-silviculture-with-troll-from-reality-to-simulations.html"><a href="modelling-silviculture-with-troll-from-reality-to-simulations.html#felling-trees"><i class="fa fa-check"></i><b>5.3.1</b> Felling trees</a></li>
+<li class="chapter" data-level="5.3.2" data-path="modelling-silviculture-with-troll-from-reality-to-simulations.html"><a href="modelling-silviculture-with-troll-from-reality-to-simulations.html#main-track"><i class="fa fa-check"></i><b>5.3.2</b> Main Track</a></li>
+<li class="chapter" data-level="5.3.3" data-path="modelling-silviculture-with-troll-from-reality-to-simulations.html"><a href="modelling-silviculture-with-troll-from-reality-to-simulations.html#secondary-tracks"><i class="fa fa-check"></i><b>5.3.3</b> Secondary tracks</a></li>
+<li class="chapter" data-level="5.3.4" data-path="modelling-silviculture-with-troll-from-reality-to-simulations.html"><a href="modelling-silviculture-with-troll-from-reality-to-simulations.html#residual-mortality"><i class="fa fa-check"></i><b>5.3.4</b> Residual mortality</a></li>
+</ul></li>
+<li class="chapter" data-level="5.4" data-path="modelling-silviculture-with-troll-from-reality-to-simulations.html"><a href="modelling-silviculture-with-troll-from-reality-to-simulations.html#model-output-files"><i class="fa fa-check"></i><b>5.4</b> Model output files</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="selective-logging-experiment.html"><a href="selective-logging-experiment.html"><i class="fa fa-check"></i><b>6</b> Selective Logging experiment</a><ul>
+<li class="chapter" data-level="6.1" data-path="selective-logging-experiment.html"><a href="selective-logging-experiment.html#experiment-design"><i class="fa fa-check"></i><b>6.1</b> Experiment design</a><ul>
+<li class="chapter" data-level="6.1.1" data-path="selective-logging-experiment.html"><a href="selective-logging-experiment.html#gfclim-scenarios-adaptation-to-the-study-scale"><i class="fa fa-check"></i><b>6.1.1</b> GFClim scenarios: Adaptation to the study scale</a></li>
+<li class="chapter" data-level="6.1.2" data-path="selective-logging-experiment.html"><a href="selective-logging-experiment.html#simulated-forests"><i class="fa fa-check"></i><b>6.1.2</b> Simulated forests</a></li>
+<li class="chapter" data-level="6.1.3" data-path="selective-logging-experiment.html"><a href="selective-logging-experiment.html#diversification-of-the-harvested-species"><i class="fa fa-check"></i><b>6.1.3</b> Diversification of the harvested species</a></li>
+<li class="chapter" data-level="6.1.4" data-path="selective-logging-experiment.html"><a href="selective-logging-experiment.html#silvicultural-parameters"><i class="fa fa-check"></i><b>6.1.4</b> Silvicultural parameters</a></li>
+<li class="chapter" data-level="6.1.5" data-path="selective-logging-experiment.html"><a href="selective-logging-experiment.html#grouping-effects-to-analyse-the-output"><i class="fa fa-check"></i><b>6.1.5</b> Grouping effects to analyse the output</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="selective-logging-experiment.html"><a href="selective-logging-experiment.html#results"><i class="fa fa-check"></i><b>6.2</b> Results</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="selective-logging-experiment.html"><a href="selective-logging-experiment.html#model-features"><i class="fa fa-check"></i><b>6.2.1</b> Model features</a></li>
+<li class="chapter" data-level="6.2.2" data-path="selective-logging-experiment.html"><a href="selective-logging-experiment.html#fuelwood-volumes"><i class="fa fa-check"></i><b>6.2.2</b> Fuelwood volumes</a></li>
+<li class="chapter" data-level="6.2.3" data-path="selective-logging-experiment.html"><a href="selective-logging-experiment.html#carbon"><i class="fa fa-check"></i><b>6.2.3</b> Carbon</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="selective-logging-experiment.html"><a href="selective-logging-experiment.html#final-discutiion"><i class="fa fa-check"></i><b>6.3</b> Final discutiion</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="conclusions-and-perspectives.html"><a href="conclusions-and-perspectives.html"><i class="fa fa-check"></i><b>7</b> Conclusions and perspectives</a></li>
+<li class="chapter" data-level="8" data-path="a-few-words-on-this-work.html"><a href="a-few-words-on-this-work.html"><i class="fa fa-check"></i><b>8</b> A few words on this work</a></li>
+<li class="chapter" data-level="9" data-path="introductive-elements.html"><a href="introductive-elements.html"><i class="fa fa-check"></i><b>9</b> Introductive elements</a></li>
+<li class="chapter" data-level="10" data-path="the-module.html"><a href="the-module.html"><i class="fa fa-check"></i><b>10</b> The module</a><ul>
+<li class="chapter" data-level="10.1" data-path="the-module.html"><a href="the-module.html#spatial-planning"><i class="fa fa-check"></i><b>10.1</b> Spatial planning</a><ul>
+<li class="chapter" data-level="10.1.1" data-path="the-module.html"><a href="the-module.html#definition-of-the-forest-domain-where-the-plots-will-be-settled"><i class="fa fa-check"></i><b>10.1.1</b> Definition of the forest domain where the plots will be settled</a></li>
+<li class="chapter" data-level="10.1.2" data-path="the-module.html"><a href="the-module.html#definition-of-the-harvestable-areas"><i class="fa fa-check"></i><b>10.1.2</b> Definition of the harvestable areas</a></li>
+<li class="chapter" data-level="10.1.3" data-path="the-module.html"><a href="the-module.html#definition-of-the-sampling-units-and-the-position-of-the-main-tracks"><i class="fa fa-check"></i><b>10.1.3</b> Definition of the sampling units and the position of the main tracks</a></li>
+</ul></li>
+<li class="chapter" data-level="10.2" data-path="the-module.html"><a href="the-module.html#trees-choice"><i class="fa fa-check"></i><b>10.2</b> Trees choice</a><ul>
+<li class="chapter" data-level="10.2.1" data-path="the-module.html"><a href="the-module.html#designation-or-of-the-harvestable-trees"><i class="fa fa-check"></i><b>10.2.1</b> Designation or of the harvestable trees</a></li>
+<li class="chapter" data-level="10.2.2" data-path="the-module.html"><a href="the-module.html#tree-probing-1"><i class="fa fa-check"></i><b>10.2.2</b> Tree Probing</a></li>
+<li class="chapter" data-level="10.2.3" data-path="the-module.html"><a href="the-module.html#tree-felling"><i class="fa fa-check"></i><b>10.2.3</b> Tree Felling</a></li>
+<li class="chapter" data-level="10.2.4" data-path="the-module.html"><a href="the-module.html#main-tracks-opening"><i class="fa fa-check"></i><b>10.2.4</b> Main Tracks opening</a></li>
+<li class="chapter" data-level="10.2.5" data-path="the-module.html"><a href="the-module.html#secondary-tracks-opening"><i class="fa fa-check"></i><b>10.2.5</b> Secondary Tracks opening</a></li>
+<li class="chapter" data-level="10.2.6" data-path="the-module.html"><a href="the-module.html#post-logging-residual-mortality"><i class="fa fa-check"></i><b>10.2.6</b> Post-logging residual mortality</a></li>
+</ul></li>
+<li class="chapter" data-level="10.3" data-path="the-module.html"><a href="the-module.html#monitoring-and-post-logging-diagnostics"><i class="fa fa-check"></i><b>10.3</b> Monitoring and Post logging diagnostics</a></li>
+<li class="chapter" data-level="10.4" data-path="the-module.html"><a href="the-module.html#output-handling"><i class="fa fa-check"></i><b>10.4</b> Output handling</a></li>
+<li class="chapter" data-level="10.5" data-path="the-module.html"><a href="the-module.html#limits-perspectives-and-oncoming-developmentsimplementations"><i class="fa fa-check"></i><b>10.5</b> Limits, perspectives, and oncoming developments/implementations</a><ul>
+<li class="chapter" data-level="10.5.1" data-path="the-module.html"><a href="the-module.html#trolls-limits"><i class="fa fa-check"></i><b>10.5.1</b> TROLL’s limits</a></li>
+<li class="chapter" data-level="10.5.2" data-path="the-module.html"><a href="the-module.html#the-modules-limits"><i class="fa fa-check"></i><b>10.5.2</b> The module’s limits</a></li>
+<li class="chapter" data-level="10.5.3" data-path="the-module.html"><a href="the-module.html#wood-volume-calculation"><i class="fa fa-check"></i><b>10.5.3</b> Wood volume calculation</a></li>
+<li class="chapter" data-level="10.5.4" data-path="the-module.html"><a href="the-module.html#rotten-submodule"><i class="fa fa-check"></i><b>10.5.4</b> Rotten submodule</a></li>
+<li class="chapter" data-level="10.5.5" data-path="the-module.html"><a href="the-module.html#main-tracks-submodule"><i class="fa fa-check"></i><b>10.5.5</b> Main tracks submodule</a></li>
+<li class="chapter" data-level="10.5.6" data-path="the-module.html"><a href="the-module.html#secondary-tracks-submodule"><i class="fa fa-check"></i><b>10.5.6</b> Secondary tracks submodule</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="selective-logging-modelling-from-reality-to-computation.html"><a href="selective-logging-modelling-from-reality-to-computation.html"><i class="fa fa-check"></i><b>11</b> Selective Logging Modelling : From reality to computation</a><ul>
+<li class="chapter" data-level="11.1" data-path="selective-logging-modelling-from-reality-to-computation.html"><a href="selective-logging-modelling-from-reality-to-computation.html#a-few-words-on-this-work-1"><i class="fa fa-check"></i><b>11.1</b> A few words on this work</a></li>
+<li class="chapter" data-level="11.2" data-path="selective-logging-modelling-from-reality-to-computation.html"><a href="selective-logging-modelling-from-reality-to-computation.html#introductive-elements-1"><i class="fa fa-check"></i><b>11.2</b> Introductive elements</a></li>
+<li class="chapter" data-level="11.3" data-path="selective-logging-modelling-from-reality-to-computation.html"><a href="selective-logging-modelling-from-reality-to-computation.html#the-module-1"><i class="fa fa-check"></i><b>11.3</b> The module</a><ul>
+<li class="chapter" data-level="11.3.1" data-path="selective-logging-modelling-from-reality-to-computation.html"><a href="selective-logging-modelling-from-reality-to-computation.html#spatial-planning-1"><i class="fa fa-check"></i><b>11.3.1</b> Spatial planning</a></li>
+<li class="chapter" data-level="11.3.2" data-path="selective-logging-modelling-from-reality-to-computation.html"><a href="selective-logging-modelling-from-reality-to-computation.html#trees-choice-1"><i class="fa fa-check"></i><b>11.3.2</b> Trees choice</a></li>
+<li class="chapter" data-level="11.3.3" data-path="selective-logging-modelling-from-reality-to-computation.html"><a href="selective-logging-modelling-from-reality-to-computation.html#monitoring-and-post-logging-diagnostics-1"><i class="fa fa-check"></i><b>11.3.3</b> Monitoring and Post logging diagnostics</a></li>
+<li class="chapter" data-level="11.3.4" data-path="selective-logging-modelling-from-reality-to-computation.html"><a href="selective-logging-modelling-from-reality-to-computation.html#output-handling-1"><i class="fa fa-check"></i><b>11.3.4</b> Output handling</a></li>
+<li class="chapter" data-level="11.3.5" data-path="selective-logging-modelling-from-reality-to-computation.html"><a href="selective-logging-modelling-from-reality-to-computation.html#limits-perspectives-and-oncoming-developmentsimplementations-1"><i class="fa fa-check"></i><b>11.3.5</b> Limits, perspectives, and oncoming developments/implementations</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="including-more-species-in-trolls-dataset.html"><a href="including-more-species-in-trolls-dataset.html"><i class="fa fa-check"></i><b>12</b> Including more species in TROLL’s dataset</a></li>
+<li class="chapter" data-level="13" data-path="introduction-4.html"><a href="introduction-4.html"><i class="fa fa-check"></i><b>13</b> Introduction</a></li>
+<li class="chapter" data-level="14" data-path="datasets-used.html"><a href="datasets-used.html"><i class="fa fa-check"></i><b>14</b> Datasets used</a><ul>
+<li class="chapter" data-level="14.1" data-path="datasets-used.html"><a href="datasets-used.html#the-bridge-trait-database-1"><i class="fa fa-check"></i><b>14.1</b> The BRIDGE trait database</a></li>
+<li class="chapter" data-level="14.2" data-path="datasets-used.html"><a href="datasets-used.html#troll-initial-species-list"><i class="fa fa-check"></i><b>14.2</b> TROLL initial species list</a><ul>
+<li class="chapter" data-level="14.2.1" data-path="datasets-used.html"><a href="datasets-used.html#individual-level-variability"><i class="fa fa-check"></i><b>14.2.1</b> Individual level variability</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="15" data-path="paracou-plots-subsetting-issues.html"><a href="paracou-plots-subsetting-issues.html"><i class="fa fa-check"></i><b>15</b> Paracou plots: subsetting issues</a></li>
+<li class="chapter" data-level="16" data-path="multivariate-imputed-dataset.html"><a href="multivariate-imputed-dataset.html"><i class="fa fa-check"></i><b>16</b> Multivariate imputed dataset</a><ul>
+<li class="chapter" data-level="16.1" data-path="multivariate-imputed-dataset.html"><a href="multivariate-imputed-dataset.html#rationale"><i class="fa fa-check"></i><b>16.1</b> Rationale</a></li>
+<li class="chapter" data-level="16.2" data-path="multivariate-imputed-dataset.html"><a href="multivariate-imputed-dataset.html#method"><i class="fa fa-check"></i><b>16.2</b> Method</a></li>
+<li class="chapter" data-level="16.3" data-path="multivariate-imputed-dataset.html"><a href="multivariate-imputed-dataset.html#results-and-discussion-1"><i class="fa fa-check"></i><b>16.3</b> Results and discussion</a><ul>
+<li class="chapter" data-level="16.3.1" data-path="multivariate-imputed-dataset.html"><a href="multivariate-imputed-dataset.html#summary-1"><i class="fa fa-check"></i><b>16.3.1</b> Summary</a></li>
+<li class="chapter" data-level="16.3.2" data-path="multivariate-imputed-dataset.html"><a href="multivariate-imputed-dataset.html#consistency"><i class="fa fa-check"></i><b>16.3.2</b> Consistency</a></li>
+<li class="chapter" data-level="16.3.3" data-path="multivariate-imputed-dataset.html"><a href="multivariate-imputed-dataset.html#discussion"><i class="fa fa-check"></i><b>16.3.3</b> Discussion</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="17" data-path="hierarchical-inference-of-traits-and-allometric-parameters.html"><a href="hierarchical-inference-of-traits-and-allometric-parameters.html"><i class="fa fa-check"></i><b>17</b> Hierarchical inference of traits and allometric parameters</a><ul>
+<li class="chapter" data-level="17.1" data-path="hierarchical-inference-of-traits-and-allometric-parameters.html"><a href="hierarchical-inference-of-traits-and-allometric-parameters.html#method-1"><i class="fa fa-check"></i><b>17.1</b> Method</a><ul>
+<li class="chapter" data-level="17.1.1" data-path="hierarchical-inference-of-traits-and-allometric-parameters.html"><a href="hierarchical-inference-of-traits-and-allometric-parameters.html#generalities"><i class="fa fa-check"></i><b>17.1.1</b> Generalities</a></li>
+<li class="chapter" data-level="17.1.2" data-path="hierarchical-inference-of-traits-and-allometric-parameters.html"><a href="hierarchical-inference-of-traits-and-allometric-parameters.html#leaf-and-stem-traits-1"><i class="fa fa-check"></i><b>17.1.2</b> Leaf and stem traits</a></li>
+<li class="chapter" data-level="17.1.3" data-path="hierarchical-inference-of-traits-and-allometric-parameters.html"><a href="hierarchical-inference-of-traits-and-allometric-parameters.html#allometric-relationships"><i class="fa fa-check"></i><b>17.1.3</b> Allometric relationships</a></li>
+</ul></li>
+<li class="chapter" data-level="17.2" data-path="hierarchical-inference-of-traits-and-allometric-parameters.html"><a href="hierarchical-inference-of-traits-and-allometric-parameters.html#results-1"><i class="fa fa-check"></i><b>17.2</b> Results</a><ul>
+<li class="chapter" data-level="17.2.1" data-path="hierarchical-inference-of-traits-and-allometric-parameters.html"><a href="hierarchical-inference-of-traits-and-allometric-parameters.html#leaf-and-stem-traits-2"><i class="fa fa-check"></i><b>17.2.1</b> Leaf and stem traits</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="18" data-path="comparisons.html"><a href="comparisons.html"><i class="fa fa-check"></i><b>18</b> Comparisons</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/sylvainschmitt/master-thesis" target="blank">work in progress</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Master thesis</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="selective-logging-modelling-from-reality-to-computation" class="section level1">
+<h1><span class="header-section-number">11</span> Selective Logging Modelling : From reality to computation</h1>
+<div id="a-few-words-on-this-work-1" class="section level2">
+<h2><span class="header-section-number">11.1</span> A few words on this work</h2>
+<p>We updated the first version of the silviculture module created by Sylvain Schmitt during his M.Sc internship last year to perform silviculture simulations with TROLL. Based upon his work, along with the information found in the literature, and the precious explanations and advice of Laurent Descroix, we updated his original work to adapt it to our questions.</p>
+<p>The principal modifications are a revision of the designation process, a continuous screening of the merchantable trees stock, and the addition of an option to simulate damages as they would possibly be for “conventional logging” techniques.</p>
+<p>As in the previous version, we explicitly focus on silvicultural practices in French Guiana. Thus, the modeling choices expressed here should be carefully examined, and perhaps revised, if this work needs to be adapted to simulate silviculture in other forests.</p>
+</div>
+<div id="introductive-elements-1" class="section level2">
+<h2><span class="header-section-number">11.2</span> Introductive elements</h2>
+<p>In general, silvicultural practices encompass selective logging with or without rotations, tree plantation, and silvicultural treatments such as enrichment planting, or tending operations (e.g., thinning).</p>
+<p>Nowadays in French Guiana, silviculture operations mainly consist of selective logging. Tree plantations have not yet emerged as a standard, mastered practice to generate timber incomes, and has not yet overpassed the experimental stage (XXX REF). “Maintenance” operations have often consisted in thinning by poison-girdling, but this practice has been left apart in agreement with the results of the Paracou Disturbance Experiment (1984 onwards). Currently, Sylviculture in French Guiana is oriented towards reduced impact (selective) logging (RIL), and it can be called “silviculture” because of the care that is taken in the operations. Part of the aim is then to destroy as less future trees as possible, and optimize the natural regeneration process by reducing the damages and canopy opening during operations. These clarifications notwithstanding, we will systematically refer to “silvicultural treatments in French Guiana” as “selective logging” hereafter.</p>
+<p>Forest management oriented towards selective logging is currently divided into three fundamental parts: Tree choice, Harvesting, . Both encompass different steps and effects that have to be modeled :</p>
+<p>Tree choice: - Definition of the harvestable areas and the main tracks - Designation of the harvestable trees by the forest office - Minor selection from the loggers - Tree probing Harvesting operations: - Tree Felling - Main tracks opening - Secondary tracks opening - Bole skidding - Post-logging, residual damages Additional questions, such as the harvest of fuelwood during operations, and post-logging monitoring, are tackled at the end of this document</p>
+<p>Each of these processes is modeled either explicitly or implicitly. Hereafter, we detail each step/effect in three parts : - The way it is currently happening in French Guiana with state-of-the-art RIL (“EFI2”) methods. - The way it used to happen (and still happens sometimes) with conventional techniques. - The way we modeled it in the module, with detailed code.</p>
+<p>This version of the code will be stored in a GitHub repository to keep an easily-updatable version online.</p>
+<p>N.B.: What is referred to as “conventional logging” may be equivocal. Laurent Descroix, from the French National Forest Office (Cayenne center), insisted several times on how “RIL2” and “conventional” are the opposite ends of a continuum. Conventional logging was, more than everything, characterized by the absence of controlled designation process, and the absence of resource spatialization of skidding tracks planning. These factors generally led to higher damages due to unoptimized tracks network, for a lower quantity of wood because of the loss of a certain proportion of the boles.</p>
+</div>
+<div id="the-module-1" class="section level2">
+<h2><span class="header-section-number">11.3</span> The module</h2>
+<div id="spatial-planning-1" class="section level3">
+<h3><span class="header-section-number">11.3.1</span> Spatial planning</h3>
+<p>Planning the operations is critical to perform logging according to the RIL guidelines. The use of remote-sensing improved the efficiency of this operation considerably. In conventional logging, these operations were not as comfortable but were still needed to ensure that logging takes place in a forest with enough wood.</p>
+<div id="definition-of-the-forest-domain-where-the-plots-will-be-installed" class="section level4">
+<h4><span class="header-section-number">11.3.1.1</span> Definition of the forest domain where the plots will be installed</h4>
+<div id="ril-8" class="section level5">
+<h5><span class="header-section-number">11.3.1.1.1</span> RIL</h5>
+<p>Three critical factors determine the exploitability of a forest domain: - The topography - The wood quantity that has to be sufficient to ensure the economic viability of the operations - Accessibility</p>
+<p>The topography of the field is the primary mechanic constraint for logging operations in general. Logging often occurs on hilltops or plateaus, because steep slopes constrain the machines circulation and bottomland are systematically considered unharvestable areas. Besides, the topography is somehow linked to the amount of harvestable wood in the logged areas. To define which forest domains will be candidates for further planning, the National Forest Office (in French, Office National des Forêts; ONF) used various topographical relevé from different geographical information systems. Nowadays, the ONF uses last up-to-date LIDAR digital elevation model.</p>
+<p>Accessibility is the principal determinant of the infrastructure and transport costs engaged in the operations. For the moment, logging operations are restricted to forest domains that are narrow roads, possibly close to the sawmills, not to separate excessively the source of raw matter from the place where it is transformed. Later on, transport could perhaps be carried out by the fluvial way (Maroni region, for example) (REF DU MEC D’AURELIE).</p>
+<p>The quantity of wood is a critical factor that determines whether the operations are economically viable and if the plots could be logged again at the next rotation. The ONF uses a range of information sources to have an a priori of whether a forest domain is worth being logged, or not: - Three past inventory campaigns have been led to assess the commercial richness of various parts of the littoral band. (XXX DESCRIPTION). This valuable information is still widely used to orientate the ONF choices. - LIDAR and hyperspectral data, along with geological relevés are used to determine whether the quantity “big woods”. For example, saprolitic soils often carry “poor” forests (in commercial terms) (XXXX REFERENCE). These areas are avoided, thus reducing the probability of non-viability. - The “habitat” data and maps are used for the same reasons (XXXX INFOS).</p>
+</div>
+<div id="conventional-8" class="section level5">
+<h5><span class="header-section-number">11.3.1.1.2</span> Conventional</h5>
+<p>One may often hear that conventional logging operations are unplanned, but the truth is that no company would exploit a forest without being guaranteed that there is wood to extract. Indeed, planning was not easy for conventional logging, because the tools mentioned above were not all yet available. However, the topographical maps, the forest inventories, and the habitat information were already used to pre-filter the forest areas where operations take place.</p>
+</div>
+<div id="model-17" class="section level5">
+<h5><span class="header-section-number">11.3.1.1.3</span> Model</h5>
+<p>Topographical issues are not (yet) of primary concern for one who simulates logging with TROLL: this is one of the major limits of the current version of the model. The only point to be careful about is to use input forests that display a sufficient quantity of harvestable trees to simulate the desired harvesting intensity. This point is addressed elsewhere.</p>
+</div>
+</div>
+<div id="definition-of-the-harvestable-areas-1" class="section level4">
+<h4><span class="header-section-number">11.3.1.2</span> Definition of the harvestable areas</h4>
+<div id="ril-9" class="section level5">
+<h5><span class="header-section-number">11.3.1.2.1</span> RIL</h5>
+<p>Mechanical and “floristic” constraints define harvestable areas. Bottomlands and swamps, as well as other waterlogged areas, are avoided. They generally display poor stands, or non-merchantable species, and the engines may not circulate well within these areas. Moreover, the rules (XXX WHICH ONES) stipulate that these zones may not be crossed by engines, to avoid jeopardizing the integrity of freshwater ecosystems. Additionally, a buffering space (XXX WHICH DIMENSIONS) have to be left intact around creeks and waterlogged areas, for the same reasons. Steep slopes are also avoided due to mechanical constraints: The engines are not supposed to transit with adverse slopes over (XXX)% and lateral (“dévers”) slopes over 4%. Lateral slopes are especially restricted because they increase the risk of “sweeping effect” (when the bole, tied to a cable, falls laterally), which can cause considerably increase the damages, and are a source of work accidents.</p>
+</div>
+<div id="conventional-9" class="section level5">
+<h5><span class="header-section-number">11.3.1.2.2</span> Conventional</h5>
+<p>In conventional logging, the definition of harvestable areas follows approximately the same rules. Perhaps the guidelines mentioned above are not carefully respected as in RIL when it is about reducing damages, but it is likely to be similar concerning human and mechanical safety: this is mainly about common sense.</p>
+</div>
+<div id="model-18" class="section level5">
+<h5><span class="header-section-number">11.3.1.2.3</span> Model</h5>
+<p>Again, the topography is not yet implemented in TROLL model. The TROLL dev-team is currently working on it in Toulouse, so the modeling choices relative to the absence of topography in the model must be re-evaluated as soon as a new version is released, and modified accordingly. Thus, we consider the whole simulated plot as a harvestable area.</p>
+</div>
+</div>
+<div id="definition-of-the-sampling-units-and-the-position-of-the-main-tracks-1" class="section level4">
+<h4><span class="header-section-number">11.3.1.3</span> Definition of the sampling units and the position of the main tracks</h4>
+<div id="ril-10" class="section level5">
+<h5><span class="header-section-number">11.3.1.3.1</span> RIL</h5>
+<p>The ONF subdivides forest areas into plots or sampling units. Their surface area is variable (from 20 to 250 hectares; Laurent Descroix, pers. comm.), but is in the majority of the cases between 30 and 50 hectares. Because of the definition of harvestable areas, the sampling units are nearly always located on plateaus or smooth slopes around the crest of a hill. In each plot, the main track is designed following the crest line (using digital elevation models). The main track extent within the sampling unit generally depends on the quantity of wood available in the plot. If more than 100 cubic meters of wood are transiting on a segment of forest track, the main track must be built up to that segment, probably to avoid excessive damages to the soil (that ultimately cause erosion and infrastructure destruction). We further detail this part in the corresponding section, for consistency with the module code.</p>
+<p>The implantation of the main track can be foreseen using the targetted volume and the dimensions of the plot: assuming the isotropy of the harvested tree (which in reality is often violated to some extent), it is possible to calculate the area corresponding to 100 cubic meters of wood (XXX FORMULA)</p>
+</div>
+<div id="conventional-10" class="section level5">
+<h5><span class="header-section-number">11.3.1.3.2</span> Conventional</h5>
+<p>In conventional logging, sampling units and main tracks were defined similarly. The source of information was not the same, but the result was supposedly similar, modulo some errors.</p>
+</div>
+<div id="model-19" class="section level5">
+<h5><span class="header-section-number">11.3.1.3.3</span> Model</h5>
+<p>We decided to define the whole plot as one sampling unit, or rather, as the entire harvestable area within a sampling unit. This simplifying assumption must be kept in mind, as well as the absence of topography, for the interpretations. We model the main track in the middle of the plot.</p>
+</div>
+</div>
+</div>
+<div id="trees-choice-1" class="section level3">
+<h3><span class="header-section-number">11.3.2</span> Trees choice</h3>
+<p>The two following subsections may be considered inadequately split. The term “designation” is dedicated to the pre-logging assessment in which the forest office performs a selection of the harvested and leave trees. This step is one of the main novelties brought by the recent implementation of RIL in French Guiana, since 2007 (XXX REFS). Notwithstanding this specificity, we had reasons to separate the process of tree choice into “designation” and “selection by loggers”.</p>
+<div id="designation-or-of-the-harvestable-trees-1" class="section level4">
+<h4><span class="header-section-number">11.3.2.1</span> Designation or of the harvestable trees</h4>
+<div id="ril-11" class="section level5">
+<h5><span class="header-section-number">11.3.2.1.1</span> RIL</h5>
+<p>The “designation” is a spatialized inventory of the present and future timber resource. ONF agents designate trees during a timber cruise. Trees are classified into two categories : - Marked trees that are sold to harvest for the current cutting cycle. - “Reserved” or leave trees, that can be future merchantable trees (to be harvested during the next cutting cycle) or ecologically important trees. The last category encompasses protected or “key-resource” species, seeding adult trees belonging to merchantable species - that are either too big to be harvested, or let in the stand to allow species regeneration. These are not to be damaged during operations.</p>
+<p>To determine which trees to mark and which to leave, the ONF uses various information : - Quality estimates from ontogenic diagnostics (ERIC NICOLINI XXX). The designated tree are generally from mature to slightly overmature: their growth is starting to decrease, but their quality is high. “present” trees can still grow up during the rotation, so as “future” trees do. Overmature trees often have redhibitory defaults and are left in the stand to allow regeneration. - Species-specific minimum harvestable diameters that generally correspond to the end of the trees growth peak. The minimum harvestable diameter, for a given species, has to be adapted to this species’ maximum dimensions, autecology, and wood quality in function of the tree size. Most of the species are harvestable from 55 cm diameter. “Precious” woods such as the Boko, or other trees as the wacapou, have lower minimum diameters (45 cm). A minimum diameter increment is applied at the plot scale when the volume of merchantable trees is far above the target volume defined by the ONF: the idea is to preserve wood for next rotations.<br />
+- The loggers’ preferences (because they have to work with companies, not against)</p>
+</div>
+<div id="conventional-11" class="section level5">
+<h5><span class="header-section-number">11.3.2.1.2</span> Conventional</h5>
+<p>The designation did not exist in conventional logging. The selection was made by loggers, based on their habits, and the market demand. The minimum harvestable diameter was a priori often respected because the loggers tended to choose big (and easily accessible) trees to have maximum yields. These practices were often leading to low numbers of harvested trees per hectare, except in highly capitalized stands, like those recently discovered in the Régina-St Georges forest domain.</p>
+</div>
+<div id="model-20" class="section level5">
+<h5><span class="header-section-number">11.3.2.1.3</span> Model</h5>
+</div>
+<div id="ril-12" class="section level5">
+<h5><span class="header-section-number">11.3.2.1.4</span> RIL</h5>
+<p>In reality, loggers sometimes voluntarily omit to harvest some trees belonging to secondary interest species and focus on high-value timber. This habit often leads to a reduction of the harvested volume, which combines with the proportion of trees that are probed rotten.</p>
+</div>
+<div id="conventional-12" class="section level5">
+<h5><span class="header-section-number">11.3.2.1.5</span> Conventional</h5>
+</div>
+<div id="model-21" class="section level5">
+<h5><span class="header-section-number">11.3.2.1.6</span> Model</h5>
+</div>
+</div>
+<div id="tree-probing-2" class="section level4">
+<h4><span class="header-section-number">11.3.2.2</span> Tree Probing</h4>
+<div id="ril-and-conventional-2" class="section level5">
+<h5><span class="header-section-number">11.3.2.2.1</span> RIL and conventional</h5>
+<p>Generally, 20% of the trees matching commercial criteria (species, diameter) have redhibitory defaults and are considered “rotten” by the lumberman after probing (i.e., after burying his chainsaw inside the trunk to see if it is hollow). The causes of these defaults are partially unknown. The observed symptoms are generally: the presence of holes on the trunk or the basis; the break of a big fork that has not cicatrized; or a hollow sound of the trunk. The probability for a tree to be rotten depends on its dbh. Big trees are likely to be older. They thus had more time to be exposed to wood consumers such as fungi (REF GUIDE) or Coleoptera (personal observations), or extensive crown damages (potentially being “entrance door” for the agents that cause the decay XXX REF) due to neighboring treefalls. The ONF forced the loggers to harvest these trees during an experimental campaign and gathered data on the probability to be probed rotten, the actual rotten volume, and the characteristics of the trees (Laurent Descroix, pers. comm.). According to the data gathered, around a half or the designated trees considered as rotten by lumbermen would be intact on around 90% of their bole volume. This is exciting news because a perspective for forestry in French Guiana would be to valorize those trees (even if they can survive to this and produce seeds). If the fuelwood market is developed during the next years, harvesting rotten trees could be advantageous even for high rotten volume trees.</p>
+</div>
+<div id="model-22" class="section level5">
+<h5><span class="header-section-number">11.3.2.2.2</span> Model</h5>
+<p>Using the data mentioned above, Sylvain Schmitt built models to describe the probability to be rotten, and the proportion of intact wood in trees that are probed rotten. The first is already implemented in the module. We decided to implement the rotten volume model as well to compute the volume of energy wood potentially valuable from such trees.</p>
+</div>
+</div>
+<div id="tree-felling-1" class="section level4">
+<h4><span class="header-section-number">11.3.2.3</span> Tree Felling</h4>
+<div id="ril-13" class="section level5">
+<h5><span class="header-section-number">11.3.2.3.1</span> RIL</h5>
+<p>In RIL, the felling direction is supposed to be controlled to some extent, to avoid damaging leave (“reserve”) trees. The basal treefall direction is considered random but rather depends on the trees’ natural orientation and crown aspect. In fact, four orientations are possible for an ideally felled tree (see figure 1). Oriented treefall aims at orienting logs at 45° to the track (main or secondary), to reduce damages when skidding. Unfortunately, few harvesters currently apply this technique, but things are starting to change.</p>
+</div>
+<div id="conventional-13" class="section level5">
+<h5><span class="header-section-number">11.3.2.3.2</span> Conventional</h5>
+<p>In conventional logging, few cares are taken when felling the trees. The orientation can be considered random. It makes it more dangerous for workers, and the damages in the understorey are thus expected to be higher when skidding.</p>
+</div>
+<div id="model-23" class="section level5">
+<h5><span class="header-section-number">11.3.2.3.3</span> Model</h5>
+<p>We had the choice between implementing directional treefall and sticking with random direction treefalls. We estimate that the complexity and computational costs involved would be too high for a minimum gain: A fully functional oriented treefall function would do it by assessing, for each harvested tree, what orientation fits with the closest track and involves the minimum damage for future merchantable trees. We hope that further developments of the module, for next versions, could bring an easy and fast way to implement this feature. In the current implementation, gap dimensions are saved into a map, to compute post-logging damages.</p>
+</div>
+</div>
+<div id="main-tracks-opening-1" class="section level4">
+<h4><span class="header-section-number">11.3.2.4</span> Main Tracks opening</h4>
+<div id="ril-14" class="section level5">
+<h5><span class="header-section-number">11.3.2.4.1</span> RIL</h5>
+</div>
+<div id="conventional-14" class="section level5">
+<h5><span class="header-section-number">11.3.2.4.2</span> Conventional</h5>
+</div>
+<div id="model-24" class="section level5">
+<h5><span class="header-section-number">11.3.2.4.3</span> Model</h5>
+</div>
+</div>
+<div id="secondary-tracks-opening-1" class="section level4">
+<h4><span class="header-section-number">11.3.2.5</span> Secondary Tracks opening</h4>
+<div id="ril-15" class="section level5">
+<h5><span class="header-section-number">11.3.2.5.1</span> RIL</h5>
+<p>One of the major improvement in RIL is the mapping of felled trees and the usage of topographical relevés to optimize the secondary tracks network. The National forest office currently uses these tools to trace the tracks manually (being careful with inclinations and slopes) the secondary tracks in a way that more wood is extracted for a reduced track area. Software developed by the CIRAD and ONF is also used to optimize the tracks automatically but is currently still improved, to become fully functional. Recent improvements, such as the use of a nylon cable to skid the logs, also allow reducing the damage, because the tracks do not have to go up to every tree. Thus, tracks are designed to go between trees, approaching them to a distance of 30 meters maximum.</p>
+</div>
+<div id="conventional-15" class="section level5">
+<h5><span class="header-section-number">11.3.2.5.2</span> Conventional</h5>
+<p>Conventional logging was primarily characterized by the absence of GPS mapping and topographical relevés. Skidding tracks were designed “on the heap,” directly in the field. Thus, some trees were omitted and the track network used to be everything but optimal. There is no evident way to describe how tracks were typically traced. Bulldozers were used to go up to every felled tree, following the (somewhat imprecise) approximations of lumbermen. According to the information I received (I never attended a conventional logging project !), the trajectories were partly random, with many errors, and shortcut (the bulldozer sometimes was coming back by another way that the one it came with). Overall, this could be more related to visual-based skidding, from close to close.</p>
+</div>
+<div id="model-25" class="section level5">
+<h5><span class="header-section-number">11.3.2.5.3</span> Model</h5>
+<p>We decided to model both conventional and RIL skidding fashions. RIL skidding was already implemented in the first version of the module, and this function has only been slightly revised, optimized, and outputs were added.</p>
+</div>
+</div>
+<div id="bole-skidding" class="section level4">
+<h4><span class="header-section-number">11.3.2.6</span> Bole skidding</h4>
+<div id="ril-16" class="section level5">
+<h5><span class="header-section-number">11.3.2.6.1</span> RIL</h5>
+</div>
+<div id="conventional-16" class="section level5">
+<h5><span class="header-section-number">11.3.2.6.2</span> Conventional</h5>
+</div>
+<div id="model-26" class="section level5">
+<h5><span class="header-section-number">11.3.2.6.3</span> Model</h5>
+</div>
+</div>
+<div id="post-logging-residual-mortality-1" class="section level4">
+<h4><span class="header-section-number">11.3.2.7</span> Post-logging residual mortality</h4>
+<div id="reality-8" class="section level5">
+<h5><span class="header-section-number">11.3.2.7.1</span> Reality</h5>
+<p>Logging operations have immediate and secondary damages on tree stands. If the cause of the immediate damages is easy to guess, secondary damages are way less conspicuous and cause residual mortality during the first years after logging operations. These damages can be due to direct hurts underwent by the remaining trees during felling or skidding (uprooted stems, stem wounds, and bark scrapes), or due to consequences of the induced habitat changes (erosion, and for full-sun-intolerant species, change in light exposure).</p>
+</div>
+<div id="model-27" class="section level5">
+<h5><span class="header-section-number">11.3.2.7.2</span> Model</h5>
+<p>We decided, once again, to use the model developed by Sylvain Schmitt last year. What follows is the description he wrote in the technical document coming with the first version of the module :</p>
+<p>He gathered data from Paracou censuses between 1988 and 1992 on harvested plots and adapted the model from (XXX Cite Herault) based on a disturbance index into:</p>
+<p>Death of a tree (i) follows a Bernoulli probability law. The odds for a tree to die is calculated by the sum of the natural tree death odd and a perturbation index β∗eα∗dgaps. The perturbation index depends on the distance of the tree to the closest logging gap. The probability for a tree is finally calculated by taking the inverse logit of the odd (see hurt models document). We need now to transfer this allometry into TROLL to simulate disturbed trees that will die because of the selective logging gaps. A tree will die and fall if it randomly gets under the probability to die because of the logging gap:</p>
+<p>However, the probability to be dead P(Death) for a tree encompass both the probability of dying due to the logging and the natural death rate.</p>
+</div>
+</div>
+</div>
+<div id="monitoring-and-post-logging-diagnostics-1" class="section level3">
+<h3><span class="header-section-number">11.3.3</span> Monitoring and Post logging diagnostics</h3>
+<div id="reality-9" class="section level5">
+<h5><span class="header-section-number">11.3.3.0.1</span> Reality</h5>
+<p>Post-logging diagnostics (in French, Diagnostic Post-Exploitation; DPE) have been recently implemented (2006) by the ONF in French Guiana <span class="citation">(Bezard <em>et al.</em> <a href="#ref-Bezard2017">2017</a>)</span>, along with the designation and other RIL methods. The ONF performs an inventory on some plots (for the moment, results are available for 28 of them). Several observations are reported for subplots along transects: Overall apparent perturbation, inventory of the trees over 10 dbh, qualification of their state and possible wounds. These inventories are necessary to objectively ensure that logging operations were carefully done, which is not often possible to assess directly during the operations. I ignore if other inventories of timber stocks and regrowth were carried out in the plots. If it is not the case, this will be done within a few decades, when we will reach the end of the first cutting cycle. For the moment, research stations such as Paracou and Montagne Tortue offer insights of the overall regeneration trajectories that take place for conventional logging.</p>
+</div>
+<div id="model-28" class="section level5">
+<h5><span class="header-section-number">11.3.3.0.2</span> Model</h5>
+<p>Since we can modify TROLL’s source code, monitoring can easily be simulated. We can register every tree death during logging operations, and their cause. Even better, at each iteration, it is possible to follow the evolution of timber stocks. We decided to refine the existing logging damages output to include rotten trees, and the wood volume for trees that are destroyed during operations, to evaluate the quantity of fuelwood that could possibly be valorized. Additionally, the implementation of cutting cycles in the module now allows creating a separate file at each logging operation. The Furthermore, we created 4 new output files to track the current state of commercial species at each timestep, grouping them by categories. These outputs are :</p>
+<p>Above-ground biomass: - all trees - recruited trees (over 10 cm dbh) - next-cycle stock trees (over 30 cm dbh)</p>
+<p>Basal area: - all trees - recruited trees (over 10 cm dbh) - next-cycle stock trees (over 30 cm dbh) Stem density: - all trees - recruited trees (over 10 cm dbh) - next-cycle stock trees (over 30 cm dbh) Wood volume: - future trees (&gt;30 cm dbh) supposedly harvested one rotation later - harvestable trees (&gt;55 cm dbh)</p>
+</div>
+</div>
+<div id="output-handling-1" class="section level3">
+<h3><span class="header-section-number">11.3.4</span> Output handling</h3>
+<p>The outputs I added are directly usable with R scripts. I am currently finishing the development of a personal R package containing the functions used to handle this flow of new outputs. This set of tools includes grouping statistics and graphical displays adapted to this output. Hopefully, it could be integrated to RconTroll, the official TROLL package, currently developed by Fabian Fischer and Sylvain Schmitt, in a near future.</p>
+</div>
+<div id="limits-perspectives-and-oncoming-developmentsimplementations-1" class="section level3">
+<h3><span class="header-section-number">11.3.5</span> Limits, perspectives, and oncoming developments/implementations</h3>
+<div id="trolls-limits-1" class="section level4">
+<h4><span class="header-section-number">11.3.5.1</span> TROLL’s limits</h4>
+<p>The major limits to improve the selective logging module are the environmental variables not yet accounted for in TROLL model. At the moment I write this report, Isabelle Maréchaux and Fabian Fischer are implementing a new Water module in TROLL code. Fabian also aims at developing explicit topography. These major changes would considerably enhance the realism of the silviculture simulations with TROLL but will require extensive calibrations, and are complex to include to TROLL’s code, that is already as complex as fascinating. The same remark can be made on the selective logging module, when TROLL will jump at the next step in terms of complexity: Thus, a definition of harvestable area according to topography and water-logging would have to be implemented, the main tracks would not be a straight line anymore, and follow a crest, and the secondary tracks would be traced differently depending on slopes. Directional felling would also have to be accounted for in this case, and skidding damages, such as “sweeping”, would have to be modeled accordingly. These deep changes could be complex to implement without involving computational costs to explode, and the ration of realism to informativeness, ponderated by computational costs, will have to be evaluated.</p>
+</div>
+<div id="the-modules-limits-1" class="section level4">
+<h4><span class="header-section-number">11.3.5.2</span> The module’s limits</h4>
+<p>The major limits of this version of the module are a lack of calibration from real data specific to every sub-module, the use of approximations or simplifications for some of the steps instead of models, and the somewhat rigid calculation of timber volume.</p>
+</div>
+<div id="wood-volume-calculation-1" class="section level4">
+<h4><span class="header-section-number">11.3.5.3</span> Wood volume calculation</h4>
+<p>The formula used is the one from [XXX REF ONF 2011] for center-east forests (around Cayenne), and is the one that estimates the highest volume of the five site-specific equations derived from field measurements in French Guiana [XXX TABLE]. This choice is based on the fact that Easter forests are currently being logged, and display high capitalization rates, i.e. a large number of harvestable, high value trees, with high bole heights, thus, a rather advantageous ratio of wood volume to diameter at breast height. In the next version of the module (which I already planned to upgrade), this limit will be accounted for by letting the user choose between inputting a different set of coefficients, or use my default values.</p>
+</div>
+<div id="rotten-submodule-1" class="section level4">
+<h4><span class="header-section-number">11.3.5.4</span> Rotten submodule</h4>
+<p>The rotten submodule has the advantage to have been calibrated by Sylvain Schmitt (2017) to best estimate the probability for a tree to be rotten (according to its dbh), AND the rotten and intact volumes of this tree, if it is rotten, which has been implemented in this new version to estimate potential fuelwood volumes. However, as pinpointed in the precedent version of the Logging Module’s description, this is a generic, species-independent equation, whilst the probability of being rotten and the proportion of rotten bole volume are arguably influenced by a species-specific factor (see Schmitt 2017). This is one of the reasons why some species, such as Vouacapoua americana, have smaller maximum cutting diameters than other species <span class="citation">(Guitet <em>et al.</em> <a href="#ref-Guitet2011">2011</a>)</span>. Even further, the parameters are probably influenced at the individual scale. Factors such as growth rates and extractive contents in the heartwood have been shown to help explaining this variability <span class="citation">(Highley <em>et al.</em> <a href="#ref-Highley1970">1970</a>)</span>, [. Dicorynia guianensis, the major commercial species in French Guiana, shows high variations of wood durability between individuals (as well as within a single trunk), althought no significant effect of the site have been highlighted <span class="citation">(<span class="citeproc-not-found" data-reference-id="Amusant2004"><strong>???</strong></span>)</span>. The best examples I see supporting this hypothesis can be found in ForesTreeCulture’s results : Individuals of Dicorynia Guianensis grown in plantations (thus, favorable light condition) have a smaller proportion of duramen, which is the part that concentrates the major part of secondary metabolites possibly involved in wood imputrescibility (XXX REF). However, such a number of factors are impossible to account for right now: the dataset used by Sylvain is quite unique, and does not contain enough observations to derive species-specific coefficients, and even less measure the variability or disentangle its potential drivers at the individual tree scale. The current implementation of the rotten model can thus be considered as state-of-the-art for now. The last improvement that could be brought to the submodule would be to calculate the additional damages that would be caused by harvesting rotten trees. This is not part of our development perspectives for now since I believe that the ratio of informative power to computational expenses involved may be disadvantageous.</p>
+</div>
+<div id="main-tracks-submodule-1" class="section level4">
+<h4><span class="header-section-number">11.3.5.5</span> Main tracks submodule</h4>
+<p>The current implementation of the main tracks module relies on one quick-fix decision and one oversimplistic assumption. First, the volume threshold used in our simulation is high (190 m3 instead of 100). Current plot dimensions (400*600m) constrained the main track to go too close to the plot’s “upper” limit to be consistent with reality, and the proportion of plot length to main track length did not (in humble, yet subjective opinion) vary enough between current (20 m3) and projected (30 m3, by 2025) target volumes. The validity of the threshold was sight-estimated and requires a proper parametrization from GIS data. Not having had the time to do it in the current version, this falls in the list of improvements to bring for the next version of the module. Second, the calculation of the track extent is based on an oversimplified proportionality relationship between transiting wood volumes and surface area, according to the target volume. The validity of this assumption relies on an isotropic harvestable trees’ distribution. A more accurate method would be to decide what is the main track extent after having inventoried the harvested trees, -again accounting for the overall observed proportion of rotten trees (between 0.2 and 0.4) although a site-specific proportion would be the best, if consistent with a site-specific volume estimation equation).</p>
+</div>
+<div id="secondary-tracks-submodule-1" class="section level4">
+<h4><span class="header-section-number">11.3.5.6</span> Secondary tracks submodule</h4>
+<p>This complex submodule relies on several essential simplifications and can be improved substantially in terms of realism, although these improvements might have mitigated influence on the damages occasionated and the outcome of the simulations. First, the secondary tracks are in reality constrained by topography, felling angle, between-tracks angles, and optimized manually or automatically to minimize the disturbed areas, based on time-consuming designing or more complex algorithms based on cost functions and graph theory, that still have to be improved (Descroix, pers. comm.). For example, a secondary track joins another track smoothly (angle &lt; pi/2) to handle the bole properly, and avoid “sweeping” effects. Second, secondary tracks could be traced in a way that minimizes the destruction of big or future trees, in order to improve the operations’ carbon footprint and probability to successfully sustain timber yields. Efforts are already supposed to be made in French Guiana (and machines cannot destroy big trees), by the designation of “reserve trees” and the ONF supervision during operations, but I am not certain whether this is totally successful or not. The least we can say is that this submodule has to be examined and calibrated to be consistent with field reality, in order to improve the reliability of the model’s predictions.</p>
+
+</div>
+</div>
+</div>
+</div>
+<h3>References</h3>
+<div id="refs" class="references">
+<div id="ref-Bezard2017">
+<p>Bezard, V., Descroix, L. &amp; Thiebaut, G. (2017). <em>Diagnostics Post Exploitation (DPE) Bilan des DPE réalisés jusqu’à 2017</em>.</p>
+</div>
+<div id="ref-Guitet2011">
+<p>Guitet, S., Brunaux, O. &amp; Traissac, S. (2011). <em>Sylviculture pour la production de bois d’oeuvre dans les forêts du nord de la Guyane : Etats des connaissances et recommandations</em>.</p>
+</div>
+<div id="ref-Highley1970">
+<p>Highley, TL, Scheffer &amp; TC. (1970). Natural Decay Resistance of 30 Peruvian Woods. </p>
+</div>
+</div>
+<div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://master-thesis-1.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="the-module.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="including-more-species-in-trolls-dataset.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/sylvainschmitt/master-thesis/blob/master/09-SL_draw.Rmd",
+"text": "Edit"
+},
+"download": ["master-thesis.pdf"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

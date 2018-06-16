@@ -1,0 +1,163 @@
+# Modelling silviculture with TROLL: from reality to simulations
+
+## Introduction
+
+To model silviculture in French Guiana with TROLL, we used the first version of the logging module, which we updated according to bibliographical infoormation [mostly in @Guitet2011] and numerous communications with Laurent Descroix, head of the RD pole of the National Forels Office (ONF).
+
+Silvicultural practices *largo sensu* encompass selective logging with or without cutting cycle, tree plantation, and stand improvement, such as enrichment planting or tending operations [REF]. Nowadays in French Guiana (FG), silviculture operations mainly consist in selective logging. Tree plantations are not yet a practice to generate timber incomes, but promising experiments are ongoing [Project ForesTreeCulture; @Nicolini2016]. Stand improvement often consisted in thinning by poison-girdling, but this practice has been left apart [@Guitet2011]. Currently, Sylviculture in French Guiana is oriented towards reduced impact logging (RIL). It is called "silviculture" for the care that is taken in the operations. Part of the aim is to destroy as less future trees as possible, and optimize natural regeneration processes by reducing damages and canopy opening during operations. Notwithstanding these remarks, we mostly refer to "silvicultural treatments in FG" as "selective logging" in this whole report.
+
+Forest management focused on selective logging is currently divided into three fundamental parts: Tree choice, Harvesting, and Monitoring.  Both encompass different steps and effects:
+
+* Areas and tree choice:
+	  + Definition of the harvestable areas and main track planification
+	  + Designation of the harvestable trees by the ONF
+	  + Minor selection from the loggers
+	  + Tree probing
+* Harvesting operations:
+	  + Tree Felling
+	  + Main tracks opening
+	  + Secondary tracks opening
+	  + Bole skidding
+	  + Post-logging, residual damages
+
+
+
+Each of these processes is modeled either explicitly or implicitly. Hereafter, we detail these processes and effects in two parts: 
+
+* What currently happens with RIL implementation, or used to with "conventional"[^1] practices
+* The way we model the process in TROLL
+
+The modified version of the code will be stored in a public Github Repository.
+
+[^1]What is referred to as "conventional logging" may be equivocal. Laurent Descroix (ONF, Cayenne center) insisted several times on how "RIL2" and "conventional" are both ends of a continuum. Conventional logging was characterized by no controlled tree designation, no resource spatialization, and even less optimization of skidding tracks planning. These factors generally led to higher damages due to unoptimized tracks network, for equal target volumes, but a lower quantity of harvested timber (due to selection or lack of organization). This definition probably holds for every selectively logged tropical forest [@Kormos2012].
+
+## Choosing area and trees
+
+### Harvestable areas
+
+#### Reality
+
+The ONF subdivides forest areas into plots or sampling units. Their surface area is variable (from 20 to 250 hectares; Laurent Descroix, unpublished data), but often somewhere between 20 and 50 hectares. Mechanical and "floristic" constrain the choice of harvestable areas. Bottomlands and swamps are avoided. They generally display poor stands, and engines do not circulate well in flooded areas. Steep slopes are also avoided due to mechanical constraints. Lateral slopes are especially restricting because they increase the risk of "sweeping effect" (when the bole, tied to a cable, slips laterally) or engine fall, and thus can cause accidents and considerably increase the damages. Because of such constraints, sampling units are nearly always located on plateaus or smooth slopes around hill crests. 
+
+In conventional logging, the definition of harvestable areas follows approximately the same rules. Perhaps the guidelines mentioned above are not carefully respected as in RIL, because of prevailing profit interests and untrained crew, but it is as least comparable concerning human and mechanical safety.
+
+
+#### Model
+
+Topography is not yet implemented in TROLL model, which implicitely assumes a flat environment. Thus, we consider the whole simulated plot as a harvestable area. We simulated 24 $ha$ plots ($400*600\ m^2$), thus making a compromise between simulating realistically big plots, and computational costs. 
+
+### Designation
+
+#### Reality
+Designation was implemented with RIL by the ONF in 2007 [@Guitet2011]. It consists in mapping trees and tag trees to be harvested for the current harvest, future trees to keep for the next harvest, and "reserve" trees (ecologically important, or threatened species). The designation is made in order to meet the tarvet volume, and the preference of the loggers: the ONF does not designate trees that will not be sold. High rank species are “protected” by additional designation rules, that depend on stand spatial structure. For example, one individual of Dicorynia guianensis is marked as “reserve” every 100 meters in large aggregates. This is supposed to let enough reproductive individuals to ensure the stock in the next rotation. In CL, there were no designation. The loggers used to choose the trees, and generally focused on a few species, and big individuals.
+
+#### Model
+Designation was deeply modified in the new version of the module. For consistency with field reality, the designation process is now tailored to depend the interest loggers have for the different species present on the plot, in a simple way.
+
+There are a myriad of methods to model choice and preference, and this is a huge theoretical field of statistics and mathematics [@Kaci2011]. A choice basically depends on which entities that are confronted, which are the preferences of the actor who choose, and the presence of other entities of contextual factors (covariables that modulate choice along with preference relationships). The preference relationship between two entities (say, $A$ and $B$) can be direct and unvariant , variable , or neutral . In the first case, $A$ is always preferred over $B$, in the second, the outcome has a certain dependance on the context, and in the other, there is neither a preference for $A$ nor for $B$)
+
+To model designation oriented by the neat preferences of loggers for some timber species, we splitted species into categories and established  simple rules to choose which trees to harvest. In concrete terms, the categories are interest ranks and the contextual variable is the individual's diameter. We defined the following relationships inside and between categories :
+
+* The preference between two individuals of different ranks is direct and unvariant. Preference is oriented toward the lowest rank number regardless to diameters (provided it matches the minimum cutting diameter).
+* The preference between equal rank ndividuals depends on their diameter. The biggest one is picked, because it yields more timber.
+* If diameters and ranks are equal, both can be indifferently be picked.
+
+We use three interest ranks in to match the 3 overall categories  of species :
+* Always harvested and highly demanded (all Principal Major Commercial Species - ECMP, and *Bagassa guianensis*)
+* Species harvested if the first are not abundant enough (most of the Other Major Commercial Species - ECMA)
+* Species nearly never harvested, but sometimes [^2] if the two others are really unsufficiently abundant.
+
+[^2]:In reality, loggers often harvest less than the target volume if the stand is not commercially interesting enough, but this is not what we wanted to simulate here.
+
+In the model, the relashionships between these categories a fixed. To simulate harvesting diversification, we made species interest ranks vary (*cf* next section), but not the way ranks interact with each other. Our modelling framework is simplified :  Additional protection rules and the "reserve" designation are not implemented yet. 
+
+### Tree Probing
+
+#### RIL and conventional
+
+Generally, 20% of the trees matching commercial criteria (species and diameter) have redhibitory defaults and are considered "rotten" by the lumberman after probing. The causes of these defaults are partially mysterious. The observed symptoms are generally: the presence of holes on the trunk or the basis; the break of a big fork that has not cicatrized; or a hollow sound of the trunk. The probability for a tree to be rotten depends on its diameter, because big trees are likely to be older than small trees. They thus had more time to be exposed to wood consumers such as fungi (@Guitet2011), or events inducing crown damages (causing a vulnerability) due to neighboring treefalls.
+
+The ONF "encouraged" the loggers to harvest all trees, including rotten ones, during an experimental campaign, and gathered data on the probability to be probed rotten, the actual rotten volume, and the characteristics of the trees (Laurent Descroix, pers. comm.). According to this data, around half the designated trees probed rotten by lumbermen are intact on a *ca.* 90% of their bole volume. An exciting perspective is to valorize those trees. Conversely, these trees may better be let on the plot, because they can survive and keep producing seeds. If the fuelwood demand is expanding during the next years, harvesting rotten trees may be advantageous.
+
+#### Model
+
+We used @Schmitt2017's models, calibrated on the mentioned dataset, to describe the probability for a tree to be rotten, and the proportion of intact wood in rotten trees. The first is already implemented in the module :
+
+\begin{equation}
+  \begin{array}{c} 
+    probbed~rotten \sim \mathcal{B}(P(probbed~rotten)) \\
+    P(probbed~rotten) = logit^{-1}(\beta_0 + \beta_1*dbh) = \frac{e^{\beta_0 + \beta_1*dbh}}{1 + e^{\beta_0 + \beta_1*dbh}}
+  \end{array}
+  (\#eq:rotten)
+\end{equation} 
+
+[XXX values]
+The probability for a tree to be $probbed~rotten$, noted $P(probbed~rotten)$, follows a $Bernoulli$ probability law. The odds for a tree to be probbed as rotten is the sum of a basal odd $\beta_0$, and a diameter dependent odd proportional to $\beta_1$. The probability for a tree to be probbed as rotten $P(probbed~rotten)$ is the inverse logit ($logit^{-1}$) of the odd (see @Schmitt2017 for the detailed model design).
+
+We implemented the rotten volume model as well, to compute the volume of energy wood potentially valuable from rotten trees, given by:
+
+$V_{intact} = 8.9dbh^2(1-(0.4*dbh^2))$
+
+## Then, harvesting
+
+### Felling trees
+
+#### Reality
+
+In RIL, directional felling is theoretically implemented to avoid damaging leave ("reserve") trees. The basic treefall direction is considered random, but in fact depends on the trees' natural orientation and crown aspect. In fact, four orientations characterize an optimally felled tree (see figure 1). Oriented treefall aims at orienting logs at *ca* $30^{\circ}$ in relation to the closest track (main or secondary), to reduce damages when skidding and to handle the logs with more ease. Unfortunately, very few harvesters currently apply this technique in French Guiana, at least for now. Its implementation is ongoing, being part of the ONF's goals.
+
+In conventional logging, few care is taken in felling the trees. The orientation is not controlled, and future trees are not accounted for at all. It makes it more dangerous for workers, and the damages in the understorey are expected to be higher.
+
+#### Model
+The complexity and computational costs involved with directional felling implementation are too high regarding the gain that it represents. A fully functional oriented treefall function would do it by assessing, for each harvested tree, what orientation fits with the closest track and involves the minimum damage for future merchantable trees, which would have to be preliminarily marked. We hope that further developments of the module will bring an easy and computationally efficient way to implement this feature. In the current implementation, trees are felled at random angle, and gap dimensions are kept in memory to subsequently compute post-logging damages.
+
+
+### Main Track
+
+#### Reality
+
+Foresty roads and tracks are split in three categories: truck roads, main tractor track, and secondary track (*cloisonnement*). In each plot, the main track is designed following the crest line (using digital elevation models). The main track extent within the sampling unit generally depends on the quantity of wood available in the plot. If more than 100 cubic meters of wood are transiting on a segment of forest track, the main track must be built up to there, probably to avoid excessive damages to the soil (that cause compaction, erosion and ultimately, infrastructure destruction). Wood quantity can be assessed directly, or using using surface as a proxy. This second option is often used, but assumes an isotropic distribution of harvestable trees, which is often violated to some extent.
+
+#### Model
+
+Given TROLL's assumption of a flat environment, the main track is opened from the midle of one side of the plots  with a width of 6 meters, and traced untill reaching the point corresponding to a volume threshold.
+The extent of the main track is foreseen using the targetted volume and the dimensions of the plot, and the surface uncovered by the main track correspond to the volume threshold, approximately. We choosed to use a threshold of 250 $m^3$, instead of the 100 $m^3$ used by the ONF. This adaptation was specific to the size and shapes of our plots, and is partly wrong. However, with 100m3, the main track always reached very close to the other edge of the plot, and this was conceptually disturbing.
+
+
+### Secondary tracks
+
+#### Reality
+
+One of the major improvement in RIL is the mapping of felled trees and the usage of topographical relevés to optimize the secondary tracks network. The National forest office currently uses these tools to trace the tracks manually (being careful with inclinations and slopes) the secondary tracks in a way that more wood is extracted for a reduced track area. Software developed by the CIRAD and ONF is also used to optimize the tracks automatically but is currently still improved, to become fully functional. Recent improvements, such as the use of a nylon cable to skid the logs, also allow reducing the damage, because the tracks do not have to go up to every tree. Thus, tracks are designed to go between trees, approaching them to a distance of 30 meters maximum.
+
+
+Conventional logging was primarily characterized by the absence of GPS mapping and topographical relevés. Skidding tracks were designed directly in the field. Thus, some trees were omitted and the track network used to be everything but optimal. There is no evident way to describe how tracks were typically traced. Bulldozers were used to go up to every felled tree, following the (somewhat imprecise) approximations of lumbermen. Overall, this could be more related to sight-based skidding, and getting trees from close to close.
+
+##### Model
+
+We modeled both conventional and RIL skidding fashions. RIL skidding was already implemented in the first version of the modules [see @Schmitt2017]. CL was modeled using the simple assumption that the closest tree is first harvested, and the next ones, from close to close.
+
+Figure \@ref(fig:tracksRIL) shows maps generated with both options, at two different harvest intensities. Note the difference in track extent, and the dependence to target volume.
+
+
+```{r tracksRIL, echo=FALSE, fig.cap='Maps generated by the selective logging module. A and B are maps obtained with a target volume of 30 cubic meters. For C and D, target volumes were 20 cubic meters. A and C were simulated with the RIL configuration. B and D were simulated with the conventional logging configuration.'}
+knitr::include_graphics('images/logging_fig.png', dpi = NA)
+```
+
+### Residual mortality
+
+#### Reality
+Logging operations have immediate and secondary damages on tree stands. If the cause of the immediate damages is easy to guess, secondary damages are way less conspicuous and cause residual mortality during the first years after logging operations. These damages can be due to direct hurts underwent by the remaining trees during felling or skidding (uprooted stems, stem wounds, and bark scrapes), or due to consequences of the induced habitat changes. As exposed in section 4 of the thesis, mortality rates are higher at Paracou during the first years following logging, from 1987 to 1994.
+
+#### Model
+Generally, long term damages due to selective logging are modelled with a 10 years increased mortality [@Huth2004; @Khler2004; @Ruger2008]. We used the model developed by @Schmitt2017 last year, who gathered data from Paracou censuses between 1988 and 1992 on harvested plots and adapted the model from @Herault2010 based on a disturbance index into:
+
+\begin{equation}
+  \begin{array}{c} 
+    Death \sim \mathcal{B}(P(Death)) \\
+    P(Death) = logit^{-1}(\theta + \beta*e^{\alpha*d_{gaps}}) = \frac{e^{\theta + \beta*e^{\alpha*d_{gaps}}}}{1 + e^{\theta + \beta*e^{\alpha*d_{gaps}}}}
+  \end{array}
+  (\#eq:death)
+\end{equation} 
+
+$Death$ of a tree follows a $\mathcal{B}ernoulli$ law of probability $P(Death)$. The odds for a tree to die are calculated with the sum of the natural tree death odd $\theta$ and a perturbation index $\beta*e^{\alpha*d_{gaps}}$. The perturbation index depend on the distance $d_{gaps}$ of the tree $i$ to the closest logging gap. The probability for a tree to die $P(Death)$ is finally calculated by taking the inverse logit $logit^{-1}$ of the odd.

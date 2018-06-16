@@ -1,0 +1,1771 @@
+--- 
+title: "Master thesis"
+author: "Nino PAGE"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+output: 
+  bookdown::gitbook
+csl: C:/Users/nino.page/Desktop/my_thesis/mee.csl
+bibliography: C:/Users/nino.page/Desktop/bibs/thesis.bib
+link-citations: yes
+colorlinks: yes
+cover-image: images/main.png
+---
+
+`r if (knitr:::is_html_output()) '# Preface {-}'`
+
+
+```{r fig.align='center', echo=FALSE, message = FALSE, warning = FALSE, include=identical(knitr:::pandoc_to(), 'html')}
+knitr::include_graphics('images/main.png', dpi = NA)
+```
+
+`r if (knitr:::is_html_output()) 'This is the online html version of my master thesis. The pdf version is available for download with the download button on top of the window.'`
+
+`r if (knitr:::is_html_output()) 'Have a nice reading.'`
+
+`r if (knitr:::is_html_output()) '<div align="right">  *Nino*'`
+
+<!--chapter:end:index.Rmd-->
+
+# Résumé {-} 
+
+ OK lets go[@Guariguata2000]
+
+
+<!--chapter:end:00-Abstract.Rmd-->
+
+# Introduction
+
+
+<!--chapter:end:01-Introduction.Rmd-->
+
+# TROLL model
+
+## Overview
+
+
+
+In a few words, TROLL simulates every tree starting from 1 meter high (formerly, 1 cm dbh) in a spatialized light environment, where every process of the trees life cycle are modeled according to global rates, species-specific traits, and photosynthetic rates influenced by individual-level light incomes. TROLL can thus be defined as an individual-based and spatially explicit forest growth model, along with SORTIE  [@Pacala1996; @Uriarte2009] and FORMIND [@Fischer2016; @Kohler1998]. Actually, TROLL can be qualified with many adjectives. The most important among them are individual tree-based, spatially-explicit, and process- and physiology-based.
+
+TROLL simulates two classes of objects: species, and trees. Trees are simulated in a tridimensional (voxel) space of one-meter resolution, in which the light environment is explicitly computed. One tree can settle in each horizontal pixel of 1$m^2$. Each tree has a number of attributes, which we can classify into two categories: biometric, state variables, and species-specific variables (see Figure . 
+
+```{r TROLLtree, echo=FALSE, fig.cap='Individuals tree inside TROLL explicit spatial grid from @Marechaux2017b. Tree geometry (crown radius CR, crown depth CD, height h, diameter at breast height dbh) is updated at each timestep (1 months) using allometric relationship with assimilated carbon allocated to growth. Each tree inherits a species label linking to its species-specific attributes. Light is computed explicitly at each timestep for each voxel, and trees are asymetrically shading each-other.'}
+knitr::include_graphics('images/TROLLtree.png', dpi = NA)
+```
+The firsts encompass tree age, diameter at brease height ($dbh$), height ($h$), crown radius ($CR$) and depth ($CD$), leaf area ($LA$). 
+The second encompass five functional traits and two allometric parameters (*cf.* Table \@ref(tab:traits)). Species are linked to trees with by a species label, which is inherited from the parent (mother) tree.
+
+```{r traits, echo=FALSE}
+table <- data.frame(
+  Abbreviation = c('$LMA$', '$N_m$', '$P_m$', '$wsg$', '$dbh_{thresh}$', '$h_{lim}$', '$a_h$'),
+  Description = c('leaf mass per area', 'leaf nitrogen content per dry mass', 'leaf phosphorous content per dry mass', 'wood specific gravity', 'diameter at breasth height threshold', 'asymptotic height', 'parameter of the tree-height-dbh allometry'),
+  Units = c('$g.m^{-2}$', '$mg.g^{-1}$', '$mg.g^{-1}$', '$g.cm^{-3}$', '$m$', '$m$', '$m$')
+)
+knitr::kable(table, caption = 'Species-specific parameters used in TROLL from @Li. Data originates from the BRIDGE [@Baraloto2010] and TRY [@Kattge2011] datasets.', format = 'pandoc')
+```
+
+Tree geometry is derived from its diameter according to allometric relations (XXX refs), whereas leaf area varies dynamically within each tree crown.  Contrasting with other forest simulators, TROLL models tree growth as the result of an explicitly computed carbon balance between assimilation by photosynthesis, emissions from respiration (XXX), and allocation to the different tree compartments. Assimilation is computed according to climate input data, over half-hourly periods of a representative day, and influences the simulated environment at the next time step, which defaults to one month. Seeds and seedlings are not explicitly modeled and are considered part of a seedling/seed pool.  Every tree belongs to a species through a species label, and thus shares common species features that are inherited from the mother tree through the seed. The species label established the correspondence between a tree and species-specific parameters, i.e. trait values obtained from field measurements (and inference).
+Currently, soil processes and topography are not explicitly modeled. Their overall influence on a real forest at a plot's scale is implicit, partly accounted for when using site-specific species datasets (see after).
+
+<!--chapter:end:02-Model.Rmd-->
+
+# Including more species in TROLL simulations
+
+## Summary
+
+We included more species to the existing dataset used for TROLL simulations. This choice was motivated by both theoretical and practical reasons. The aims were either to enhance the coverage (in number of trees) for Paracou simulations (see next section) and to have enough species to simulate large plots, for the logging experiment. We hierarchically inferred species-specific means for leaf traits, stem traits and allometric parameters, with the BRIDGE dataset. We estimated maximum diameters from the whole Guyafor dataset, pooled with BRIDGE. We used Predictive Mean Matching to complete the dataset beforehand, due to a variable -Pmass- that considerably limited our possibilities. 
+
+## Introduction
+
+The importance of biodiversity (in its most generic assertion) in ecosystem functioning[add ref] is well recognized. It affects most of the ecosystemic characteristics, among others productivity  [@Loreau2010], stability [@Loreau2001], resistance to invasion [@Lyons2001]. Recent advances in Functional Ecology suggest that the most relevant component of communities decription to study ecosystem functioning is its functional composition, that can be assessed using functional traits. Functional traits are formally defined as morpho-physio-phenological traits that indirectly impact fitness via their effect on growth, survival, and reproduction [@Violle2007]. 
+
+Accounting for functional traits and their effects on processes, instead of overall rates, is necessary to model forest dynamics with a finer accuracy. Classical models often use a limited number of species groups defined according to restrictive criteria. TROLL directly uses 5 functional traits (LMA, Nmass, Pmass, and wsg) and 2 allometric parameters at the species-specific level. All were obtained from real data,. TROLL is one of the few models that depicts forests' functional compositions with such finesse and accuracy, thus allowing finer-scales investigation (@Marechaux2017, @Marechaux2017b, also see @FyllasREF for a continuum-based approach).
+
+The two primary goals of this work were to assess TROLL's capacity to simulate post-logging ecosystem trajectories from real censuses, and to simulate silviculture as currently done in French Guiana. For the first, we used real forest censuses from the Paracou Disturbance Experiment site. For the second, we simulated forests *in silico*. Given the number of species present at Paracou (>800), and in French Guianean forests in general, we wondered whether the 163 species included in TROLL's current list were numerous enough to achieve our goals. The actual need to include more species emerged when we explored Paracou individual plots (6.25 ha), that had a variable but generally large (20-50%) proportion of individuals belonging to species not included in TROLL's list (hereafter referred to as *missing species*).
+
+We used the BRIDGE and Guyafor datasets to include new species for our simulations. Because the dataset had few non-missing values of Pmass, we infered missing values with an approach based on Predictive Mean Matching, taking advantage of the correlations between traits. We then used hierarchical models to infer species means for Nmass, Pmass, LMA, and wsg, including all complete observations. Maximum diameters (dmax) were the 99th percentiles taken from both BRIDGE and Guyafor datasets. For allometric parameters, we used a Michaelis-Menten version of the same hierarchical models. The model blueprints were generously provided by Fabian Fisched (EDB, Toulouse).  
+
+## Context and Problem
+```{r loads, echo = FALSE}
+library(tidyverse)
+bridge <- read.csv("C:/Users/nino.page/Desktop/TrollR_data/BRIDGE/bridge.csv", sep = ";", dec = ".")
+sp <- read.table("C:/Users/nino.page/Desktop/TrollR_data/species.txt", header = T)
+
+bridge2 <- read.csv("C:/Users/nino.page/Desktop/TROLL project/data/traits/BRIDGE_data_ind_2013_10_29.csv", header = T, sep = ";")
+
+for(i in 1:nrow(bridge2)){
+if(!is.na(bridge2$traits_surf_area[i])){
+bridge2$LA[i] <- bridge2$traits_surf_area[i]
+}
+else{
+bridge2$LA[i] <- (bridge2$ind_surf_area[i])/3
+}
+}
+bridge2 <- bridge2 %>% mutate(LMA = 10000*dry_mass/LA)
+bridge2 <- bridge2 %>% filter(Family != "Arecaceae")
+bridge2 <- bridge2 %>% mutate(species = paste(Genus, species, sep = "_")) %>% 
+  rename(wsg = sapwood_dens, Nmass = N, Pmass = P, dbh = DBH) %>% 
+  select(species, LMA, wsg,Nmass,Pmass, Height,dbh) %>%
+  mutate(LA = NA)
+
+
+
+baseline <- read.table("file:///C:/Users/nino.page/Desktop/TROLL project/logging/input_forests/baseline/baseline.txt",header = T)
+
+miced_bridge <- read.csv("C:/Users/nino.page/Desktop/TROLL project/data/traits/miced_dataset_straight.csv", header = T, sep = ",")
+```
+### The initial species list
+
+TROLL's current species-specific trait dataset contains 8 variables: $LMA$, $Nmass$, $Pmass$, $wsg$, $hmax$, $dmax$, $ah$, and $Freg$ (see table \@ref(tab:traits), in the previous section). We decided to let apart Freg (the regional frequency of a species) which are adapted for each simulation depending on the forest composition and simulation aims.
+
+The actual maximum height a tree can reach in TROLL model depends on both its maximum diameter, and the H-dbh allometry at the species level.It is given by: $h_{max[real]} = \frac{1.5*h_{max}*d_{max}}{(1.5*d_{max}+ah)}$. With hmax and ah, the parameters of a Michaelis Menten equation (for details, see corresponding inference section). These parameters are highly correlated [@Schmitt2017]. Although its name may be quite confusing, hmax corresponds to an asymptotic height, which rigourously means that this height will never be reacher by any tree of a given species. 
+
+```{r distritrolll,out.width = "0.8\\textwidth", fig.cap = "distributions of six functional traits in TROLL species list: LMA, Nmass, Pmass, wsg, dmax, and hmax(real), this one being the outcome of both allometries and maximum diameters. Details on the traits are available in the model description section.", fig.height=6, fig.width=10, echo=FALSE}
+sp %>% rename(species = X....) %>%
+  mutate(hrealmax = 1.5*hmax*dmax/(1.5*dmax+ah)) %>%
+  select(-seedvolume,-Freg, -ah , -hmax) %>%
+  reshape2::melt(id.var = "species",
+       variable.name = "trait") %>% 
+  # filter(trait == "LMA") %>% 
+  ggplot(aes(value)) +
+  geom_histogram() +
+  facet_wrap(~trait, scales = "free")
+```
+### Can we represent Paracou forests with TROLL species list ?
+
+#### Missing species and individuals
+
+#### Representativity of the subsets
+
+## Methods
+
+## Data used
+
+## The BRIDGE trait database
+
+We used the BRIDGE trait database (@Baraloto2010, @Baraloto2012) which was further completed by the Toulouse EDB team (@Marechaux2017a, @Marechaux2017b XXX REF). 
+The BRIDGE dataset contains measurements for ten leaf and stem traits, with a total of 4709 individuals. One of the strengths of BRIDGE is that nine plots were sampled exhaustively, thus providing an exceptional representation of the French Guianean forests functional composition for >10cm dbh trees. However, another feature of the BRIDGE dataset is that the plots sampled are tropical rainforest: the dataset contains numerous species with a majority of rare (>4 observations) and a minority of highly dominant (> 200 observations) species.We used six individual-level traits and characteristics, namely: LMA, Nmass, Pmass, wsg, H, d (@tablebridge). Trait distributions are shown in \@ref(fig:tablebridge).
+
+```{r tablebridge2, fig.cap='Summary table of the trait data obtained from the BRIDGE database', echo = F}
+n_species <- c(0,0,0,0,0,0)
+traits <- c("LMA","Nmass","Pmass","wsg","Height","dbh")
+for(i in 1:length(traits)){
+  col <- which(names(bridge2) == traits[i])
+  n_species[i] <- bridge2[which(!is.na(bridge2[,col])),"species"] %>% unique %>% length
+}
+
+total <- bridge2 %>% filter(!is.na(LMA) &
+                              !is.na(Nmass)&
+                              !is.na(Pmass)&
+                              !is.na(wsg)&
+                              !is.na(Height)&
+                              !is.na(dbh))
+completerows <- total %>% nrow
+completesp <- total %>% select(species) %>% unique %>% nrow
+
+totalwP <- bridge2 %>% filter(!is.na(LMA) &
+                              !is.na(Nmass)&
+                              !is.na(wsg)&
+                              !is.na(Height)&
+                              !is.na(dbh))
+completerowsP <- totalwP %>% nrow
+completespP <- totalwP %>% select(species) %>% unique %>% nrow
+
+totalrow = c("Total","complete\ observations","\ -\ ", completerows, "\ -\ ", completesp)
+totalrowP = c("LMA, N, wsg","complete\ observations\ (Pmass\ excluded)","\ -\ ", completerowsP, "\ -\ ", completespP)
+
+tabs <- bridge2 %>%
+  select(species,LMA, Nmass, Pmass, wsg, Height, dbh) %>%
+  reshape2::melt(id.var = "species",
+       variable.name = "trait") %>% 
+  mutate(isna = if_else(is.na(value), 1, 0))%>% 
+  group_by(trait) %>% 
+  summarize(missing = sum(isna), complete = sum(if_else(isna == 0, 1, 0))) %>% 
+  mutate(trait = paste0('', trait, '')) %>% 
+  mutate(dataset_unit = c("g.cm^{2}", "mg.g^{-1}","mg.g^{-1}", "g.cm^{-3}","m","m")) %>% 
+  mutate(full_name = c("leaf\ mass\ per\ areaa",
+                       "leaf\ nitrogen\ content\ per\ dry\ mass",
+                       "leaf\ phosphorous\ content\ per\ dry\ mass",
+                       "wood \ specific\ gravity",
+                       "tree\ height",
+                       "diameter at breast hight"))%>% 
+  rowwise() %>% 
+  cbind(n_species) %>%
+  select(trait, full_name, dataset_unit, complete, missing, n_species) %>% 
+  rename_("Full\ name" = "full_name",
+          "Trait" = "trait",
+          "Unit" = "dataset_unit",
+          "N\ (complete)" = "complete",
+          "Missing\ data" = "missing",
+          "Species" = "n_species"
+          ) 
+tabs%>% 
+  rbind(totalrow) %>% 
+  rbind(totalrowP) %>% 
+  knitr::kable("pandoc") 
+
+
+
+```
+ The dataset we used contains large amounts of missing data, as the majority of functional trait databases (@Taugourdeau2014).Still, we can infer a great number of species means for LMA, Nmass, wsg and height-diameter allometries. For Pmass, however, very few observations are available compared to other variables(Table \@ref(tab:phosphorus)). It is by far the most limiting variable. Indeed, out of the 270 specie, the overwhelming majority of them are singletons (\@ref(fig:phosphorous)). @Marechaux2017b have apparently further completed this dataset, probably with TRY database (@Kattge2011) to achieve parametrization for 163 species in TROLL. 
+
+```{r phosphorus, fig.cap = 'Histogram of the number of observations per species for Pmass. Most species are singletons.', echo = F,out.width = "0.5\\textwidth"}
+bridge2 %>%  
+  filter(!is.na(Pmass)) %>% 
+  group_by(species) %>% 
+  summarise(n = n()) %>% 
+  arrange(desc(n)) %>% 
+  ggplot(aes(x = n))+
+  geom_histogram(binwidth = 1)+
+  xlab("Number of observatons")+
+  ylab("Species count")
+  
+```
+
+
+## Preliminary completion 
+
+## Simple hierarchical models
+
+## Michaelis-Menten hierarchical model
+
+
+\begin{equation}
+  h_{log} \sim \mathcal{N}(\hat h, \sigma)
+  (\#eq:leaftraits1)
+\end{equation}
+
+\begin{equation}
+  \hat h = log(\frac{1}{(\frac{1}{h_{max_{sp[i]}}}+\frac{1}{\beta_{sp[i]}*dbh[i]})})
+  (\#eq:leaftraits1)
+\end{equation}
+h_{max_{sp}}
+
+h_log ~ normal(h_hat, sigma)
+h_hat[i] = log(1/(1/hm_sp[i] + 1/(be_sp[i]*dbh_adjusted[i])))
+
+### Leaf and stem traits
+
+To infer species mean traits, we used two types of hierarchical models. Both accounted for two layers only, for reasons of parsimony: adding grouping variables (Genus or Family) did not bring significant improvement considering the number of parameters added.
+
+We used the following model: 
+
+\begin{equation}
+  X_{sp} \sim \mathcal{N}(\mu_{sp}, \sigma_{intra})
+  (\#eq:leaftraits1)
+\end{equation}
+
+Where, for individuals belonging to species $s$, and a given trait of log-transformed trait $X$, the $X$ attribute of these individual follows a $Gaussian$ prodability distribution, of parameters $\mu_{sp}$, a species-level trait mean, and $sigma_{intra}$, the intraspecific variance (here assumer to be homogen among species). Moreover:
+
+\begin{equation}
+  \mu_{sp} \sim \mathcal{N}(\mu_{tot}, \sigma
+  (\#eq:leaftraits2)
+\end{equation}
+
+The species mean $\mu_{sp}$ itself is normally distributed, depending on an overall mean $\mu_{tot}$ and an overall variance $\sigma$.
+
+ 
+
+
+
+
+
+
+
+<!--chapter:end:03-Species.Rmd-->
+
+# Can TROLL simulate real forests and post-logging trajectories ?
+
+## Introduction
+Tree reproduction (pollination, dispersion, germination) and recruitment (seedling and sapling dynamics) are key points to understand the response of forests to disturbances such as selective logging. Due to our whopping lack of knowledge concerning autecology oftimber species and their competitors (*e.g.* pioneers), we may question the accuracy of the conclusions drawn with models in general. The original goal of this section was to evaluate TROLL’s aptitude to simulate post-logging trajectories by using real data. This yielded another question : is TROLL adapted to simulate forests from real data ? Field data of <10 cm dbh trees are scarce and often focused on a few species, making it difficult to evaluate models such as TROLL with it. We simulated ecosystem trajectories with regular censuses ($>10 dbh$), after adapting field data to the model input format, and simulating the understorey strata. Since the obtained results were aberrating, we used a spatial statistic approach to compare real censuses with mature forests simulated with comparable species composition.
+
+
+## Methods
+
+
+### Handling missing species
+
+We used the newly inferred species dataset to simulate Paracou Post-logging trajectories. Overall, 347 Paracou species matched with our dataset, resulting in higher yet still disturbing proportions of individuals belonging to missing species.
+
+
+In total, 347 species were finally represented in the whole Paracou dataset. Even considering the amount of data needed to infer species mean traits, the number of species we could use for TROLL simulations at a plot’s scale was quite reduced (100 to 200), compared to the >250 species that can occur in a single plot. We had about three missing species out of five but representing only 15-30% of the total number of individuals at the plot scale. We graphically explored the representativeness of our species subset comparing it to the whole BRIDGE database. Pioneer species were slightly under-represented, but generally, the parametrized species subset was representative of the functional diversity of the whole BRIDGE data.
+Missing species (number, %)
+Parametrised species (number, %)
+
+Because including someting false is better than not including, we replaced the individuals belonging to missing species by individuals of parametrized species, by diameter class: 10-20, 20-30,30-45,45-60,>60.
+Total
+
+### Residual mortality after logging: where to start from ?
+
+Residual mortality after selective logging is a well observed phenomenon (XXX REF). For a duration between 4 and 10 years after logging, logged stands undergo a high, persistent mortality, which is due to several factors:
+
+* A lot of trees are hurt during operations. They do not die instantaneously, but rather a few years after being hurt.
+* Soil modifications (compaction, degradation, and ultimately erosion) can also stress the trees located neer the secondary or main tracks. 
+* Changes in abiotic environment due to gap opening can be detrimental to some trees.
+
+We used Paracou data and Geraldine Derroire's mortality correction and calculation function (unpublished) to calculate annual mortality rates in the 12 plots of the Disturbance Experiment (REF XXX). Paracou plots have undergone different treatments, consisting in conventional selective logging (T1), additional Timber Stand Improvement (thinning by poison girdling, T2, T3), and additional fuelwood harvest (T3). Control plots (natural forests, T0) are also included. The annual mortality rates observed at logged plots to go back to levels comparable to control plots after six to eight years of recovery (Figure \@ref(fig:mortality)), althought this evaluation is subject to personal interpretation, for there is no neat transition.
+         
+```{r mortality, message=FALSE, echo = FALSE,warning=FALSE, fig.cap="Annual mortality rates at Paracou plots, pooled by treatment. T0 are control plots, T1 are conventionally logged plots, T2 are logged plots with additional Stand Improvement treatment (thinning by poison girdling), T3 are plots logged for timber and additional fuelwood, having also undergone Stand Improvement treatments (cf XXX REF). Grey bands around the curves are pseudo-confidence intervals generated with geom_smooth (package ggplot2). The plots were logged in 1986/1987. "}
+load("C:/Users/nino.page/Desktop/my_thesis/data_ready/ggplot_mortalite.RData")
+gmort
+```
+
+Considering that 1. the number of botanical indeterminations decreased, and the "coverage" by TROLL species list increased over time at Paracou; 2. residual mortality decreases between 6 and 8 years after logging in this dataset; and 3. we want to model as much as possible the entire trajectory following logging; we decide to start the simulations from 1992, which seems the best compromise.
+
+
+### Coordinates and duplicates
+
+Paracou inventories are real forest data at a $0.5m*0.5m$ resolution and TROLL simulates forests with horizontal cell set to 1m². Other resolutions are technically possible, but this has not been further explored and increases computation time.
+As TROLL allows only one tree to exist in a cell, we had to handle cells containing several trees: the solution was either to keep only the most prominent tree in each conflicting cell, or to replace the smallest trees in a randomly sampled, nearby free cell with an algorithm (details available on demand). Both options introduce some bias, as they consist in direct modification of the data. Deleting trees is, in our opinion, worse than moving them 1 or 2 meter away. Indeed, it has more impact on canopy structure, thus on competition for light, which is the critical process modeled by TROLL.
+
+### Missing understorey
+
+
+Paracou censuses gather only measurements for trees over 10 cm dbh, whereas TROLL simulates trees from 1 cm dbh. Starting a simulation from a Paracou inventory without any tree under 10 cm dbh is a severely erroned way to proceed : the regeneration of the understorey from scratch induces a latency between the beginning of the simulation and the first “recruitment” (*sensu* 10 cm dbh) events ;  in reality, recruitment happens continuously and new trees are registered every year.  We thus had to dodge this difficulty the most correctly as can be: by first simulating the forest understorey, that we re-injected in the initial map.
+ 
+We used simplifying, but hopefully adequate assumptions and hypotheses :
+1.  Even thought we can question TROLL realism to simulate the regeneration strata, this is still the best option for we have nearly no data for trees under 10cm dbh. We assumed that TROLL can be realistic enough to use it in this purpose.
+2.  To simulate an understorey with TROLL in order to simulate a plot with TROLL is than using another solution (for reasons of consistency).
+3.  TROLL is oriented towards simulation of competition for ligth, thus the upper-stratae spatial structure strongly impacts the lower-stratae.
+4.  Paracou was a mature forest before the logging experiment.
+5.  Mature trees project their seed on the ground. If they do so for long enough, the frequency of the seeds on the plots should be close to the frequencies of the upper strata. 
+6.  Even if logging damages (as represented on the map in Appendix XXX) let part of the >10cm trees survive, the understorey must have been more impacted in the corresponding areas : skidders and bulldozers tend to avoid big trees, but slaughter small trees. 
+7.  Thus, the understorey of a logged plot is heterogeneously impacted, and is finally a spatial mixture of “mature state” and “early stage” understoreys.
+8.  Areas outside the damaged zones have been relatively few impacted during 5 years after logging, so the understorey may have the same structure and compositions as in 1986.
+9.  Few trees over 10cm dbh have been recruted between 1987 and 1992, because of understorey damages.
+
+
+
+We adapted modeling choices considering these assumptions:
+
+* The final understorey we use to inject to the >10dbh census for logged plots is constructed from two distinct TROLL simulations of two different censuses, and spatially consistent with  the geographic data available for the plots and the upper strata structure.
+
+* For undamaged zones in disturbed plots, we simulated the understoreys from the last Paracou prelogging census during 30 years, which was a compromise between a “mature state” understorey and having initial (real) trees still alive, for spatial consistency.
+
+* For areas located within damaged zones (see map XXX), we simulated an understorey from the 1992 censuses for 5 years, to obtain a youg understorey [6] that has undergone high enlightenment in opened areas (cf pictures in XXX REF PARACOU BIBLE) 
+* For control plots, a single understorey was simulated for 30 years and reinjected in the census.
+We used packages XXXX and data XXXX
+
+
+
+### Simulation parameters
+The simulation parameters were all TROLL default parameters (calibrated in Maréchaux et al. XXX REF, adapted for the new version by Fabian Fischer, *pers. comm.*), except the seedrain scaling constant and the mortality rate parameters. 
+
+We tested a wide range of seedrain parameters, in order to calibrate the external seed rain during post-logging recovery at Paracou, for subsequent logging *in silico* experiment. This constant can have a strong influence on commercial tree species regeneration, of which depends directly the conclusions we can draw from logging experiments. TROLL’s default to simulate forests from bare ground is C_seedrain = 50000 seeds/ha, and certainly overestimates the importance of this process in our framework. We tested 100%, 50%, 25%, 10% and 5% of the default value.
+
+Initially, mortality parameters were let to their default (i.e. the minimum mortality rate, m0 = 0.025; and the slope, m1 = 0.025), but we tested softer mortality rates *a posteriori* since the results were highly anormal.
+
+### Spatial structure analysis
+
+After seeing the first outputs, we simulated mature forests corresponding to each plot in terms of species composition (regional frequencies set to plot frequencies, default seed-rain scaling constant). Simulations lasted 600 years, which is assumed to be sufficient to reach maturity for high seed-rain influence [@Marechaux2017b].
+
+Spatial statistical analyses were performed with the help Stéphane Traissac, using the  ads R-package (XXX REF). We compared the spatial structure of TROLL and Paracou forests using classical spatial indices, based upon Ripley's K function (@Ripley1977), namely g(r) and L(r). The first is the linearised version of K proposed by @Bezag1977a, thas has the advantage to be readily interpreted. The second is the derivative of Ripley's K function, and is proportional to the expected number of neighbours present between two consecutive circles at a distance r, for a randomly choosen point in the map.
+
+
+## Results and discussion
+
+### Simulated trajectories
+
+Figure X shows the trajectories obtained for a control plot (T0) and a logged plot (T1), in terms of above-ground carbon biomass (AGBc, $kgC.ha^{-1}$) and densities of canopy trees ($dbh > 30$,N30,$ha^{-1}$). In every plot, for every simulation, we observed an anormal decrease in AGBc and N30 compared to the real evolution of these values. This pattern holded at every mortality rate tested, although high mortality lead to stronger decreases in AGBc and N30. This surprinsing behavior is not likely to be linked to the way we simulated the understorey, because it affects trees over 30 dbh. There are several possible reasons to this observation. One can be an inaccurate parametrization of the model, but it seems unlikely to be the case, because @Marechaux2017b did intensive calibrations. Another can be an overestimated basal mortality rate, but we tested a wide range of values. A factor also influencing the results may be our data pre-treatment, consisting in replacing trees which had duplicated coordinates. The observed pattern is however homogen for all simulations, that were led with different random seeds. The last hypothesis we can make is that the observed result are due to a difference in spatial structure between TROLL and real forests. Light competition is the principal ressource-limiting process modelled in TROLL, which reproduces realistic forests in terms of global variables and floristic composition [see @Marechaux2017b]. Other factors, possibly explaining a proportion of the overall mortality rate in reality, are not accounted for, which may lead to an overestimation of the detrimental effects of competition for light in TROLL. This hypothesis is further discussed hereafter.
+
+### Spatial statistics
+
+```{r spatialcontrol, echo = FALSE,fig.cap="Spatial structure of simulated (A and B) and real (C and D) forests for Paracou plot P1 (undisturbed). A and B show the distribution of g(r), the pair density function. C and D show the distribution or L(r), a linearization of Ripley's K. Both were computed for 30 radii ranging from 1 to 30 meters. Solid black lines are the observed distributions, dotted red lines represent the expected mean distribution under null hypothesis (Complete Spatial Randomness, CSR). Green areas are 99% confidence intervals (CIs) around the CSR null distribution means (for each radius), that were obtained by resampling randomly trees coordinates (1000 simulations). Parts of the curves that are out the CIs, for a given radius, violate the assumption of CSR for this radius. Values under the CIs indicate an overdispersed repartition, and values over the CIs, a clustered repartition"}
+knitr::include_graphics('./plots/p01/Plot_1.pdf', dpi = NA)
+```
+
+
+```{r spatiallogged, echo=FALSE, fig.cap="Spatial structure of simulated (A and B) and real (C and D) forests for Paracou plot P1 (logged). These graphics correspond rigourously to the figure, please refer to its label for description and interpretation tips."}
+knitr::include_graphics('./plots/p01/Plot_3.pdf', dpi = NA)
+```
+The spatial distribution of trees over 30 cm dbh differed greatly between real forests (year 1992) and mature simulated forests, regardless if real plots have been logged or are undisturbed (Figures \@ref(fig:spatialcontrol) and \@ref(fig:spatiallogged)). This pattern holds for every plot (Annexe XXX to see the rest of the graphs). 
+The $L$ function (C and D, on both) curves slightly differ for logged and disturbed plots, with a slightly overdispersed spatial structure for radii between 3 and 10 meters in control plots. In TROLL mature forests, L(r) reaches extremely low values for radii up to 10 meters. The rest of the curve probably stays out of the confidence interval because of the autocorrelation inherent to $L(r)$: it is computed foc concentric circles, so the deficit in points observed for low radii impacts severely the rest of the distribution. The $g$ function curves bring more reasonable results, yet still showing an enormous overdispersion in simulated mature forests, for radii between 1 and 5 meters. The $g(r)$ curves are computed for consecutive crowns (the inner-most circle is eliminated). this yields more reasonable, autocorrelation-free results, yet loosing discrimination power.
+ 
+These result show us that TROLL tends to overdisperse drastically trees over 30 cm dbh compared to real forests at small scale (radius < 5m). It is quite difficult, at first sight, to disentangle the effects of light competition and discretisation (cells of 1m²) in TROLL: we are comparing two structurally different objects. TROLL is constrained to homogen spatial structure at fine scale (say, from 1-2 m radius) because of its fundamental assumption of a discrete space with maximum 1 tree in each cell, while natural forests are spatially continuous. Although the same analysis for saplings or poles (*sensu* $<10$ and $<20$ cm dbh) would have only revealed the ovious effects of TROLL's conception, focusing on big trees (over 30cm dbh) yields interesting clues to explain the results described above.  It seems likely that TROLL underestimates trees tolerance to shade of vicinity with other big trees, thus making simulation from real data irrelevant for structural reasons. We can question the validity of the model, because in natural forest, certain demographic and successional processes rely on trees vicinity, for example, substitution (a strategy "adopted" by some trees, consisting in growing close to big ones to benefit additional water and nutrients). However, the fact that TROLL might overestimate competition for light and yield forest with overdispersion of big trees does not take away the numerous advantages of this model, such as jointly simulating carbon and biodiversity (@Marechaux2017b), exploring the impact of forests composition on ecosystem resilience (@Schmitt2017), or simulate selective logging with unequalized spatial resolution. Modelling real forest with TROLL is just not what it is meant to... for now.
+
+
+
+
+ 
+
+
+<!--chapter:end:04-Paracou.Rmd-->
+
+# Modelling silviculture with TROLL: from reality to simulations
+
+## Introduction
+
+To model silviculture in French Guiana with TROLL, we used the first version of the logging module, which we updated according to bibliographical infoormation [mostly in @Guitet2011] and numerous communications with Laurent Descroix, head of the RD pole of the National Forels Office (ONF).
+
+Silvicultural practices *largo sensu* encompass selective logging with or without cutting cycle, tree plantation, and stand improvement, such as enrichment planting or tending operations [REF]. Nowadays in French Guiana (FG), silviculture operations mainly consist in selective logging. Tree plantations are not yet a practice to generate timber incomes, but promising experiments are ongoing [Project ForesTreeCulture; @Nicolini2016]. Stand improvement often consisted in thinning by poison-girdling, but this practice has been left apart in agreement with the results of the Paracou Disturbance Experiment (@Guitet2011)[XXX ref]. Currently, Sylviculture in French Guiana is oriented towards reduced impact logging (RIL). It is called "silviculture" for the care that is taken in the operations. Part of the aim is to destroy as less future trees as possible, and optimize natural regeneration processes by reducing damages and canopy opening during operations. Notwithstanding these remarks, we mostly refer to "silvicultural treatments in FG" as "selective logging" in this whole report.
+
+Forest management focused on selective logging is currently divided into three fundamental parts: Tree choice, Harvesting, and Monitoring.  Both encompass different steps and effects:
+
+* Areas and tree choice:
+	  + Definition of the harvestable areas and main track planification
+	  + Designation of the harvestable trees by the ONF
+	  + Minor selection from the loggers
+	  + Tree probing
+* Harvesting operations:
+	  + Tree Felling
+	  + Main tracks opening
+	  + Secondary tracks opening
+	  + Bole skidding
+	  + Post-logging, residual damages
+
+
+
+Each of these processes is modeled either explicitly or implicitly. Hereafter, we detail these processes and effects in two parts: 
+
+* What currently happens with RIL implementation, or used to with "conventional"[^1] practices
+* The way we model the process in TROLL
+
+The modified version of the code will be stored in a public Github Repository.
+
+[^1]What is referred to as "conventional logging" may be equivocal. Laurent Descroix (ONF, Cayenne center) insisted several times on how "RIL2" and "conventional" are both ends of a continuum. Conventional logging was characterized by no controlled tree designation, no resource spatialization, and even less optimization of skidding tracks planning. These factors generally led to higher damages due to unoptimized tracks network, for equal target volumes, but a lower quantity of harvested timber (due to selection or lack of organization). This definition probably holds for every selectively logged tropical forest [@Kormos2012].
+
+## Choosing area and trees
+
+### Harvestable areas
+
+#### Reality
+
+The ONF subdivides forest areas into plots or sampling units. Their surface area is variable (from 20 to 250 hectares; Laurent Descroix, unpublished data), but often somewhere between 20 and 50 hectares. Mechanical and "floristic" constrain the choice of harvestable areas. Bottomlands and swamps are avoided. They generally display poor stands, and engines do not circulate well in flooded areas. Steep slopes are also avoided due to mechanical constraints. Lateral slopes are especially restricting because they increase the risk of "sweeping effect" (when the bole, tied to a cable, slips laterally) or engine fall, and thus can cause accidents and considerably increase the damages. Because of such constraints, sampling units are nearly always located on plateaus or smooth slopes around hill crests. 
+
+In conventional logging, the definition of harvestable areas follows approximately the same rules. Perhaps the guidelines mentioned above are not carefully respected as in RIL, because of prevailing profit interests and untrained crew, but it is as least comparable concerning human and mechanical safety: this is about common sense.
+
+Moreover, the rules (XXX WHICH ONES) stipulate that these zones may not be crossed by engines, to avoid jeopardizing the integrity of freshwater ecosystems. Additionally, a buffering space (XXX WHICH DIMENSIONS) have to be left intact around creeks and waterlogged areas, for the same reasons. 
+
+
+#### Model
+
+Topography is not yet implemented in TROLL model, which implicitely assumes a flat environment. Thus, we consider the whole simulated plot as a harvestable area. We simulated 24 $ha$ plots ($400*600\ m^2$), thus making a compromise between simulating realistically big plots, and computational costs. 
+
+### Designation
+
+#### Reality
+high rank species are “protected” by additional designation rules, that depend on stand spatial structure. For example, one individual of Dicorynia guianensis is marked as “reserve” every 100 meters in large aggregates. This is supposed to let enough reproductive individuals to ensure the stock in the next rotation.
+#### Model
+Designation was deeply modified in the new version of the module. For consistency with field reality, the designation process is now tailored to depend the interest loggers have for the different species present on the plot, in a simple way.
+
+There are a myriad of methods to model choice and preference (REF CHOICE MODELLING), and this is a huge theoretical field of statistics and mathematics. A choice basically depends on which entities that are confronted, which are the preferences of the actor who choose, and the presence of other entities of contextual factors (covariables that modulate choice along with preference relationships). The preference relationship between two entities (say, $A$ and $B$) can be direct and unvariant , variable , or neutral . In the first case, $A$ is always preferred over B, in the second, the outcome has a certain dependance on the context, and int the latter, there is neither a preference for A nor for B)
+
+To model designation oriented by the neat preferences of loggers for some timber species, we splitted species into categories and established  simple rules to choose which trees to harvest. In concrete terms, the categories are interest ranks and the contextual variable is the individual's diameter. We defined the following relationships inside and between categories :
+* The preference between two individuals of different ranks is direct and unvariant. Preference is oriented toward the lowest rank number regardless to diameters (provided it matches the minimum cutting diameter).
+* The preference between equal rank ndividuals depends on their diameter. The biggest one is picked, because it yields more timber.
+* If diameters and ranks are equal, both can be indifferently be picked.
+
+We use three interest ranks in to match the 3 overall categories  of species :
+* Always harvested and highly demanded (all Principal Major Commercial Species - ECMP, and *Bagassa guianensis*)
+* Species harvested if the first are not abundant enough (most of the Other Major Commercial Species - ECMA)
+* Species nearly never harvested, but sometimes [^2] if the two others are really unsufficiently abundant.
+
+[^2]:In reality, loggers often harvest less than the target volume if the stand is not commercially interesting enough, but this is not what we wanted to simulate here.
+
+In the model, the relashionships between these categories a fixed. To simulate harvesting diversification, we made species interest ranks vary (*cf* next section), but not the way ranks interact with each other. Our modelling framework is simplified :  Additional protection rules and the "reserve" designation are not implemented yet. 
+
+### Tree Probing
+
+#### RIL and conventional
+
+Generally, 20% of the trees matching commercial criteria (species and diameter) have redhibitory defaults and are considered "rotten" by the lumberman after probing (*i.e.* after burying a chainsaw inside the trunk to check if it is hollow). The causes of these defaults are partially mysterious. The observed symptoms are generally: the presence of holes on the trunk or the basis; the break of a big fork that has not cicatrized; or a hollow sound of the trunk. The probability for a tree to be rotten depends on its diameter, because big trees are likely to be older than small trees. They thus had more time to be exposed to wood consumers such as fungi (REF GUIDE) or Coleoptera (personal observations), or events inducing crown damages (causing a vulnerability) due to neighboring treefalls.
+
+The ONF "encouraged" the loggers to harvest all trees, including rotten ones, during an experimental campaign and gathered data on the probability to be probed rotten, the actual rotten volume, and the characteristics of the trees (Laurent Descroix, pers. comm.). According to this data, around half the designated trees probed rotten by lumbermen are intact on a *ca.* 90% of their bole volume. This is good news, because an exciting perspective is to valorize those trees. Conversely, these trees may better be let on the plot, because they can survive and keep producing seeds. If the fuelwood demand is expanding during the next years, harvesting rotten trees could be advantageous even for high rotten volume trees.
+
+#### Model
+
+We used @Schmitt's models, calibrated on the mentioned dataset, to describe the probability for a tree to be rotten, and the proportion of intact wood in rotten trees. The first is already implemented in the module :
+
+\begin{equation}
+  \begin{array}{c} 
+    probbed~rotten \sim \mathcal{B}(P(probbed~rotten)) \\
+    P(probbed~rotten) = logit^{-1}(\beta_0 + \beta_1*dbh) = \frac{e^{\beta_0 + \beta_1*dbh}}{1 + e^{\beta_0 + \beta_1*dbh}}
+  \end{array}
+  (\#eq:rotten)
+\end{equation} 
+
+[XXX values]
+The probability for a tree to be $probbed~rotten$, noted $P(probbed~rotten)$, follows a $Bernoulli$ probability law. The odds for a tree to be probbed as rotten is the sum of a basal odd $\beta_0$, and a diameter dependent odd proportional to $\beta_1$. The probability for a tree to be probbed as rotten $P(probbed~rotten)$ is the inverse logit ($logit^{-1}$) of the odd (see @Schmitt2017 for the detailed model design).
+
+We implemented the rotten volume model as well, to compute the volume of energy wood potentially valuable from rotten trees. 
+
+$V_{intact} = 8.9dbh²(1-(0.4*dbh^2))$
+
+## Then, harvesting
+
+
+### Felling trees
+
+#### Reality
+
+In RIL, directional felling is theoretically implemented to avoid damaging leave ("reserve") trees. The basic treefall direction is considered random, but in fact depends on the trees' natural orientation and crown aspect. In fact, four orientations characterize an optimally felled tree (see figure 1). Oriented treefall aims at orienting logs at *ca* $30^{\circ}$ in relation to the closest track (main or secondary), to reduce damages when skidding and to handle the logs with more ease. Unfortunately, very few harvesters currently apply this technique in French Guiana, at least for now. Its implementation is ongoing, being part of the ONF's goals.
+
+In conventional logging, few care is taken in felling the trees. The orientation is not controlled, and future trees are not accounted for at all. It makes it more dangerous for workers, and the damages in the understorey are expected to be higher.
+
+#### Model
+The complexity and computational costs involved with directional felling implementation are too high regarding the gain that it represents. A fully functional oriented treefall function would do it by assessing, for each harvested tree, what orientation fits with the closest track and involves the minimum damage for future merchantable trees, which would have to be preliminarily marked. We hope that further developments of the module will bring an easy and computationally efficient way to implement this feature. 
+
+In the current implementation, trees are felled at random, and gap dimensions are kept in memory to subsequently compute post-logging damages.
+
+
+### Main Track
+
+#### Reality
+
+Foresty roads and tracks are split in three categories: truck roads, main tractor track, and secondary track (*cloisonnement*). In each plot, the main track is designed following the crest line (using digital elevation models). The main track extent within the sampling unit generally depends on the quantity of wood available in the plot. If more than 100 cubic meters of wood are transiting on a segment of forest track, the main track must be built up to there, probably to avoid excessive damages to the soil (that cause compaction, erosion and ultimately, infrastructure destruction). Wood quantity can be assessed directly, or using using surface as a proxy. This second option is often used, but assumes an isotropic distribution of harvestable trees, which is often violated to some extent.
+
+#### Model
+
+Given TROLL's assumption of a flat environment, the main track is opened from the midle of one side of the plots  with a width of 6 meters, and traced untill reaching the point corresponding to the volume threshold.
+
+The extent of the main track is foreseen using the targetted volume and the dimensions of the plot: 
+
+
+
+
+### Secondary tracks
+
+#### Reality
+In RIL, secondary tracks are opened once trees have been designated and the geolocation taken at a maximum distance of 30 meters from designated trees [XXX petite REF].
+
+#### Model
+```{r tracksRIL, echo=FALSE, fig.cap='Maps generated by the selective logging module. A and B are maps obtained with a target volume of 30 cubic meters. For C and D, target volumes were 20 cubic meters. A and C were simulated with the RIL configuration. B and D were simulated with the conventional logging configuration.'}
+knitr::include_graphics('images/logging_fig.png', dpi = NA)
+```
+
+
+Insert Image
+
+### Residual mortality
+
+#### Reality
+Logging operations have immediate and secondary damages on tree stands. If the cause of the immediate damages is easy to guess, secondary damages are way less conspicuous and cause residual mortality during the first years after logging operations. These damages can be due to direct hurts underwent by the remaining trees during felling or skidding (uprooted stems, stem wounds, and bark scrapes), or due to consequences of the induced habitat changes. As exposed in section 4 of the thesis, mortality rates are higher at Paracou during the first years following logging, from 1987 to 1994.
+
+#### Model
+Generally, long term damages due to selective logging are modelled with a 10 years increased mortality [@Huth2004; @Khler2004; @Ruger2008]. We used the model developed by @Schmitt2017 last year, who gathered data from Paracou censuses between 1988 and 1992 on harvested plots and adapted the model from @Herault2010 based on a disturbance index into:
+
+\begin{equation}
+  \begin{array}{c} 
+    Death \sim \mathcal{B}(P(Death)) \\
+    P(Death) = logit^{-1}(\theta + \beta*e^{\alpha*d_{gaps}}) = \frac{e^{\theta + \beta*e^{\alpha*d_{gaps}}}}{1 + e^{\theta + \beta*e^{\alpha*d_{gaps}}}}
+  \end{array}
+  (\#eq:death)
+\end{equation} 
+
+$Death$ of a tree follows a $\mathcal{B}ernoulli$ law of probability $P(Death)$. The odds for a tree to die are calculated with the sum of the natural tree death odd $\theta$ and a perturbation index $\beta*e^{\alpha*d_{gaps}}$. The perturbation index depend on the distance $d_{gaps}$ of the tree $i$ to the closest logging gap. The probability for a tree to die $P(Death)$ is finally calculated by taking the inverse logit $logit^{-1}$ of the odd.
+
+
+## Model output files
+
+<!--chapter:end:05-LoggingModel.Rmd-->
+
+# Selective Logging experiment
+
+
+## Experiment design
+
+### GFClim scenarios: Adaptation to the study scale
+
+Currently, the GFClim project tackles the problematics of climate change and its interrelation with tropical forests in GF. The second Work Package of the project aims at defining scenarii regarding forest management and timber industry in the region, and examine their potential impact in this context, among others carbon emissions and required forest area.
+
+Nowadays, about 80 000 m3 of wood are harvested by selective logging each year in French Guiana. This quantity slowly increases year by year. Current demographic growth in French Guyana is at a level which arguably can lean to a double increase of the population by 2030. Given this estimate, and a general aim to develop wood industry (the only possibly sustainable lucrative activity in French Guiana, opposed to gold mining), current projections aim at 200 000m3 of timber harvested per year, to be reached by 2025, along with a substantial quantity of fuelwood to supply biomass-fueled power station. This involves either an increased need to designate areas for logging, or an increase in harvest intensities. Moreover, public policies and the international context are supposed to give a rising importance to biodiversity preservation and carbon-accounting problems.
+Whilst neotropical forests are possibly no longer an important carbon sink (XXX REF BRUNO) [@Baccini2017] [@Brienen2015], thy still represent an important stock (200-400 T.ha) of carbon (XXX REFS STOCK).
+
+In French Guiana, 77% of carbon emissions would be due to deforestation (XXX FIND REF : “CIRAD GEC 2016”??), and selective logging would account for 5% of these emissions, although uncertainties are high  [@Cabon2015]. 
+
+The fuelwood supply is a problematic of growing interest in the region. Three solutions could answer the increasing demand of wood for energy supply :
+Valorize the wastes that are usually left on the ground during timber extraction
+Dedicate plots for this particular activity
+Take advantage of plantation wood and local species to minimize pressure on natural forests.
+The scenarii defined in the GFClim wp3 are the following:
+
+### Simulated forests
+
+
+### Diversification of the harvested species
+
+Primary neotropical rainforests are hyperdiverse. The main point of studying selective logging is to determine how these mixed-age, mixed-species stands, recover from the occasioned disturbance and damages to ensure the production of timber and the maintenance of ecosystemic services. Most of the harvested primary forest tree species are non-pioneer, long-lived tree species with dense and imputrescible hardwood, low number of individuals per surface area, and which growth is supposed to be extremely slow [@Zimmerman2014]. It is critical to define the best way to manage the stands to ensure ecosystem resilience, that is in this context a synonymous with long-term, sustainable incomes. 
+
+The choice of harvested trees is essential to allow for regrowth of merchantable timber species instead of pioneer trees. The diversification of harvested species has long been proposed as a solution to mitigate the adverse demographic impacts of logging of these species [@Guitet2011]. 
+
+In French Guiana, more than 100 tree species are recognized for their technological qualities, and are referred to as commercial species. However, only a handful of species constitute over a 70% of the overall extracted timber volume [add graph XXX]. Commercial species are classified according to 4 categories: 
+* Principal Major Commercial Timbers (ECMP)
+* Other Major Commercial Timbers (ECMA)
+* Precious Timbers (BP)
+* Other Commercial Timbers (AEC)
+Currently, only every ECMPs (*Peltogyne sp., Sextonia rubra, Dicorynia Guianensis*)[XXX names] and one ECMA (*Bagassa guianensis*) are subject to designation to be harvested. One the one hand, the ONF insist on the need to diversify the set of harvested species, without what current choices can only lead to ressource depletion within a few cutting cycles. On the other hand, they have to collaborate with logging companies to ensure the operations economical viability, which is impossible if too much non-demanded timbers, that can't be sold in the current market context, are designated.
+ 
+ 
+We simulated three situations of preferences starting from the actual preferences to ideal, total diversification, resulting in three cases which we refer to as "realistic", "intermediate" and "diverse". Diversification is modelled with a species-specific interest variable, and our 3 modalities correspond to three cases: 
+
+* Species interest are split into three rank levels :
+  + 1: the few species that are overharvested in reality
+  + 2: species that are occasionally harvested as a complement of the firsts
+  + 3: species that are generally avoided, *i.e.* the majority.
+* Species interest are split into two rank levels
+  + 1: the previous first and second categories, i.e. the diversification occurs on the species that loggers currently accept only.
+  + 2: the often-avoided species set
+* Every commercial species have the same rank
+  + This is the ideal diversification, the case where every technically usable species would be valorised.
+  
+### Silvicultural parameters
+
+#### Both types of selective logging
+
+We simulated both Reduced Impact Logging and “improved” conventional logging, as implemented in the new version of the silviculture module. The reason of this choice is that both logging types can still happen in French Guiana: logging companies undergo a rapid turnover, and the degree of collaboration with the ONF is not constantly ideal. Careless operations, yet supposed to follow EFI guidelines, can lead to unoptimized skidding tracks opening and be, in terms of damages, relatable to conventional logging (Laurent Descroix, pers. com.). 
+
+#### Target and designated volumes
+ 
+Current harvests in French Guiana target timber volumes of 25m3 per hectare in average, and the actual quantity of wood that is extracted is generally around 20 m3 due to rotten trees that are not yet valorised. This can however have advantages, such as conserving carbon stocks and seeding trees.
+
+In the present regional and international contexts, harvest intensity is a central element of forest management, and can be influenced by  two adverse forces: human needs or ecological concern. A growing body of evidence suggests that harvests must be regulated at low intensities, to make selective logging less harmful to the ecosystem. However, in a region such as French Guiana, experiencing high demographic growth and with ambitions relative to timber valorisation, there is a pressure to either uprise logging intensities, or log more forest areas.
+
+We thus tested two target harvesting intensities:
+
+- 20 $m^3$, which is in agreement with the current practices
+- 30 $m^3$, which may be a future target according to GFClim scenarii
+
+Since the overall proportion of rotten trees is about one third of the total designated trees, we parametrized the module accounting for this. The total designated volumes thus were uprisen to 30 and 45 $m^3$, to obtain the target volume at the first rotation, in average.
+
+#### Cutting cycles
+
+The cutting cycle duration is equally a key parameter in sustainable management. It varies widely in the Tropics depending on the continent, region, or even the country. In the Amazon, most of the cutting cycles are currently set to 40 approximately (XXX check exact values). French Guiana is somehow an exception, with cutting cycles fixed at 65 years for the moment. This exception is thought to be the minimum time that should elapse between two cutting operations, but this is often inadequate considering economic and development purposes. This situation may change in French Guiana someday, if logging is to be intensified in the region.
+
+We tested two durations for a complete cutting cycle: 35 years, which is the duration that matches most current practices in neighboring countries (for example Brasil); and 65 years, the choice currently adopted by the ONF in French Guiana.
+To assess the alleged sustainability of such cutting cycles, we simulated logging operations, and stopped the simulations just before the sixth. This resulted in 175 years of simulation for the short cycle, and 325 years for the long one.
+
+
+#### Seed-rain scaling: personal choices
+Most of tree species rely on animal pollinators and dispersers to perpetuate their lineage. Selective logging has certainly adverse effects on these animals, be it directly (changes in forest structure, depletion of ecologically important trees) or indirectly (increased hunting pressure subsequently to road opening) [XXX REF]. The remaining reproductive adult trees are probably the major dispersers of seeds in logged plots. Since regeneration processes and timber species autecology remain mysterious, the way we model seed dispersion may have a wide range of impacts on the results obtained with logging simulations. 
+
+We think that the default value of the seed-rain scaling constant -used in TROLL to model external seed arrival- overestimates the actual regeneration potential in the case of logged forests. This default parameter (50000 seeds/ha/month) is convenient to simulate regeneration from bare soil of craft forests with predictible species frequencies, but is not adapted to simulate regeneration from already-established, disturbed, or logged forests, in which we assume a more enclosed demographic functioning. 
+
+Moreover, in our experiment, we assume that our simulated logged plots are surrounded by equally logged plots, that thus cannot supply a high number of seeds to neighboring areas. Thus, we believe that it would be safer to underestimate the seedrain than overestimate it. We set TROLL's seed-rain constant on an arbitrary 5% of its value (2500 seeds/ha/mmonth)
+
+#### Replication of the experiment
+
+The experiment is constrained by time and high computational costs. The present experiment design already yields a total of 48 factor combinations. We replicated each simulation 5 times with a distinct random seed, resulting in 240 simulations.
+
+### Grouping effects to analyse the output
+
+With a continuous screening of ecosystem variables by commercial group, and from the damage maps saved at each operation, we produced five different types of outputs. 
+
+* Overall damages in relation with the actual harvested volumes, to have an idea of the range of the disturbances we simulated and control for model consistency.
+* Timber quantities over time and cutting cycles, to evaluate the sustainability of the practices we testes
+* Volumes per merchantable species class, to assess the effects of diversification
+* Fuelwood volumes, to estimate the quantities obtainable from colateral damages
+* Overal abovegroune biomass, to assess the impact of selective logging on carbon stocks
+
+All the analysis were performed using a 16 cores calculus cluster provided by EcoFog, and marginally, a 32 cores cluster also belonging to EcoFog. Analyses were led using R v3.4.X and rStudio v1.9.X, and many packages, including: tidyverse, ggplot2, ggplotly, Rstan, devtools, BBmisc,cowplot, gridExtra... etc XXX REF
+
+## Results
+
+
+### Model features
+```{r disturbance, echo = FALSE, message=FALSE, warning=FALSE, fig.cap="Summary of the logging damages caused by main and secondary tracks opening in our simulations (logged and rotten trees are excluded), plotted against the corresponding actual harvested timber volume: removed Basal area (m²), damaged stem count, removed Above Ground Biomass (kgC/ha), and Fuelwood volume (the volume of damaged trees over 20cm dbh). In the model, every damaged tree is at every cutting cycle. Points are all the observations for every scenario tested and all cutting cycles (1200 observations: 240 simulations - 2 forests, 2 target volumes, 2 cutting cycles, 3 designation modes, and 2 logging techniques; with 5 replicated each)."}
+load("./images/Output_disturbance.RData")
+g_disturbance
+```
+
+Unsurprisingly, conventional logging (CL) always caused significantly higher tracks damages than reduced impact logging (RIL), be it in terms of above-ground biomass, basal area or stem number (Figure \@ref(fig:disturbance)). The most discriminant indicator, for the two logging techniques, is the number of damaged stems (over 1 cm dbh), which is equally unsurprinsing because it is an excellent proxy of the tracks area[^1], that strongly differ between CL and RIL. For BA and AGB, the difference between CL and RIL is less pronounced. Each of the four variables is strongly related to the actual harvested timber volume. Including logged trees makes this relationship tightly linear, within the range of our harvested volumes, for BA and AGB (see suplementary material S XXX). Averaging the whole simulated dataset, we noticed that about one third of damaged trees died due to the main tracks, and another third due to secondary tracks. The differences observed between both logging types are more strongly related to secondary tracks, because the main track length only depends on the target volume, in our model.  Additionally, the absence of replication of the experiment on several other initial forests, simulated with different random seeds, may be a source of biais in estimating main track damages for the first cutting cycles (after which regeneration occurr at random): it is traced at the same place on the map for every simulation,with only variations of length according to target volumes. Thus, differences between CL and RIL might be more marked if examined on a bigger set of simulations
+
+[^1]: The maps shown in the precedent chapter are actually made with the coordinates of destroyed stems, for which the cause of the death is registered.
+### Selective logging sustainability
+```{r totalvolumes, echo = FALSE, message=FALSE, warning=FALSE, fig.cap="Simulated evolution of the timber stocks over 5 complete cutting cycles, for two contrasted initial forests -in terms of initial timber stock, cf. the facets labels-, with cutting cycles of 35 and 65 years, and target volumes of 20 (red) and 30 (blue) cubic meters. Lines represent the mean trajectory of 30 simulatons each, and color bands, confidence intervals delimited by the 1st and 99th percentile computed for the 30 observations at each timestep."}
+load("./images/Output_total_timbervolume_forest.RData")
+g_total_volume
+```
+Conventional and reduced impact logging only had a marginal impact on wood quantity (not shown), probably due to high harvest intensities in our simulations. Thus, we pooled these simulations and decided to emphasize on cutting cycle, target volume, and initial forests. 
+
+All factors contribute to the available wood volume at the second harvest. However, this quantity is best explained by the initial timber stocks and the target volume than by the length of the cutting cycles. Regeneration of timber stocks between two harvests is not of the same order of magnitude than the harvest intensities that we applied our *in silico* forests. At the second cut, plots were left with no remaining timber stock in every case scenarii, which is something predicted by many authors (XXX) Short cutting cycles considerably accelerate the depletion of timber stocks, which may even be overestimated in the model's framework (see discussion XXX).
+
+SImulated forest started from 48.5m3 or 74.3 m3 of harvestable timber. This initial difference did not have a significant effect on the final outcome, and only retarded the total ressource de 
+### Diversification
+
+Diversification was simulated by making vary the equitability of interest ranks for merchantable species. Figure \@ref(fig:diversification) shows the merchantable volume for ECMPs, which are the actual most valuable timbers. 
+
+```{r diversification, fig.cap=" Total merchantable volume (m3/ha, for trees over 55 cm dbh) for Major Principal Commercial Timber species (ECMPs) over time (years). Diversity corresponds to our 3 designation choice scenarii: Diverse - all species have equal interests; Intermediate - ECMP and ECMAs are preferred over BPs and AEC; Realistic - ECMPs are preferred over every other categories, ECMAs are preferred over BPs and AECs. Color bands are confidence intervals obtained by pooling"}
+
+# low <- read.table("file:///C:/Users/nino.page/Desktop/TROLL project/logging/forest_logging/low.txt",header=T)
+# 
+# rich <- read.table("file:///C:/Users/nino.page/Desktop/TROLL project/logging/forest_logging/rich.txt", header =T)
+# sp <- read.table("file:///C:/Users/nino.page/Desktop/sp.txt", header = T) %>% mutate(splab = 1:nrow(sp))
+# rich$species <- sp$X....[rich$sp_lab]
+# rich$category = sp$category[rich$sp_lab]
+# low$species = sp$X....[low$sp_lab]
+# low$category = sp$category[low$sp_lab]
+# low$dbh = low$dbh/1000
+# rich$dbh=rich$dbh/1000
+# rich %>% 
+#   mutate(volume=-0.04155 + 10.461316*dbh*dbh) %>% 
+#   mutate(harvestable = if_else(dbh>0.55,1,0)) %>% 
+#   filter(harvestable == 1) %>% 
+#   group_by(category) %>% 
+#   summarise(vol = sum(volume)/24) %>% filter(category != "NC") %>%
+#   select(vol) %>% sum
+# low %>% mutate(volume=-0.04155 + 10.461316*dbh*dbh) %>% 
+#   mutate(harvestable = if_else(dbh>0.55,1,0)) %>% 
+#   filter(harvestable == 1) %>% 
+#   group_by(category) %>% 
+#   summarise(vol = sum(volume)/24) %>% filter(category != "NC") %>%
+#   select(vol) %>% sum
+```
+
+### Fuelwood volumes
+
+```{r fuelwoodsupp, eval =  F, include = F,echo = FALSE, message=FALSE, warning=FALSE, fig.cap="Summary of the logging damages caused by main and secondary tracks opening in our simulations (logged and rotten trees are excluded), plotted against the corresponding actual harvested timber volume: removed Basal area (m²), damaged stem count, removed Above Ground Biomass (kgC/ha), and Fuelwood volume (the volume of damaged trees over 20cm dbh). In the model, every damaged tree is at every cutting cycle. Points are all the observations for every scenario tested and all cutting cycles (1200 observations: 240 simulations - 2 forests, 2 target volumes, 2 cutting cycles, 3 designation modes, and 2 logging techniques; with 5 replicated each)."}
+load("./images/Output_fuelwood1.RData")
+ g_fuelwood
+```
+
+```{r fuelwood2, echo = FALSE, message=FALSE, warning=FALSE, fig.cap="Estimated usable fuelwood volumes during the 2 firsts cutting cycles, originating from : A - Rotten trees, with a comparison between cutting cycle durations (35 or 65), and target volumes (20 or 30); B - Main tracks, with the same label correspondence as A; and C - Secondary track, with separation on logging techniques (CL or RIL) and target volumes (20 or 30); Black horizontal lines point the median of the distributions. Color boxes encompass values between the 1st and 3rd quartile. Black points are extreme values."}
+load("./images/Output_fuelwood2.RData")
+g_fuelwood
+
+```
+The average usable fuelwood quantities, over the two first cutting cycles, range mainly between 1 and 5 cubic meters per hectare from rotten trees, and between 2 and 4 $m^3/ha$ from main track damages. Secondary tracks are the main potential source of extractible fuelwood over two cutting cycles, with quantities ranging from 10 to 20 $m^3$ in most cases. 
+The target volume is the principal factor influencing this quantity for the main track, because its extent depends on it. The duration of the cutting cycle has an impact, yet marginal, due to longer regrowth period. 
+Concerning secondary tracks, CL obviously yields more damages than RIL, thus a higher quantity of reusable wastes. 
+No factor apparently influenced the fuelwood quantities from rotten trees, because of the quantity of designated trees that vary between both cutting cycles, due to the lack of stock regeneration exposed above. In fact, for the first rotation only it depends directly on the target volume(XXX summplementary).
+These graphs, depicting 
+Theare influenced by both harvest intensities, logging techniques. 
+(Figure @\ref(fig:fuelwood2))
+Pooling all cutting cycles, logging type and target volume did not have a significant effect on the harvested quantities of fuelwood. These factor are confused by the differences in timber volumes, thus in actually harvested volumes between the first cutting cycles, and the next ones, leading to reduced secondary track extent and number of rotten trees.
+
+### Carbon
+
+```{r carbon, fig.cap="Simulated effects of selective logging on Ecosystem carbon stocks over time with 5 complete cutting cycles. Simulations are pooled to focus on two keys variables : Cutting cycle, and target volume." }
+load("./images/Output_agb.RData")
+g_biomass
+```
+The total above-ground biomass globally decreases over time and harvests (\@ref(fig:carbon). 
+For both cutting cycle durations, the regain in AGB is significantly higher for plot logged at the lower intensity (20$m^3$). After the second cut, intensively harvested plots seem to regrow their AGB stock faster than less severly logged ones, once again for both cycles duration, yet this effect is of unlikely to be significant. Still, this would be explainable by a shift in community composition, accentuated by the second cut, from shade-tolerant, slow growing tree species to heliophilous, fast growing stands. From the third harvest onwards, the differences in harvest intensity is insufficient to change the ecosystem fate: both trajectories converge towards 250 $TC/ha$, *i.e.* around 30% less than the original *ca.* 350 $TC/ha$.
+
+## Final discutiion
+
+Our simulations indicate that selective logging may be unsustainable regarding many aspects. Current practices may allow neither to sustain overall timber stocks nor high value timber yields, nor fundamental ecosystemic services such as holding carbon stocks.
+
+<!--chapter:end:06-Experiment.Rmd-->
+
+# Conclusions and perspectives
+
+
+<!--chapter:end:07-Conclusion.Rmd-->
+
+---
+title: "Sylviculture modelling with TROLL"
+author: "Nino Page"
+date: "6 juin 2018"
+output:
+  pdf_document: default
+  html_document: default
+  word_document: default
+csl: C:/Users/nino.page/Desktop/my_thesis/mee.csl
+bibliography: C:/Users/nino.page/Desktop/bibs/thesis.bib
+link-citations: yes
+---
+```{r setu, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# A few words on this work
+We updated the first version of the silviculture module created by Sylvain Schmitt during his M.Sc internship last year to perform silviculture simulations with TROLL. Based upon his work, along with the information found in the literature, and the precious explanations and advice of Laurent Descroix, we updated his original work to our study goals. 
+
+The principal modifications are :
+
+* a revision and merging of the designation and selection steps;
+* continuous screening of the merchantable trees stock by commercial species categories;
+* the adaptation of the main track extent to the wood quantities targetted during the harvest;
+* the addition of an option to simulate "conventional logging" secondary tracks design.
+
+We explicitly focus on silvicultural practices in French Guiana. The modeling choices expressed here should be carefully examined, and perhaps revised, if this work needs to be adapted elsewhere.
+
+Informations appearing without literature  references can be found in @Guitet2011 or come from interviews with Laurent Descroix (Hear of the regional R&D pole, ONF, Cayenne, French Guiana)
+
+# Introductive elements
+
+In general, silvicultural practices encompass selective logging with or without rotations, tree plantation, and silvicultural treatments such as enrichment planting, or tending operations (e.g., thinning). Nowadays in French Guiana (FG), silviculture operations mainly consist of selective logging. Tree plantations have not yet emerged as a standard, mastered practice to generate timber incomes, and has not yet overpassed the experimental stage (Project ForesTreeCulture; @Nicolini2016). "Maintenance" operations often consisted in thinning by poison-girdling, but this practice has been left apart in agreement with the results of the Paracou Disturbance Experiment (1984 onwards)[XXX ref]. Currently, Sylviculture in French Guiana is oriented towards reduced impact (selective) logging (RIL). It can be called "silviculture" for the care that is taken in the operations. Part of the aim is to destroy as less future trees as possible, and optimize natural regeneration processes by reducing the damages and canopy opening during operations. These clarifications notwithstanding, we will mostly refer to "silvicultural treatments in FG" as "selective logging" hereafter.
+
+Forest management focused on selective logging is currently divided into three fundamental parts: Tree choice, Harvesting, and Monitoring.  Both encompass different steps and effects that have to be modeled :
+
+* Tree choice:
+	  + Definition of the harvestable areas and the main tracks
+	  + Designation of the harvestable trees by the forest	office
+	  + Minor selection from the loggers
+	  + Tree probing
+* Harvesting operations:
+	  + Tree Felling
+	  + Main tracks opening
+	  + Secondary tracks opening
+	  + Bole skidding
+	  + Post-logging, residual damages
+
+Additional items, such as the harvest of fuelwood during operations, and post-logging monitoring, are tackled at the end of this document
+
+Each of these processes is modeled either explicitly or implicitly. Hereafter, we detail each step/effect in three parts, or only two if more relevant : 
+
+* What currently happens in French Guiana with state-of-the-art RIL ("EFI2") methods
+* What used to happen (and still happens sometimes) with "conventional" practices
+* The way we model the process in the module, with attached code
+
+This version of the code will be stored in a GitHub repository to keep an accessible and easily-updatable and trackable version online.
+
+N.B.: What is referred to as "conventional logging" may be equivocal. Laurent Descroix, from the French National Forest Office (ONF, Cayenne center), insisted several times on how "RIL2" and "conventional" are both ends of a continuum, and not two drastically distinct things. Conventional logging was, more than everything, characterized by the absence of controlled designation process,  resource spatialization, and optimization of skidding tracks planning. These factors generally led to higher damages due to unoptimized tracks network, for equal target volumes, but a lower quantity of wood because of the loss of a certain proportion of the boles (due to selection or lack of organization). This definition probably holds for every selectively logged tropical forest [@Kormos2012].
+
+# The module
+
+## Spatial planning
+Planning the operations is critical to perform logging according to the RIL guidelines [REF] [@Guitet2011]. The use of remote-sensing improved the efficiency of this operation considerably.  In conventional logging, these operations were not as comfortable but were still needed to ensure that logging takes place in a forest with enough wood.
+
+### Definition of the forest domain where the plots will be settled
+
+#### RIL
+Three critical factors determine the exploitability of a forest domain:
+- The topography
+- The wood quantity that has to be sufficient to ensure the economic viability of the operations
+- Accessibility
+
+The topography of the field is the primary mechanic constraint for logging operations in general. Logging often occurs on hilltops or plateaus, because steep slopes constrain the machines circulation and bottomland are systematically considered unharvestable areas. Besides, the topography is somehow linked to the amount of harvestable wood in the logged areas. To define which forest domains will be candidates for further planning, the National Forest Office (in French, Office National des Forêts; ONF) used various topographical relev[char] from different geographical information systems. Nowadays, the ONF uses last up-to-date LIDAR digital elevation model.
+
+Accessibility is the principal determinant of the infrastructure and transport costs engaged in the operations. For the moment, logging operations are restricted to forest domains that are narrow roads, possibly close to the sawmills, not to separate excessively the source of raw matter from the place where it is transformed. Later on, transport could perhaps be carried out by the fluvial way (Maroni region, for example) (REF DU MEC D'AURELIE).
+
+The quantity of wood is a critical factor that determines whether the operations are economically viable and if the plots could be logged again at the next rotation. The ONF uses a range of information sources to have an a priori of whether a forest domain is worth being logged, or not:
+- Three past inventory campaigns have been led to assess the commercial richness of various parts of the littoral band. (XXX DESCRIPTION). This valuable information is still widely used to orientate the ONF choices. 
+- LIDAR and hyperspectral data, along with geological relev[char]s are used to determine whether the quantity "big woods".  For example, saprolitic soils often carry "poor" forests (in commercial terms) (XXXX REFERENCE). These areas are avoided, thus reducing the probability of non-viability.
+- The "habitat" data and maps are used for the same reasons (XXXX INFOS).
+
+#### Conventional
+One may often hear that conventional logging operations are unplanned, but the truth is that no company would exploit a forest without being guaranteed that there is wood to extract. Indeed, planning was not easy for conventional logging, because the tools mentioned above were not all yet available. However, the topographical maps, the forest inventories, and the habitat information were already used to pre-filter the forest areas where operations take place. 
+
+#### Model
+Topographical issues are not (yet) of primary concern for one who simulates logging with TROLL: this is one of the major limits of the current version of the model. The only point to be careful about is to use input forests that display a sufficient quantity of harvestable trees to simulate the desired harvesting intensity. This point is addressed elsewhere.
+
+### Definition of the harvestable areas
+
+#### RIL
+Mechanical and "floristic" constraints define harvestable areas. Bottomlands and swamps, as well as other waterlogged areas, are avoided. They generally display poor stands, or non-merchantable species, and the engines may not circulate well within these areas. Moreover, the rules (XXX WHICH ONES) stipulate that these zones may not be crossed by engines, to avoid jeopardizing the integrity of freshwater ecosystems. Additionally, a buffering space (XXX WHICH DIMENSIONS) have to be left intact around creeks and waterlogged areas, for the same reasons. Steep slopes are also avoided due to mechanical constraints: The engines are not supposed to transit with adverse slopes over (XXX)% and lateral ("d[char]vers") slopes over 4%. Lateral slopes are especially restricted because they increase the risk of "sweeping effect" (when the bole, tied to a cable, falls laterally), which can cause considerably increase the damages, and are a source of work accidents.
+
+#### Conventional
+In conventional logging, the definition of harvestable areas follows approximately the same rules. Perhaps the guidelines mentioned above are not carefully respected as in RIL when it is about reducing damages, but it is likely to be similar concerning human and mechanical safety: this is mainly about common sense.
+
+#### Model
+Again, the topography is not yet implemented in TROLL model. The TROLL dev-team is currently working on it in Toulouse, so the modeling choices relative to the absence of topography in the model must be re-evaluated as soon as a new version is released, and modified accordingly. 
+Thus, we consider the whole simulated plot as a harvestable area.
+
+### Definition of the sampling units and the position of the main tracks
+#### RIL
+The ONF subdivides forest areas into plots or sampling units. Their surface area is variable (from 20 to 250 hectares; Laurent Descroix, pers. comm.), but is in the majority of the cases between 30 and 50 hectares.  Because of the definition of harvestable areas, the sampling units are nearly always located on plateaus or smooth slopes around the crest of a hill. In each plot, the main track is designed following the crest line (using digital elevation models). The main track extent within the sampling unit generally depends on the quantity of wood available in the plot. If more than 100 cubic meters of wood are transiting on a segment of forest track, the main track must be built up to that segment, probably to avoid excessive damages to the soil (that ultimately cause erosion and infrastructure destruction). We further detail this part in the corresponding section, for consistency with the module code.
+
+The implantation of the main track can be foreseen using the targetted volume and the dimensions of the plot: assuming the isotropy of the harvested tree (which in reality is often violated to some extent), it is possible to calculate the area corresponding to 100 cubic meters of wood (XXX FORMULA)
+
+#### Conventional
+In conventional logging, sampling units and main tracks were defined similarly. The source of information was not the same, but the result was supposedly similar, modulo some errors.
+
+#### Model
+We decided to define the whole plot as one sampling unit, or rather, as the entire harvestable area within a sampling unit. This simplifying assumption must be kept in mind, as well as the absence of topography, for the interpretations. We model the main track in the middle of the plot.
+
+## Trees choice
+The two following subsections may be considered inadequately split. The term "designation" is dedicated to the pre-logging assessment in which the forest office performs a selection of the harvested and leave trees. This step is one of the main novelties brought by the recent implementation of RIL in French Guiana, since 2007 (XXX REFS). Notwithstanding this specificity, we had reasons to separate the process of tree choice into "designation" and "selection by loggers". 
+
+### Designation or of the harvestable trees
+
+#### RIL
+The "designation" is a spatialized inventory of the present and future timber resource. ONF agents designate trees during a timber cruise. Trees are classified into two categories : 
+- Marked trees that are sold to harvest for the current cutting cycle.
+- "Reserved" or leave trees, that can be future merchantable trees (to be harvested during the next cutting cycle) or ecologically important trees. The last category encompasses protected or "key-resource" species, seeding adult trees belonging to merchantable species - that are either too big to be harvested, or let in the stand to allow species regeneration. These are not to be damaged during operations.
+
+To determine which trees to mark and which to leave, the ONF uses various information :
+- Quality estimates from ontogenic diagnostics (ERIC NICOLINI XXX). The designated tree are generally from mature to slightly overmature: their growth is starting to decrease, but their quality is high. "present" trees can still grow up during the rotation, so as "future" trees do. Overmature trees often have redhibitory defaults and are left in the stand to allow regeneration.
+- Species-specific minimum harvestable diameters that generally correspond to the end of the trees growth peak. The minimum harvestable diameter, for a given species, has to be adapted to this species' maximum dimensions, autecology, and wood quality in function of the tree size. Most of the species are harvestable from 55 cm diameter. "Precious" woods such as the Boko, or other trees as the wacapou, have lower minimum diameters (45 cm). A minimum diameter increment is applied at the plot scale when the volume of merchantable trees is far above the target volume defined by the ONF: the idea is to preserve wood for next rotations.                        
+- The loggers' preferences (because they have to work with companies, not against)
+
+#### Conventional
+The designation did not exist in conventional logging. The selection was made by loggers, based on their habits, and the market demand. The minimum harvestable diameter was a priori often respected because the loggers tended to choose big (and easily accessible) trees to have maximum yields. These practices were often leading to low numbers of harvested trees per hectare, except in highly capitalized stands, like those recently discovered in the R[char]gina-St Georges forest domain. 
+
+#### Model
+
+
+
+#### RIL
+In reality, loggers sometimes voluntarily omit to harvest some trees belonging to secondary interest species and focus on high-value timber. This habit often leads to a reduction of the harvested volume, which combines with the proportion of trees that are probed rotten.
+
+#### Conventional
+
+#### Model
+
+### Tree Probing
+
+#### RIL and conventional
+
+Generally, 20% of the trees matching commercial criteria (species, diameter) have redhibitory defaults and are considered "rotten" by the lumberman after probing (i.e., after burying his chainsaw inside the trunk to see if it is hollow). The causes of these defaults are partially unknown. The observed symptoms are generally: the presence of holes on the trunk or the basis; the break of a big fork that has not cicatrized; or a hollow sound of the trunk. The probability for a tree to be rotten depends on its dbh. Big trees are likely to be older. They thus had more time to be exposed to wood consumers such as fungi (REF GUIDE) or Coleoptera (personal observations), or extensive crown damages (potentially being "entrance door" for the agents that cause the decay XXX REF) due to neighboring treefalls.
+The ONF forced the loggers to harvest these trees during an experimental campaign and gathered data on the probability to be probed rotten, the actual rotten volume, and the characteristics of the trees (Laurent Descroix, pers. comm.).  According to the data gathered, around a half or the designated trees considered as rotten by lumbermen would be intact on around 90% of their bole volume.  This is exciting news because a perspective for forestry in French Guiana would be to valorize those trees (even if they can survive to this and produce seeds). If the fuelwood market is developed during the next years, harvesting rotten trees could be advantageous even for high rotten volume trees.
+
+#### Model
+We used @Schmitt's models to describe the probability for a tree to be rotten, and the proportion of intact wood in trees that are probed rotten. The first is already implemented in the module :
+
+\begin{equation}
+  \begin{array}{c} 
+    probbed~rotten \sim \mathcal{B}(P(probbed~rotten)) \\
+    P(probbed~rotten) = logit^{-1}(\beta_0 + \beta_1*dbh) = \frac{e^{\beta_0 + \beta_1*dbh}}{1 + e^{\beta_0 + \beta_1*dbh}}
+  \end{array}
+  (\#eq:rotten)
+\end{equation} 
+
+The probability for a tree to be Rotten, $probbed~rotten$, follows a $Bernoulli$ law of probability $P(probbed~rotten)$. The odds for a tree to be probbed as rotten are calculated with the sum of a base odd to be rotten $\beta_0$ and a diameter dependent odd calculated with $\beta_1$. The probability for a tree to be probbed as rotten $P(probbed~rotten)$ is finally calculated by taking the inverse logit $logit^{-1}$ of the odd (see @Schmitt2017 for more details).
+
+We decided to implement the rotten volume model as well, to compute the volume of energy wood potentially valuable from rotten trees. 
+
+$V_{intact} = 8.9dbh²(1-(0.4*dbh^2))$
+ 
+### Tree Felling
+
+#### RIL
+In RIL, the felling direction is supposed to be controlled to some extent, to avoid damaging leave ("reserve") trees. The basal treefall direction is considered random but rather depends on the trees' natural orientation and crown aspect.  In fact, four orientations are possible for an ideally felled tree (see figure 1). Oriented treefall aims at orienting logs at 45° to the track (main or secondary), to reduce damages when skidding. Unfortunately, few harvesters currently apply this technique, but things are starting to change.
+
+#### Conventional
+In conventional logging, few cares are taken when felling the trees. The orientation can be considered random. It makes it more dangerous for workers, and the damages in the understorey are thus expected to be higher when skidding.
+
+#### Model
+We had the choice between implementing directional treefall and sticking with random direction treefalls. We estimate that the complexity and computational costs involved would be too high for a minimum gain: A fully functional oriented treefall function would do it by assessing, for each harvested tree, what orientation fits with the closest track and involves the minimum damage for future merchantable trees. We hope that further developments of the module, for next versions, could bring an easy and fast way to implement this feature.
+In the current implementation, gap dimensions are saved into a map, to compute post-logging damages.
+
+### Main Tracks opening
+
+#### RIL
+
+#### Conventional
+
+#### Model
+
+
+### Secondary Tracks opening
+
+#### RIL
+One of the major improvement in RIL is the mapping of felled trees and the usage of topographical relevés to optimize the secondary tracks network. The National forest office currently uses these tools to trace the tracks manually (being careful with inclinations and slopes) the secondary tracks in a way that more wood is extracted for a reduced track area. Software developed by the CIRAD and ONF is also used to optimize the tracks automatically but is currently still improved, to become fully functional. Recent improvements, such as the use of a 50m long nylon cable to skid the logs, also allow reducing the damage, because the tracks do not have to go up to every tree. Thus, tracks are designed to go between trees, approaching them to a distance of 30 meters maximum. 
+
+#### Conventional
+Conventional logging was primarily characterized by the absence of GPS mapping and topographical data. Skidding tracks were designed "on the heap," directly in the field. Thus, some trees were omitted and the track network used to be everything but optimal. There is no evident way to describe how tracks were typically traced. Bulldozers were used to go up to every felled tree, following the (somewhat imprecise) approximations of lumbermen. According to the information we received, the trajectories were partly random, with many errors and shortcut, leading to excessive damage.  Overall, this could be more related to visual-based skidding, from close to close, someting following false indications, in a quite erratic way.
+
+#### Model
+We decided to model both conventional and RIL skidding fashions. RIL skidding was already implemented in the first version of the module, and this function has only been slightly revised, optimized, and outputs were added. 
+
+RIL skidding is is based on the computation of a "load map", and a "tracks map", that contain respectively the number of trees that can be skidded, and the distance of the nearest track, for each position on the plot. It is optimized to find the place where the most trees can be reached while minimizing the distance from an existing track. When a secondary track is traced, it is added to the tracks map and the "load" and "track" maps are updated.
+
+Conventional skidding is willingly less optimal, and is done by searching for the closest tree and reaching it, without having a cable to skid several trees from the same position. The tracks are thus traced from close to close, and their surface is greater, for a similar quantity of timber.
+
+
+### Post-logging residual mortality
+
+#### Reality
+Logging operations have immediate and secondary damages on tree stands. If the cause of the immediate damages is easy to guess, secondary damages are way less conspicuous and cause residual mortality during the first years after logging operations. These damages can be due to direct hurts underwent by the remaining trees during felling or skidding (uprooted stems, stem wounds, and bark scrapes), or due to consequences of the induced habitat changes. As exposed in section 4 of the thesis, mortality rates are higher at Paracou during the first years following logging, from 1987 to 1994.
+
+#### Model
+Generally, long term damages due to selective logging are modelled with a 10 years increased mortality [@Huth2004; @Khler2004; @Ruger2008]. We used the model developed by @Schmitt2017 last year, who gathered data from Paracou censuses between 1988 and 1992 on harvested plots and adapted the model from @Herault2010 based on a disturbance index into:
+
+\begin{equation}
+  \begin{array}{c} 
+    Death \sim \mathcal{B}(P(Death)) \\
+    P(Death) = logit^{-1}(\theta + \beta*e^{\alpha*d_{gaps}}) = \frac{e^{\theta + \beta*e^{\alpha*d_{gaps}}}}{1 + e^{\theta + \beta*e^{\alpha*d_{gaps}}}}
+  \end{array}
+  (\#eq:death)
+\end{equation} 
+
+$Death$ of a tree follows a $\mathcal{B}ernoulli$ law of probability $P(Death)$. The odds for a tree to die are calculated with the sum of the natural tree death odd $\theta$ and a perturbation index $\beta*e^{\alpha*d_{gaps}}$. The perturbation index depend on the distance $d_{gaps}$ of the tree $i$ to the closest logging gap. The probability for a tree to die $P(Death)$ is finally calculated by taking the inverse logit $logit^{-1}$ of the odd.
+
+## Monitoring and Post logging diagnostics
+
+#### Reality
+Post-logging diagnostics (Diagnostic Post-Exploitation; DPE) have been recently implemented [2006, @Guitet2011] by the ONF in French Guiana [@Bezard2017], along with the designation and other RIL methods.  The ONF performs an inventory on some plots (for the moment, results are available for 28 of them). Several observations are reported for subplots along transects: Overall apparent perturbation, inventory of the trees over ten centimeters dbh, qualification of their state and possible wounds. These inventories are necessary to objectively ensure that logging operations were carefully done, which is not often possible to assess directly during the operations.
+We ignore if plost-logging inventories of timber stocks and regrowth were, are or will be carried out in the plots. If it is not the case, this will be done within a few decades, when we will reach the end of the first cutting cycle. For the moment, research stations such as Paracou and Montagne Tortue offer insights of the overall regeneration trajectories that take place for conventional logging.
+
+#### Model
+Monitoring can easily be simulated. We can register every tree death during logging operations, and their cause (main or secondary track, logged, and rotten). Even better, at each iteration, it is possible to follow the evolution of every forest feature We refined the existing logging damages output to include rotten trees, and the wood volume for trees that are destroyed during operations, to evaluate the quantity of fuelwood that could be valorized. Additionally, the implementation of cutting cycles in the module now allows creating a separate file at each logging operation.
+
+Furthermore, we created four new output files to track the current state of commercial species at each timestep, grouping them by categories. These outputs are :
+
+* Above-ground biomass: 
+    +all trees
+    +recruited trees (over 10 cm dbh)
+    +next-cycle stock trees (over 30 cm dbh)
+
+* Basal area:
+    +all trees
+    +recruited trees (over 10 cm dbh)
+    +cycle stock trees (over 30 cm dbh)
+
+* Stem density:
+    +trees
+    +recruited trees (over 10 cm dbh)
+    +next-cycle stock trees (over 30 cm dbh)
+
+* Wood volume:
+    +future trees (>30 cm dbh) supposedly harvested one rotation later
+    +harvestable trees (>55 cm dbh)
+
+## Output handling
+We added outputs to the models. These are directly usable with R scripts. We are currently developing of a R package gathering the functions used to handle this flow of new outputs. This set of tools includes grouping statistics and graphical displays adapted to the context or our study. Hopefully, it could be integrated to RconTroll, the official TROLL package, currently developed by Fabian Fischer and Sylvain Schmit.
+
+## Limits, perspectives, and oncoming developments/implementations
+
+### TROLL's limits
+The primary limitations to improve the selective logging module are the environmental variables not yet accounted for in TROLL model. 
+At the moment I write this report, Isabelle Mar[char]chaux and Fabian Fischer are implementing a new Water module in TROLL code. Fabian also aims at developing explicit topography. These significant changes would considerably enhance the realism of the silviculture simulations with TROLL but will require extensive calibrations, and are complicated to include to TROLL's code, that is already as complex as fascinating. The same remark can be made on the selective logging module when TROLL will reach the next complexity level. Thus, a definition of the harvestable areas according to topography and water-logging would have to be implemented, the main tracks would not be a straight line anymore, and follow a crest, and the secondary tracks would be traced differently depending on slopes. Directional felling would also have to be accounted for in this case, and skidding damages, such as "sweeping", would have to be modeled accordingly. These profound changes could be complicated to implement without involving computational costs to explode, and the ration of realism to informativeness, ponderated by computational costs, will have to be evaluated.
+
+### The module's limits
+The major limits of this version of the module are a lack of calibration from real data specific to every sub-module, the use of approximations or simplifications for some of the steps instead of models, and the somewhat rigid calculation of timber volume. 
+
+### Wood volume calculation
+The formula used is the one from [XXX REF ONF 2011] for center-east forests (around Cayenne) and is the one that estimates the highest volume of the five site-specific equations derived from field measurements in French Guiana [XXX TABLE]. This choice is based on the fact that Easter forests are currently being logged, and display high capitalization rates, i.e., a large number of harvestable, high-value trees, with high bole heights, thus, a rather advantageous ratio of wood volume to diameter at breast height. In the next version of the module (which I already planned to upgrade), this limit will be accounted for by letting the user choose between inputting a different set of coefficients or use my default values.
+
+### Rotten submodule
+The rotten submodule has the advantage to have been calibrated by Sylvain Schmitt (2017) to best estimate the probability for a tree to be rotten (according to its dbh), AND the rotten and intact volumes of this tree, if it is rotten, which has been implemented in this new version to estimate potential fuelwood volumes. However, as pinpointed in the precedent version of the Logging Module's description, this is a generic, species-independent equation, whilst the probability of being rotten and the proportion of rotten bole volume are arguably influenced by a species-specific factor (see Schmitt 2017).  That is why some species, such as Vouacapoua Americana, have smaller maximum cutting diameters than other species [@Guitet2011]. Even further, the parameters are probably influenced at the individual scale. Factors such as growth rates and extractive contents in the heartwood have been shown to help explaining this variability [@Highley1970]. Dicorynia guianensis, the major commercial species in French Guiana, shows high variations of wood durability between individuals (as well as within a single trunk), although no significant effect of the site has been highlighted  [@Amusant2004]. The best examples I see supporting this hypothesis can be found in ForesTreeCulture's results: Individuals of Dicorynia Guianensis grown in plantations (thus, favorable light condition) have a smaller proportion of duramen, which is the part that concentrates the major part of secondary metabolites possibly involved in natural wood durability (XXX REF). However, many such factors are impossible to account for right now: the dataset used by Sylvain is unique, and does not contain enough observations to derive species-specific coefficients, and even less measure the variability or disentangle its potential drivers at the individual tree scale.  The current implementation of the rotten model can thus be considered as state-of-the-art for now. The last improvement that could be brought to the submodule would be to calculate the additional damages that would be caused by harvesting rotten trees. This is excluded from our development perspectives for now since I believe that the ratio of informative power to computational expenses involved may be disadvantageous.
+
+### Main tracks submodule
+The current implementation of the main tracks module relies on one quick-fix decision and one oversimplistic assumption. First, the volume threshold used in our simulation is high (190 m3 instead of 100). Current plot dimensions (400*600m) constrained the main track to go too close to the plot's "upper" limit to be consistent with reality, and the proportion of plot length to main track length did not (in humble, yet subjective opinion) vary enough between current (20 m3) and projected (30 m3, by 2025) target volumes. The validity of the threshold was sight-estimated and requires a proper parametrization from GIS data. Not having had the time to do it in the current version, this falls in the list of improvements to bring for the next version of the module. Second, the calculation of the track extent is based on an oversimplified proportionality relationship between transiting wood volumes and surface area, according to the target volume. The validity of this assumption relies on an isotropic harvestable trees' distribution. A more accurate method would be to decide what is the main track extent after having inventoried the harvested trees, -again accounting for the overall observed proportion of rotten trees (between 0.2 and 0.4) although a site-specific proportion would be the best, if consistent with a site-specific volume estimation equation).  
+
+### Secondary tracks submodule
+This complex submodule relies on several simplifications and can be improved substantially concerning realism, although these improvements might have mitigated influence on the damages occasionated and the outcome of the simulations.
+First, the secondary tracks are, for RIL, constrained by topography, felling angle, between-tracks angles, and optimized manually or automatically to minimize the disturbed areas, based on time-consuming designing or more complex algorithms based on cost functions and graph theory, that still have to be improved (Descroix, pers. comm.). For example, a secondary track joins another track smoothly (angle < pi/2) to handle the bole properly, and avoid "sweeping" effects.
+Second, secondary tracks for RIL could be traced in a way that minimizes the destruction of big or future trees, to improve the operations' carbon footprint and probability to sustain timber yields successfully. Efforts are already supposed to be made in French Guiana (and machines cannot destroy big trees),  by the designation of "reserve trees" and the ONF supervision during operations, but I am not sure whether this is entirely successful or not. The least we can say is that this submodule has to be examined and calibrated to be consistent with field reality, to improve the reliability of the model's predictions.
+Finally, the conventional logging version of the opening of the secondary tracks has to be calibrated with field data and possibly re-written. The difficulties to implement real careless tracks opening and skeeding are because the tracks are unplanned in the case of conventional logging. On the one hand, the trajectories from the main track to a tree have a higher part of randomness, which could be modelled using real GIS data and assessing the deviations of skidders' path to a fully optimised path, and implementing it based on, for example, a normal kernel of deviations from the target direction. On the other hand, the lumbermen's instructions not being corroborated with GPS mapping, and strict control by the ONF, conventional logging operations have often involved a significant proportion of forgotten or lost boles in the plots, while tracks were opened uselessly to search for these trees. This is somewhat complicated to model.
+
+<!--chapter:end:08-Annexe1Module.Rmd-->
+
+# Selective Logging Modelling : From reality to computation
+
+## A few words on this work
+We updated the first version of the silviculture module created by Sylvain Schmitt during his M.Sc internship last year to perform silviculture simulations with TROLL. Based upon his work, along with the information found in the literature, and the precious explanations and advice of Laurent Descroix, we updated his original work to adapt it to our questions. 
+
+The principal modifications are a revision of the designation process, a continuous screening of the merchantable trees stock, and the addition of an option to simulate damages as they would possibly be for "conventional logging" techniques.
+
+As in the previous version, we explicitly focus on silvicultural practices in French Guiana. Thus, the modeling choices expressed here should be carefully examined, and perhaps revised, if this work needs to be adapted to simulate silviculture in other forests.
+
+## Introductive elements
+
+In general, silvicultural practices encompass selective logging with or without rotations, tree plantation, and silvicultural treatments such as enrichment planting, or tending operations (e.g., thinning). 
+
+Nowadays in French Guiana, silviculture operations mainly consist of selective logging. Tree plantations have not yet emerged as a standard, mastered practice to generate timber incomes, and has not yet overpassed the experimental stage (XXX REF). "Maintenance" operations have often consisted in thinning by poison-girdling, but this practice has been left apart in agreement with the results of the Paracou Disturbance Experiment (1984 onwards). Currently, Sylviculture in French Guiana is oriented towards reduced impact (selective) logging (RIL), and it can be called "silviculture" because of the care that is taken in the operations. Part of the aim is then to destroy as less future trees as possible, and optimize the natural regeneration process by reducing the damages and canopy opening during operations. These clarifications notwithstanding, we will systematically refer to "silvicultural treatments in French Guiana" as "selective logging" hereafter.
+
+Forest management oriented towards selective logging is currently divided into three fundamental parts: Tree choice, Harvesting, . Both encompass different steps and effects that have to be modeled :
+
+Tree choice:
+	- Definition of the harvestable areas and the main tracks
+	- Designation of the harvestable trees by the forest 					office
+	- Minor selection from the loggers
+	- Tree probing
+Harvesting operations:
+	- Tree Felling
+	- Main tracks opening
+	- Secondary tracks opening
+	- Bole skidding
+	- Post-logging, residual damages
+Additional questions, such as the harvest of fuelwood during operations, and post-logging monitoring, are tackled at the end of this document
+
+Each of these processes is modeled either explicitly or implicitly. 
+Hereafter, we detail each step/effect in three parts : 
+- The way it is currently happening in French Guiana with state-of-the-art RIL ("EFI2") methods.
+- The way it used to happen (and still happens sometimes) with conventional techniques.
+- The way we modeled it in the module, with detailed code.
+
+This version of the code will be stored in a GitHub repository to keep an easily-updatable version online.
+
+N.B.: What is referred to as "conventional logging" may be equivocal. Laurent Descroix, from the French National Forest Office (Cayenne center), insisted several times on how "RIL2" and "conventional" are the opposite ends of a continuum. Conventional logging was, more than everything, characterized by the absence of controlled designation process, and the absence of resource spatialization of skidding tracks planning. These factors generally led to higher damages due to unoptimized tracks network, for a lower quantity of wood because of the loss of a certain proportion of the boles.
+
+## The module
+
+### Spatial planning
+Planning the operations is critical to perform logging according to the RIL guidelines. The use of remote-sensing improved the efficiency of this operation considerably.  In conventional logging, these operations were not as comfortable but were still needed to ensure that logging takes place in a forest with enough wood.
+
+#### Definition of the forest domain where the plots will be installed
+
+##### RIL
+Three critical factors determine the exploitability of a forest domain:
+- The topography
+- The wood quantity that has to be sufficient to ensure the economic viability of the operations
+- Accessibility
+
+The topography of the field is the primary mechanic constraint for logging operations in general. Logging often occurs on hilltops or plateaus, because steep slopes constrain the machines circulation and bottomland are systematically considered unharvestable areas. Besides, the topography is somehow linked to the amount of harvestable wood in the logged areas. To define which forest domains will be candidates for further planning, the National Forest Office (in French, Office National des Forêts; ONF) used various topographical relevé from different geographical information systems. Nowadays, the ONF uses last up-to-date LIDAR digital elevation model.
+
+Accessibility is the principal determinant of the infrastructure and transport costs engaged in the operations. For the moment, logging operations are restricted to forest domains that are narrow roads, possibly close to the sawmills, not to separate excessively the source of raw matter from the place where it is transformed. Later on, transport could perhaps be carried out by the fluvial way (Maroni region, for example) (REF DU MEC D'AURELIE).
+
+The quantity of wood is a critical factor that determines whether the operations are economically viable and if the plots could be logged again at the next rotation. The ONF uses a range of information sources to have an a priori of whether a forest domain is worth being logged, or not:
+- Three past inventory campaigns have been led to assess the commercial richness of various parts of the littoral band. (XXX DESCRIPTION). This valuable information is still widely used to orientate the ONF choices. 
+- LIDAR and hyperspectral data, along with geological relevés are used to determine whether the quantity "big woods".  For example, saprolitic soils often carry "poor" forests (in commercial terms) (XXXX REFERENCE). These areas are avoided, thus reducing the probability of non-viability.
+- The "habitat" data and maps are used for the same reasons (XXXX INFOS).
+
+##### Conventional
+One may often hear that conventional logging operations are unplanned, but the truth is that no company would exploit a forest without being guaranteed that there is wood to extract. Indeed, planning was not easy for conventional logging, because the tools mentioned above were not all yet available. However, the topographical maps, the forest inventories, and the habitat information were already used to pre-filter the forest areas where operations take place. 
+
+##### Model
+Topographical issues are not (yet) of primary concern for one who simulates logging with TROLL: this is one of the major limits of the current version of the model. The only point to be careful about is to use input forests that display a sufficient quantity of harvestable trees to simulate the desired harvesting intensity. This point is addressed elsewhere.
+
+#### Definition of the harvestable areas
+
+##### RIL
+Mechanical and "floristic" constraints define harvestable areas. Bottomlands and swamps, as well as other waterlogged areas, are avoided. They generally display poor stands, or non-merchantable species, and the engines may not circulate well within these areas. Moreover, the rules (XXX WHICH ONES) stipulate that these zones may not be crossed by engines, to avoid jeopardizing the integrity of freshwater ecosystems. Additionally, a buffering space (XXX WHICH DIMENSIONS) have to be left intact around creeks and waterlogged areas, for the same reasons. Steep slopes are also avoided due to mechanical constraints: The engines are not supposed to transit with adverse slopes over (XXX)% and lateral ("dévers") slopes over 4%. Lateral slopes are especially restricted because they increase the risk of "sweeping effect" (when the bole, tied to a cable, falls laterally), which can cause considerably increase the damages, and are a source of work accidents.
+
+##### Conventional
+In conventional logging, the definition of harvestable areas follows approximately the same rules. Perhaps the guidelines mentioned above are not carefully respected as in RIL when it is about reducing damages, but it is likely to be similar concerning human and mechanical safety: this is mainly about common sense.
+
+##### Model
+Again, the topography is not yet implemented in TROLL model. The TROLL dev-team is currently working on it in Toulouse, so the modeling choices relative to the absence of topography in the model must be re-evaluated as soon as a new version is released, and modified accordingly. 
+Thus, we consider the whole simulated plot as a harvestable area.
+
+#### Definition of the sampling units and the position of the main tracks
+##### RIL
+The ONF subdivides forest areas into plots or sampling units. Their surface area is variable (from 20 to 250 hectares; Laurent Descroix, pers. comm.), but is in the majority of the cases between 30 and 50 hectares.  Because of the definition of harvestable areas, the sampling units are nearly always located on plateaus or smooth slopes around the crest of a hill. In each plot, the main track is designed following the crest line (using digital elevation models). The main track extent within the sampling unit generally depends on the quantity of wood available in the plot. If more than 100 cubic meters of wood are transiting on a segment of forest track, the main track must be built up to that segment, probably to avoid excessive damages to the soil (that ultimately cause erosion and infrastructure destruction). We further detail this part in the corresponding section, for consistency with the module code.
+
+The implantation of the main track can be foreseen using the targetted volume and the dimensions of the plot: assuming the isotropy of the harvested tree (which in reality is often violated to some extent), it is possible to calculate the area corresponding to 100 cubic meters of wood (XXX FORMULA)
+
+##### Conventional
+In conventional logging, sampling units and main tracks were defined similarly. The source of information was not the same, but the result was supposedly similar, modulo some errors.
+
+##### Model
+We decided to define the whole plot as one sampling unit, or rather, as the entire harvestable area within a sampling unit. This simplifying assumption must be kept in mind, as well as the absence of topography, for the interpretations. We model the main track in the middle of the plot.
+
+### Trees choice
+The two following subsections may be considered inadequately split. The term "designation" is dedicated to the pre-logging assessment in which the forest office performs a selection of the harvested and leave trees. This step is one of the main novelties brought by the recent implementation of RIL in French Guiana, since 2007 (XXX REFS). Notwithstanding this specificity, we had reasons to separate the process of tree choice into "designation" and "selection by loggers". 
+
+#### Designation or of the harvestable trees
+
+##### RIL
+The "designation" is a spatialized inventory of the present and future timber resource. ONF agents designate trees during a timber cruise. Trees are classified into two categories : 
+- Marked trees that are sold to harvest for the current cutting cycle.
+- "Reserved" or leave trees, that can be future merchantable trees (to be harvested during the next cutting cycle) or ecologically important trees. The last category encompasses protected or "key-resource" species, seeding adult trees belonging to merchantable species - that are either too big to be harvested, or let in the stand to allow species regeneration. These are not to be damaged during operations.
+
+To determine which trees to mark and which to leave, the ONF uses various information :
+- Quality estimates from ontogenic diagnostics (ERIC NICOLINI XXX). The designated tree are generally from mature to slightly overmature: their growth is starting to decrease, but their quality is high. "present" trees can still grow up during the rotation, so as "future" trees do. Overmature trees often have redhibitory defaults and are left in the stand to allow regeneration.
+- Species-specific minimum harvestable diameters that generally correspond to the end of the trees growth peak. The minimum harvestable diameter, for a given species, has to be adapted to this species' maximum dimensions, autecology, and wood quality in function of the tree size. Most of the species are harvestable from 55 cm diameter. "Precious" woods such as the Boko, or other trees as the wacapou, have lower minimum diameters (45 cm). A minimum diameter increment is applied at the plot scale when the volume of merchantable trees is far above the target volume defined by the ONF: the idea is to preserve wood for next rotations.                        
+- The loggers' preferences (because they have to work with companies, not against)
+
+##### Conventional
+The designation did not exist in conventional logging. The selection was made by loggers, based on their habits, and the market demand. The minimum harvestable diameter was a priori often respected because the loggers tended to choose big (and easily accessible) trees to have maximum yields. These practices were often leading to low numbers of harvested trees per hectare, except in highly capitalized stands, like those recently discovered in the Régina-St Georges forest domain. 
+
+##### Model
+
+
+##### RIL
+In reality, loggers sometimes voluntarily omit to harvest some trees belonging to secondary interest species and focus on high-value timber. This habit often leads to a reduction of the harvested volume, which combines with the proportion of trees that are probed rotten.
+
+##### Conventional
+
+##### Model
+
+#### Tree Probing
+
+##### RIL and conventional
+
+Generally, 20% of the trees matching commercial criteria (species, diameter) have redhibitory defaults and are considered "rotten" by the lumberman after probing (i.e., after burying his chainsaw inside the trunk to see if it is hollow). The causes of these defaults are partially unknown. The observed symptoms are generally: the presence of holes on the trunk or the basis; the break of a big fork that has not cicatrized; or a hollow sound of the trunk. The probability for a tree to be rotten depends on its dbh. Big trees are likely to be older. They thus had more time to be exposed to wood consumers such as fungi (REF GUIDE) or Coleoptera (personal observations), or extensive crown damages (potentially being "entrance door" for the agents that cause the decay XXX REF) due to neighboring treefalls.
+The ONF forced the loggers to harvest these trees during an experimental campaign and gathered data on the probability to be probed rotten, the actual rotten volume, and the characteristics of the trees (Laurent Descroix, pers. comm.).  According to the data gathered, around a half or the designated trees considered as rotten by lumbermen would be intact on around 90% of their bole volume.  This is exciting news because a perspective for forestry in French Guiana would be to valorize those trees (even if they can survive to this and produce seeds). If the fuelwood market is developed during the next years, harvesting rotten trees could be advantageous even for high rotten volume trees.
+
+##### Model
+Using the data mentioned above, Sylvain Schmitt built models to describe the probability to be rotten, and the proportion of intact wood in trees that are probed rotten. The first is already implemented in the module.  We decided to implement the rotten volume model as well to compute the volume of energy wood potentially valuable from such trees.
+ 
+#### Tree Felling
+
+##### RIL
+In RIL, the felling direction is supposed to be controlled to some extent, to avoid damaging leave ("reserve") trees. The basal treefall direction is considered random but rather depends on the trees' natural orientation and crown aspect.  In fact, four orientations are possible for an ideally felled tree (see figure 1). Oriented treefall aims at orienting logs at 45° to the track (main or secondary), to reduce damages when skidding. Unfortunately, few harvesters currently apply this technique, but things are starting to change.
+
+##### Conventional
+In conventional logging, few cares are taken when felling the trees. The orientation can be considered random. It makes it more dangerous for workers, and the damages in the understorey are thus expected to be higher when skidding.
+
+##### Model
+We had the choice between implementing directional treefall and sticking with random direction treefalls. We estimate that the complexity and computational costs involved would be too high for a minimum gain: A fully functional oriented treefall function would do it by assessing, for each harvested tree, what orientation fits with the closest track and involves the minimum damage for future merchantable trees. We hope that further developments of the module, for next versions, could bring an easy and fast way to implement this feature.
+In the current implementation, gap dimensions are saved into a map, to compute post-logging damages.
+
+#### Main Tracks opening
+
+##### RIL
+
+##### Conventional
+
+##### Model
+
+
+#### Secondary Tracks opening
+
+##### RIL
+One of the major improvement in RIL is the mapping of felled trees and the usage of topographical relevés to optimize the secondary tracks network. The National forest office currently uses these tools to trace the tracks manually (being careful with inclinations and slopes) the secondary tracks in a way that more wood is extracted for a reduced track area. Software developed by the CIRAD and ONF is also used to optimize the tracks automatically but is currently still improved, to become fully functional. Recent improvements, such as the use of a nylon cable to skid the logs, also allow reducing the damage, because the tracks do not have to go up to every tree. Thus, tracks are designed to go between trees, approaching them to a distance of 30 meters maximum.
+
+##### Conventional
+Conventional logging was primarily characterized by the absence of GPS mapping and topographical relevés. Skidding tracks were designed "on the heap," directly in the field. Thus, some trees were omitted and the track network used to be everything but optimal. There is no evident way to describe how tracks were typically traced. Bulldozers were used to go up to every felled tree, following the (somewhat imprecise) approximations of lumbermen. According to the information I received (I never attended a conventional logging project !), the trajectories were partly random, with many errors, and shortcut (the bulldozer sometimes was coming back by another way that the one it came with).  Overall, this could be more related to visual-based skidding, from close to close.
+
+##### Model
+We decided to model both conventional and RIL skidding fashions. RIL skidding was already implemented in the first version of the module, and this function has only been slightly revised, optimized, and outputs were added. 
+
+#### Bole skidding
+
+##### RIL
+
+##### Conventional
+
+
+##### Model
+
+#### Post-logging residual mortality
+
+##### Reality
+Logging operations have immediate and secondary damages on tree stands. If the cause of the immediate damages is easy to guess, secondary damages are way less conspicuous and cause residual mortality during the first years after logging operations. These damages can be due to direct hurts underwent by the remaining trees during felling or skidding (uprooted stems, stem wounds, and bark scrapes), or due to consequences of the induced habitat changes (erosion, and for full-sun-intolerant species, change in light exposure).
+
+##### Model
+We decided, once again, to use the model developed by Sylvain Schmitt last year. What follows is the description he wrote in the technical document coming with the first version of the module : 
+
+He gathered data from Paracou censuses between 1988 and 1992 on harvested plots and adapted the model from (XXX Cite Herault) based on a disturbance index into: 
+
+Death of a tree (i) follows a Bernoulli probability law. The odds for a tree to die is calculated by the sum of the natural tree death odd and a perturbation index β∗eα∗dgaps. The perturbation index depends on the distance of the tree to the closest logging gap. The probability for a tree is finally calculated by taking the inverse logit of the odd (see hurt models document).
+We need now to transfer this allometry into TROLL to simulate disturbed trees that will die because of the selective logging gaps. A tree will die and fall if it randomly gets under the probability to die because of the logging gap: 
+
+However, the probability to be dead P(Death) for a tree encompass both the probability of dying due to the logging and the natural death rate. 
+
+### Monitoring and Post logging diagnostics
+##### Reality
+Post-logging diagnostics (in French, Diagnostic Post-Exploitation; DPE) have been recently implemented (2006) by the ONF in French Guiana [@Bezard2017], along with the designation and other RIL methods.  The ONF performs an inventory on some plots (for the moment, results are available for 28 of them). Several observations are reported for subplots along transects: Overall apparent perturbation, inventory of the trees over 10 dbh, qualification of their state and possible wounds. These inventories are necessary to objectively ensure that logging operations were carefully done, which is not often possible to assess directly during the operations.
+I ignore if other inventories of timber stocks and regrowth were carried out in the plots. If it is not the case, this will be done within a few decades, when we will reach the end of the first cutting cycle. For the moment, research stations such as Paracou and Montagne Tortue offer insights of the overall regeneration trajectories that take place for conventional logging.
+
+##### Model
+Since we can modify TROLL's source code, monitoring can easily be simulated. We can register every tree death during logging operations, and their cause. Even better, at each iteration, it is possible to follow the evolution of timber stocks.
+We decided to refine the existing logging damages output to include rotten trees, and the wood volume for trees that are destroyed during operations, to evaluate the quantity of fuelwood that could possibly be valorized. Additionally, the implementation of cutting cycles in the module now allows creating a separate file at each logging operation.
+The
+Furthermore, we created 4 new output files to track the current state of commercial species at each timestep, grouping them by categories. These outputs are :
+
+Above-ground biomass: 
+- all trees
+- recruited trees (over 10 cm dbh)
+- next-cycle stock trees (over 30 cm dbh)
+
+Basal area:
+- all trees
+- recruited trees (over 10 cm dbh)
+- next-cycle stock trees (over 30 cm dbh)
+Stem density:
+- all trees
+- recruited trees (over 10 cm dbh)
+- next-cycle stock trees (over 30 cm dbh)
+Wood volume:
+	- future trees (>30 cm dbh) supposedly harvested one rotation later
+	- harvestable trees (>55 cm dbh)
+
+### Output handling
+The outputs I added are directly usable with R scripts. I am currently finishing the development of a personal R package containing the functions used to handle this flow of new outputs. This set of tools includes grouping statistics and graphical displays adapted to this output. Hopefully, it could be integrated to RconTroll, the official TROLL package, currently developed by Fabian Fischer and Sylvain Schmitt, in a near future.
+
+### Limits, perspectives, and oncoming developments/implementations
+
+#### TROLL's limits
+The major limits to improve the selective logging module are the environmental variables not yet accounted for in TROLL model. 
+At the moment I write this report, Isabelle Maréchaux and Fabian Fischer are implementing a new Water module in TROLL code. Fabian also aims at developing explicit topography. These major changes would considerably enhance the realism of the silviculture simulations with TROLL but will require extensive calibrations, and are complex to include to TROLL's code, that is already as complex as fascinating. The same remark can be made on the selective logging module, when TROLL will jump at the next step in terms of complexity: Thus, a definition of harvestable area according to topography and water-logging would have to be implemented, the main tracks would not be a straight line anymore, and follow a crest, and the secondary tracks would be traced differently depending on slopes. Directional felling would also have to be accounted for in this case, and skidding damages, such as "sweeping", would have to be modeled accordingly. These deep changes could be complex to implement without involving computational costs to explode, and the ration of realism to informativeness, ponderated by computational costs, will have to be evaluated.
+
+#### The module's limits
+The major limits of this version of the module are a lack of calibration from real data specific to every sub-module, the use of approximations or simplifications for some of the steps instead of models, and the somewhat rigid calculation of timber volume. 
+
+#### Wood volume calculation
+The formula used is the one from [XXX REF ONF 2011] for center-east forests (around Cayenne), and is the one that estimates the highest volume of the five site-specific equations derived from field measurements in French Guiana [XXX TABLE]. This choice is based on the fact that Easter forests are currently being logged, and display high capitalization rates, i.e. a large number of harvestable, high value trees, with high bole heights, thus, a rather advantageous ratio of wood volume to diameter at breast height. In the next version of the module (which I already planned to upgrade), this limit will be accounted for by letting the user choose between inputting a different set of coefficients, or use my default values.
+
+#### Rotten submodule
+The rotten submodule has the advantage to have been calibrated by Sylvain Schmitt (2017) to best estimate the probability for a tree to be rotten (according to its dbh), AND the rotten and intact volumes of this tree, if it is rotten, which has been implemented in this new version to estimate potential fuelwood volumes. However, as pinpointed in the precedent version of the Logging Module's description, this is a generic, species-independent equation, whilst the probability of being rotten and the proportion of rotten bole volume are arguably influenced by a species-specific factor (see Schmitt 2017).  This is one of the reasons why some species, such as Vouacapoua americana, have smaller maximum cutting diameters than other species [@Guitet2011]. Even further, the parameters are probably influenced at the individual scale. Factors such as growth rates and extractive contents in the heartwood have been shown to help explaining this variability [@Highley1970], [. Dicorynia guianensis, the major commercial species in French Guiana, shows high variations of wood durability between individuals (as well as within a single trunk), althought no significant effect of the site have been highlighted  [@Amusant2004]. The best examples I see supporting this hypothesis can be found in ForesTreeCulture's results : Individuals of Dicorynia Guianensis grown in plantations (thus, favorable light condition) have a smaller proportion of duramen, which is the part that concentrates the major part of secondary metabolites possibly involved in wood imputrescibility (XXX REF). However, such a number of factors are impossible to account for right now: the dataset used by Sylvain is quite unique, and does not contain enough observations to derive species-specific coefficients, and even less measure the variability or disentangle its potential drivers at the individual tree scale.  The current implementation of the rotten model can thus be considered as state-of-the-art for now. The last improvement that could be brought to the submodule would be to calculate the additional damages that would be caused by harvesting rotten trees. This is not part of our development perspectives for now since I believe that the ratio of informative power to computational expenses involved may be disadvantageous.
+
+#### Main tracks submodule
+The current implementation of the main tracks module relies on one quick-fix decision and one oversimplistic assumption. First, the volume threshold used in our simulation is high (190 m3 instead of 100). Current plot dimensions (400*600m) constrained the main track to go too close to the plot's "upper" limit to be consistent with reality, and the proportion of plot length to main track length did not (in humble, yet subjective opinion) vary enough between current (20 m3) and projected (30 m3, by 2025) target volumes. The validity of the threshold was sight-estimated and requires a proper parametrization from GIS data. Not having had the time to do it in the current version, this falls in the list of improvements to bring for the next version of the module. Second, the calculation of the track extent is based on an oversimplified proportionality relationship between transiting wood volumes and surface area, according to the target volume. The validity of this assumption relies on an isotropic harvestable trees' distribution. A more accurate method would be to decide what is the main track extent after having inventoried the harvested trees, -again accounting for the overall observed proportion of rotten trees (between 0.2 and 0.4) although a site-specific proportion would be the best, if consistent with a site-specific volume estimation equation).  
+
+#### Secondary tracks submodule
+This complex submodule relies on several essential simplifications and can be improved substantially in terms of realism, although these improvements might have mitigated influence on the damages occasionated and the outcome of the simulations.
+First, the secondary tracks are in reality constrained by topography, felling angle, between-tracks angles, and optimized manually or automatically to minimize the disturbed areas, based on time-consuming designing or more complex algorithms based on cost functions and graph theory, that still have to be improved (Descroix, pers. comm.). For example, a secondary track joins another track smoothly (angle < pi/2) to handle the bole properly, and avoid "sweeping" effects.
+Second, secondary tracks could be traced in a way that minimizes the destruction of big or future trees, in order to improve the operations' carbon footprint and probability to successfully sustain timber yields. Efforts are already supposed to be made in French Guiana (and machines cannot destroy big trees),  by the designation of "reserve trees" and the ONF supervision during operations, but I am not certain whether this is totally successful or not. The least we can say is that this submodule has to be examined and calibrated to be consistent with field reality, in order to improve the reliability of the model's predictions.
+
+<!--chapter:end:09-SL_draw.Rmd-->
+
+
+# Including more species in TROLL's dataset
+
+# Introduction
+
+# Datasets used
+
+```{r lhroad, include=FALSE}
+
+library("knitr")
+library("tidyverse")
+library("gridExtra")
+library(kableExtra)
+```
+```{r load, echo = FALSE}
+bridge <- read.csv("C:/Users/nino.page/Desktop/TrollR_data/BRIDGE/bridge.csv", sep = ";", dec = ".")
+sp <- read.table("C:/Users/nino.page/Desktop/TrollR_data/species.txt", header = T)
+
+bridge2 <- read.csv("C:/Users/nino.page/Desktop/TROLL project/data/traits/BRIDGE_data_ind_2013_10_29.csv", header = T, sep = ";")
+
+for(i in 1:nrow(bridge2)){
+if(!is.na(bridge2$traits_surf_area[i])){
+bridge2$LA[i] <- bridge2$traits_surf_area[i]
+}
+else{
+bridge2$LA[i] <- (bridge2$ind_surf_area[i])/3
+}
+}
+bridge2 <- bridge2 %>% mutate(LMA = 10000*dry_mass/LA)
+bridge2 <- bridge2 %>% filter(Family != "Arecaceae")
+bridge2 <- bridge2 %>% mutate(species = paste(Genus, species, sep = "_")) %>% 
+  rename(wsg = sapwood_dens, Nmass = N, Pmass = P, dbh = DBH) %>% 
+  select(species, LMA, wsg,Nmass,Pmass, Height,dbh) %>%
+  mutate(LA = NA)
+
+
+
+baseline <- read.table("file:///C:/Users/nino.page/Desktop/TROLL project/logging/input_forests/baseline/baseline.txt",header = T)
+
+miced_bridge <- read.csv("C:/Users/nino.page/Desktop/TROLL project/data/traits/miced_dataset_straight.csv", header = T, sep = ",")
+```
+## The BRIDGE trait database
+
+We used the BRIDGE trait database (@Baraloto2010, @Baraloto2012) which was further completed by the Toulouse EDB team (@Marechaux2017a, @Marechaux2017b XXX REF). 
+The BRIDGE dataset contains measurements for ten leaf and stem traits, with a total of 4709 individuals. One of the strengths of BRIDGE is that XXX REF plots were sampled exhaustively, thus providing an exceptional representation of the diversity and functional composition for >10cm dbh trees. However, another feature of the BRIDGE dataset is that the plots sampled are tropical rainforest: the dataset contains numerous species with a majority of rare (>4 observations) and a minority of highly dominant (> 200 observations) species.We used six individual-level traits and characteristics, namely: LMA, Nmass, Pmass, wsg, H, d (@tablebridge). Trait distributions are shown in \@ref(fig:tablebridge).
+
+```{r tablebridge, fig.cap='Summary table of the trait data obtained from the BRIDGE database'}
+n_species <- c(0,0,0,0,0,0)
+traits <- c("LMA","Nmass","Pmass","wsg","Height","dbh")
+for(i in 1:length(traits)){
+  col <- which(names(bridge2) == traits[i])
+  n_species[i] <- bridge2[which(!is.na(bridge2[,col])),"species"] %>% unique %>% length
+}
+
+total <- bridge2 %>% filter(!is.na(LMA) &
+                              !is.na(Nmass)&
+                              !is.na(Pmass)&
+                              !is.na(wsg)&
+                              !is.na(Height)&
+                              !is.na(dbh))
+completerows <- total %>% nrow
+completesp <- total %>% select(species) %>% unique %>% nrow
+
+totalwP <- bridge2 %>% filter(!is.na(LMA) &
+                              !is.na(Nmass)&
+                              !is.na(wsg)&
+                              !is.na(Height)&
+                              !is.na(dbh))
+completerowsP <- totalwP %>% nrow
+completespP <- totalwP %>% select(species) %>% unique %>% nrow
+
+totalrow = c("Total","entities\ with\ complete\ observations","\ -\ ", completerows, "\ -\ ", completesp)
+totalrowP = c("LMA, N, wsg","entities\ with\ complete\ observations\ (Pmass\ excluded)","\ -\ ", completerowsP, "\ -\ ", completespP)
+
+tabs <- bridge2 %>%
+  select(species,LMA, Nmass, Pmass, wsg, Height, dbh) %>%
+  reshape2::melt(id.var = "species",
+       variable.name = "trait") %>% 
+  mutate(isna = if_else(is.na(value), 1, 0))%>% 
+  group_by(trait) %>% 
+  summarize(missing = sum(isna), complete = sum(if_else(isna == 0, 1, 0))) %>% 
+  mutate(trait = paste0('', trait, '')) %>% 
+  mutate(dataset_unit = c("g.cm^{2}", "mg.g^{-1}","mg.g^{-1}", "g.cm^{-3}","m","m")) %>% 
+  mutate(full_name = c("leaf\ mass\ per\ areaa",
+                       "leaf\ nitrogen\ content\ per\ dry\ mass",
+                       "leaf\ phosphorous\ content\ per\ dry\ mass",
+                       "wood \ specific\ gravity",
+                       "tree\ height",
+                       "diameter at breast hight"))%>% 
+  rowwise() %>% 
+  cbind(n_species) %>%
+  select(trait, full_name, dataset_unit, complete, missing, n_species) %>% 
+  rename_("Full\ name" = "full_name",
+          "Trait" = "trait",
+          "Unit" = "dataset_unit",
+          "N\ (complete)" = "complete",
+          "Missing\ data" = "missing",
+          "Species" = "n_species"
+          ) 
+tabs%>% 
+  rbind(totalrow) %>% 
+  rbind(totalrowP) %>% 
+  knitr::kable("pandoc")
+# %>%
+  # kable_styling(
+      # bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+      # full_width = T
+    # )
+
+
+
+```
+ The dataset we used contains large amounts of missing data, as the majority of functional trait databases (@Taugourdeau2014). The sampling plan carried out by the authors of the database -which probably relies on a tradeoff between costs and statistical power- allows us to use the data to infer a great number of species means for LMA, Nmass, wsh and height-diameter allometries. For Pmass, however, very few observations are available compared to the rest of the variables. Comparing the number of complete observations and species with and without including Pmass leads to the conclusion that it is by far the most limiting variable. Then, the inference of a great number of new species would require consistent increment in Pmass data... or an alternative method to estimate it.
+
+
+## TROLL initial species list
+
+We started from TROLL's species-specific trait dataset (V2.3.1). This contains 9 variables, namely LMA, Nmass, Pmass, wsg, hmax, dmax, ah, SeedVolume (the volume of a species seeds), and Freg (the regional frequency of a species). We decided to let SeedVolume and Freg apart for this presentation and subsequent inference. We do not use the seed trade-off module, and regional frequencies will be adapted for every analysis depending on the study aims. Details are found in the table \@ref(fig:listtroll)
+```{rlisttroll, echo=FALSE, fig.cap='Species in TROLL ', cache=TRUE, message=FALSE}
+sp %>%
+  rename(species = X....) %>% 
+  select(species,LMA, Nmass, Pmass, wsg, dmax,hmax,ah) %>%
+  reshape2::melt(id.var = "species",
+       variable.name = "trait") %>% 
+  group_by(trait) %>% 
+  summarize(N = n()) %>% 
+  # mutate(trait = paste0(trait)) %>% 
+  mutate(dataset_unit = c("g.cm^{2}", "mg.g^{-1}","mg.g^{-1}", "g.cm^{-3}","m","m", "m")) %>% 
+  mutate(full_name = c("leaf\ mass\ per\ areaa",
+                       "leaf\ nitrogen\ content\ per\ dry\ mass",
+                       "leaf\ phosphorous\ content\ per\ dry\ mass",
+                       "wood \ specific\ gravity",
+                       "maximum\ diameter\ at\ breast\ height",
+                       "asymptotic\ height",
+                       "tree\ height-dbh\ allometry\ parameter"))%>% 
+  select(trait, full_name, dataset_unit, N) %>% 
+  rename_("Full\ name" = "full_name",
+          "Trait" = "trait",
+          "Unit" = "dataset_unit",
+          "N\ (species)" = "N"
+  ) %>% 
+  knitr::kable(format = "pandoc") 
+# %>% 
+  # kable_styling()%>% 
+  # collapse_rows(columns = 4)  
+
+
+```
+Originally, dmax is taken as the maximum observed diameter, of the 99th percentile of this value. hmax and ah are the parameters of the diameter-height allometry used in TROLL, which is a Michaelis Menten equation (for details, see corresponding section in the inference procedure). These parameters are highly correlated. Although its name may be quite confusing, hmax corresponds to an asymptotic height, which rigourously means that this height will never be reacher by any tree of a given species. The real maximum height a tree can reach in TROLL model depends on both its maximum diameter, and the H-dbh allometric relationship at the species level. and is given by:  $h_{max[real]} = \frac{1.5*h_{max}*d_{max}}{(1.5*d_{max}+ah)}$. We fill focus on this trait instead on allometric parameters, because it can be compared to observed maximum heights in the BRIDGE dataset, and because its interpretation is more convenient and meaningful. The species gathered in this dataset have the following trait distributions :
+
+```{r distritroll}
+sp %>% rename(species = X....) %>%
+  mutate(hrealmax = 1.5*hmax*dmax/(1.5*dmax+ah)) %>%
+  select(-seedvolume,-Freg, -ah , -hmax) %>%
+  reshape2::melt(id.var = "species",
+       variable.name = "trait") %>% 
+  # filter(trait == "LMA") %>% 
+  ggplot(aes(value)) +
+  geom_histogram() +
+  facet_wrap(~trait, scales = "free")
+```
+## Comparison
+
+To estimate the representativeness of TROLL's species dataset, we have to compare its distribution with something that we think is representative of a real forest. We have to consider that the BRIDGE dataset is large enough, and comes from a sufficient number of sites, to be representative of the French Guianean forests, because there is no other such complete and big datasets to compare it with. Since TROLL species were infered from BRIDGE, the least we can expect is to observe rather similar traits distributions (in terms of density) comparing the species list and BRIDGE data pooled and averaged by species. However, it is interesting to examing the trait distribution at the individual level in BRIDGE, to estimate if there is a need to parametrize more species or account for intraspecific variability in TROLL.
+```{r preparesp, echo = F}
+traitsp <- sp %>% rename(species = X....) %>%
+  mutate(hrealmax = 1.5*hmax*dmax/(1.5*dmax+ah)) %>% 
+  select(species, LMA,wsg,Nmass,Pmass, hrealmax) %>% 
+  reshape2::melt(id.var = "species",
+       variable.name = "trait") %>% 
+  mutate(origin = "Troll") 
+ghistsp <- traitsp %>% 
+  # filter(trait == "LMA") %>% 
+  ggplot(aes(value)) +
+  geom_histogram() +
+  facet_wrap(~trait, scales = "free")
+```
+
+```{r preparebridge, echo = F}
+  traitbridge <- bridge2 %>% 
+  as.tbl() %>%
+  # mutate(sp = Species) %>% 
+  # mutate(species = paste(Genus, sp)) %>% 
+   # rename(wsg = sapwood_dens) %>% 
+  select(species, LMA, wsg,Nmass,Pmass, Height) %>% 
+  filter(LMA < 250) %>% 
+  group_by(species) %>%
+  summarise(LMA = mean(LMA, na.rm = T),
+            wsg = mean(wsg, na.rm = T),
+            Nmass = mean(Nmass, na.rm = T),
+            Pmass = mean(Pmass, na.rm = T),
+            hrealmax = max(Height, na.rm = T)) %>%
+  reshape2::melt(id.var = "species",
+       variable.name = "trait")  %>% 
+  mutate(origin = "Bridge") 
+
+  ghistb <- traitbridge %>% ggplot(aes(value)) +
+  geom_histogram() +
+  facet_wrap(~trait, scales = "free")
+  # ghistb
+  
+  
+  
+  traitbridgetot <- bridge2 %>% 
+  as.tbl() %>%
+  # mutate(sp = Species) %>% 
+  # mutate(species = paste(Genus, sp)) %>% 
+   # rename(wsg = sapwood_dens) %>% 
+  select(species, LMA, wsg,Nmass,Pmass, Height) %>% 
+  filter(LMA < 250) %>% 
+  # group_by(species) %>%
+  # summarise(LMA = mean(LMA, na.rm = T),
+            # wsg = mean(wsg, na.rm = T),
+            # Nmass = mean(Nmass, na.rm = T),
+            # Pmass = mean(Pmass, na.rm = T),
+            # hrealmax = max(Height, na.rm = T)) %>%
+  reshape2::melt(id.var = "species",
+       variable.name = "trait")  %>% 
+  mutate(origin = "Bridge") 
+```
+ ### Species scale
+```{r histo, warning=F, info = F, message=F}
+traitsp %>% rbind(traitbridge) %>% ggplot(aes(value, fill = origin)) +
+  geom_histogram(aes(y = ..density..), alpha = 0.7,position = "identity") +
+  # geom_density(aes(y = ..density..), alpha = 0.3)+
+  facet_wrap(~trait, scales = "free")
+```
+TROLL species list covers an apparently good part of the functional variability estimated at the species level for Paracou. It seems, however, that low LMA and low wsg species, as well as high Nmass species, are slightly underrepresented. These combinations of traits are somewhat typical of pioneer species, that may have been scarce sampled in undisturbed plots where BRIDGE sampling took place.
+```{r, eval = T}
+traitsp %>% rbind(traitbridge) %>% ggplot(aes(value, fill = origin)) +
+  # geom_histogram(aes(y = ..density..), alpha = 0.7,position = "identity") +
+  geom_density(aes(y = ..density..), alpha = 0.3)+
+  facet_wrap(~trait, scales = "free")
+```
+
+### Individual level variability
+```{r hists, warning=F, info = F}
+traitsp %>% filter(trait != "hrealmax") %>%  rbind(traitbridgetot %>% filter(trait != "Height")) %>% ggplot(aes(value, fill = origin)) +
+  geom_histogram(aes(y = ..density..), alpha = 0.7,position = "identity") +
+  # geom_density(aes(y = ..density..), alpha = 0.3)+
+  facet_wrap(~trait, scales = "free")
+```
+The individual scale variability is not totally captured by TROLL's species dataset. Extreme traits values are slightly underrepresented, for example, for low LMA, Pmass, and wsg. The distribution seems however representative of the total variability, that is arguably higher at the intraspecific level than at the interspecific level. Problems arises when using subsets of this dataset, as we did to simulate Paracou forest plots.
+
+# Paracou plots: subsetting issues
+
+Paracou plots display a high proportion of species that are absent of TROLL dataset. These species are mainly less common ones, and may be absent either because they were not present in the plots sampled for BRIDGE (Tropical forests show high fine-scale heterogeneity and species composition turnover), or because theirnumber of observations did not allow including them with the strict inference procedure that was followed. Based on preliminary exploration of the Paracou dataset, we noticed that the proportion of individuals belonging to missing species is reducing over time (maybe with increase in botanical determination reliability), and is low compared to the number of missing species. However, such proportion was deeply questioning the *a priori* validity of our intent to simulate real forest plots. table \@ref(fig:paracou) shows the observed proportions of missing and simulable species with the initial dataset.
+```{r paracou}
+tab <- read.csv("C:/Users/nino.page/Desktop/my_thesis/initial_paracou.csv", sep = ";")
+tab  %>% 
+   # mutate(Treatment = cell_spec(Treatment, ifelse(Treatment == "T0", "green","red"))) %>% 
+  rename_("1984" = "X1984","1992"="X1992", "1984" = "X1984.1","1992"="X1992.1") %>% 
+  kable("pandoc") %>%
+  # kable_styling("striped") %>%
+  add_header_above(c(" " = 2, "Species" = 2, "Individuals" = 2)) %>% 
+  row_spec(seq(1,35,by = 3), bold = T, color = "#339900", align = "c") %>% 
+  row_spec(seq(2,35,by = 3), bold = T, color = "#D7261E", align = "c") %>% 
+  row_spec(seq(3,35,by = 3), bold = T, align = "c") %>% 
+    kableExtra::collapse_rows(columns = 1:2) %>% 
+  group_rows("Plot 1", 1, 3, latex_gap_space = "2em") %>% 
+  group_rows("Plot 2", 4, 6, latex_gap_space = "2em") %>% 
+  group_rows("Plot 3", 7, 9, latex_gap_space = "2em") %>% 
+  group_rows("Plot 4", 10, 12, latex_gap_space = "2em") %>% 
+  group_rows("Plot 5", 13, 15, latex_gap_space = "2em") %>% 
+  group_rows("Plot 6", 16, 18, latex_gap_space = "2em") %>% 
+  group_rows("Plot 7", 19, 21, latex_gap_space = "2em") %>% 
+  group_rows("Plot 8", 22, 24, latex_gap_space = "2em") %>% 
+  group_rows("Plot 9", 25, 27, latex_gap_space = "2em") %>% 
+  group_rows("Plot 10", 28, 30, latex_gap_space = "2em") %>% 
+  group_rows("Plot 11", 31, 33, latex_gap_space = "2em") %>% 
+  group_rows("Plot 12", 34, 36, latex_gap_space = "2em")
+  
+
+# ?row_spec
+ # add_header_above(c(" " = 1, "Group 1" = 2, "Group 2" = 2, "Group 3" = 2)) 
+```
+
+
+# Multivariate imputed dataset
+
+## Rationale
+
+We used the mice R-package implemented procedures to perform multiple imputation by chained equations, using predictive mean matching (PMM). The aim of this step, however criticizable, was to infer Pmass values using the available observations and the correlations between Pmass and the other traits [XXX REF to say that phosphorous is correlated + summary?]. This was however necessary, because although Pmass has already observations for 270 specie, the overwhelming majority of them are singletons (\@ref(fig:phosphorous)). @Marechaux2017b have apparently further completed this dataset, probably with TRY database (@Kattge2011) to achieve parametrization of 163 species in TROLL. 
+
+```{r phosphorous, fig.cap = 'ok'}
+bridge2 %>%  
+  filter(!is.na(Pmass)) %>% 
+  group_by(species) %>% 
+  summarise(n = n()) %>% 
+  arrange(desc(n)) %>% 
+  ggplot(aes(x = n))+
+  geom_histogram(binwidth = 1)+
+  xlab("Number of observatons")+
+  ylab("Species count")
+  
+```
+
+Pmass
+
+## Method
+
+In simple words, here is how PMM works, based on Paul Allison's description: 
+
+Let $X$ be a single variable that has cases with missing data, and a set of variables $Z$ (with no missing data) that are used to impute x. PMM follows the above procedure:
+
+1/ For cases with no missing data, it estimates a linear regression of $X$ on $Z$, producing a set of coefficients $\beta$.
+2/ It then makes a random draw from the “posterior predictive distribution” of $\beta$, producing a new set of coefficients $\beta*$. This would typically be a random draw from a multivariate normal distribution with mean $\beta$, and the estimated covariance matrix of $\beta$ (with an additional random draw for the residual variance). This step aims at producing variability in the imputed values, and is common to all efficient methods for multiple imputation.
+3/Using $\beta*$, it generates predicted values for $x$ for all cases, both those with data missing on $x$ and those with data present.
+4/For each case with missing $x$, if identifies a set of cases with observed $X$ whose predicted values are close to the predicted value for the case with missing data.
+5/It then randomly chooses one and assign its observed value to substitute for the missing value.
+6/ Steps 2 through 5 are then repeated for each completed data set. 
+
+Unlike many methods of imputation, the purpose of the linear regression is not to generate imputed values. It rather aims at constructing a reference to match cases with missing data to similar cases with data present.
+
+There are several variations to this method (Morris et al. 2014), but the most important issue to settle is how many cases ($k$) should be in each match set. The default in the MICE package for R is k=5, i.e. each case with missing data on $X$ is matched to the 5 cases (with data present) that have the closest predicted values. One of the 5 is chosen at random and its $X$ value is assigned to the case with missing data. 
+
+We used the default $k=5$ proposed in the mice package and repeated the imputation 10 times, then pooled the datasets and averaged the obtained proposals for missing values. We aimed at avoiding extreme imputations by reducing the variability, averaging the repetitions, but we neither did we want to force the values to be too close to the predictive distribution used to match cases. This is quite discussable, but the hierarchical inference that was then used to estimate species means was by nature attenuating possible aberrations, giving low weight to underrepresented species (see below). To improve predictive power based on inter-trait correlation, we included additional variables that were correlated with our target variables, and selected with an automatic, stepwise linear model comparison procedure (step, reference needed): leaf toughness, leaf thickness, SPAD (a proxy of chlorophyll content) and leaf carbon content. Palms were excluded of the analysis beforehand, since there are not currently modelled with TROLL. Last but not least, we clustered the observations according to taxonomical levels: Imputations were performed at the genus level if more than 30 complete observations were available. If not, imputation was made at the family level, with the same threshold. Monogeneric and underrepresented families were treated at the overall level. The aim of this separation was to reduce the errors due to using overall relationships to infer values. We assumed that functional strategies were more accurately captured by grouping according to taxonomical position than using a global, unique set of relationships between trait. This however can be a source of errors: intergeneric and intrageneric variation is high in tropical trees, be it regarding morphological characteristics, light response and trade-offs. [REF XXX]
+
+## Results and discussion
+
+### Summary
+
+We obtained a completed dataset of 4245 observations (\@ref(fig:tablo), with a total of 599 represented species, which is less than the original species number for LMA and wsg. This is due to the fact that individuals belonging to indeterminated genera and species were discarded (except the ones present in Paracou, for example *Symphonia sp.1*), as well as idividuals which had only one trait measured, or with high taxonomic uncertainty, thus having to be excluded according to the authors' guidelines. Interesting is to note that Pmass have more inferred values than actually measured values in the completed dataset. One has to keep this in mind for further interpretations.
+
+```{r tablo, echo = F, fig.cap="Comparative summary of the original and completed datasets"}
+tabl <- cbind(trait = tabs[1:4, "Trait"], full = tabs$`Full\ name`[1:4],n=tabs$`N\ (complete)`[1:4],n2=rep(4245, 4),s=tabs$`Species`[1:4], s2=rep(miced_bridge %>% select(species) %>% unique %>% nrow, 4))
+tabl <- as.data.frame(tabl)
+names(tabl) <- c("Trait",
+                 "Full name",
+                 "N (original)",
+                 "N (completed)",
+                 "Species (original)",
+                 "Species (completed)")
+tabl %>% knitr::kable("pandoc") 
+# %>% 
+  # kable_styling()
+```
+
+### Consistency
+```{r, eval = T}
+# miced_bridge <- miced_bridge %>% 
+  # rowwise() %>% 
+  # mutate(species = strsplit(as.character(species), "_NA")[[1]][1])
+traitmice <- miced_bridge %>% 
+  as.tbl() %>%
+   rename(Nmass = N, Pmass = P) %>% 
+  select(species, LMA, wsg,Nmass,Pmass) %>% 
+  filter(LMA < 250) %>% 
+  # group_by(sp) %>% 
+  # summarise(LMA = mean(LMA, na.rm = T),
+            # wsg = mean(wsg, na.rm = T),
+            # Nmass = mean(N, na.rm = T),
+            # Pmass = mean(P, na.rm = T),) %>% 
+  reshape2::melt(id.var = "species",
+       variable.name = "trait")  %>% 
+  mutate(origin = "Mice")
+
+traitmicemean <- miced_bridge %>% 
+  as.tbl() %>%
+   rename(Nmass = N, Pmass = P) %>%
+  select(species, LMA, wsg,Nmass,Pmass) %>% 
+  filter(LMA < 250) %>% 
+  group_by(species) %>%
+  summarise(LMA = mean(LMA, na.rm = T),
+            wsg = mean(wsg, na.rm = T),
+            Nmass = mean(Nmass, na.rm = T),
+            Pmass = mean(Pmass, na.rm = T),) %>%
+  reshape2::melt(id.var = "species",
+       variable.name = "trait")  %>% 
+  mutate(origin = "Mice") 
+```
+Figure \@ref(fig:comparehistspecies) compares the distributions of traits species means, and figure \@ref(fig:comparehistglobal) shows the unpooled trait distributions. The mice inference did not modify significantly trait distributions for LMA, and wsg at the species level (species means, regardless of number of observations). It however modified the distributions of Nmass and Pmass, which are left left-hand skewed in the completed dataset. The imputation procedure did not generate outliers, and both the original and modified dataset have distributions within the same range, which is the main advantage of the imputation by PMM.
+```{r comparehistspecies, fig.cap= "caption" }
+traitbridge %>% filter(trait != "hrealmax") %>%  rbind(traitmicemean %>% filter(trait != "Height")) %>% ggplot(aes(value, fill = origin)) +
+  geom_histogram(aes(y = ..density..), alpha = 0.7,position = "identity") +
+  # geom_density(aes(y = ..density..), alpha = 0.3)+
+  facet_wrap(~trait, scales = "free")
+
+```
+
+```{r comparehistglobal, fig.cap= "caption2"}
+traitbridgetot %>% filter(trait != "Height") %>%  rbind(traitmice%>% filter(trait != "Height")) %>% ggplot(aes(value, fill = origin)) +
+  geom_histogram(aes(y = ..density..), alpha = 0.7,position = "identity") +
+  # geom_density(aes(y = ..density..), alpha = 0.3)+
+  facet_wrap(~trait, scales = "free")
+
+```
+### Discussion
+
+We obtained the aforementioned distributions and checked for consistency of the imputation. PMM is not supposed to have a strong influence on the overall distributions, provided observation are missing completely at random. In our case, Pmass have clearly less observations than other traits, and Nmass is missing for a great number of species. This is probably because measurment is expensive and time consuming. Thus, we expect Pmass to represent only the most common species, because this is the best sampling strategy to adopt if one wants to have good representativness with few measurements. We thus have a possible underrepresentation of original, or less common species, for example pioneers. Table \@ref(fig:comparehistspecies) shows that the mice inference did not modify significantly trait distributions for LMA, and wsg at the species level (species means, regardless of number of observations). It however modified the distributions of Nmass and Pmass, which are left left-hand skewed in the completed dataset. For the first, this may be due to the inclusion of more species (see table) with values between 0.02 and 0.025, that slightly reduced the left-hand-side asymetry of the distribution. For the second, the same effect is observed and is neater, probably because the original dataset had few available observation. Indeed, most of the Pmass values in this completed dataset were inferred than really measured. We thus rely on the assumptions that 1/ Pmass is correlated enough with other traits to have been accurately inferred; 2/ Correlation between traits are more informatively taken at the adequate taxonomic level rather that the overall level; and 3/ the threshold used (*i.e.* minimum 30 observations) allows to have enough observations at a given taxonomical level, to capure accurately relationships between traits and draw reliable posterior distributions with PMM. The extent to which these assumption may be violated has not been further explored as part of this work. Our method would require a rigorous, more detailed scrutiny to be accepted as valid. However, this is the best solution that we could choose given the amount of data and time for this internship. This preliminary step, although of prime importance to have the most valid model outputs as can be, was not the backbone of this work.
+
+
+# Hierarchical inference of traits and allometric parameters
+
+## Method
+
+### Generalities
+
+We used a simple but efficient modeling framework, which principle was suggested and blueprinted by Fabian Fisher (*pers. comm.*), to hierarchically infer species means and take advantage of every available observation. 
+
+The idea is quite simple: for a trait (or an allometric parameter), the value observed in individuals depends on a species mean (modulo a species-level variance), which is itself related to an higher-level grouping entity mean. For example, we can consider that species mean depends on genus mean, that is itself related to the family mean, and so on up to the overall observed mean (*i.e.* regardless to grouping entities). The most critical points to use this vision and turn it into a model are the choice of the number of grouping entities, of an appropriate distribution, and the use of informative priors for the target parameters. 
+
+After testing several configurations, we decided to stick with only two layers, namely species and overall levels. The main reason of this choice was parsimony. Genera means, variance, and species raw/actual deviation from its genus mean represented a high number of extra parameters, which is excessive compared to the predictive power enhancement it represents. This was estimated by a quick comparison using the WAIC criterion, that confirmed our intuition (data not shown)
+
+### Leaf and stem traits
+
+
+
+A simple but reliable solution is to use normal or lognormal distributions, according to the inferred trait. The number of layers was quite easy to decide: based on preliminary testing, we estimated that 
+$\log(trait) \sim \mathcal{N}( \hat{\mu}_{sp}, \sigma)$
+
+
+$\mu_{sp} = \mu_t + dev(\mu_{sp})$
+
+$dev(\mu_{sp}) = mu_sigma_species * dev(mu_{sp})_{raw}$
+
+$dev(mu_{sp})_{raw} ~ \mathcal{N}(0,1)$
+
+### Allometric relationships
+
+## Results
+
+### Leaf and stem traits
+
+We obtained a new set of 599 species means for Nmass, Pmass, wsg and LMA.
+```{r, eval = T}
+traitnew <-  baseline %>%
+  select(species, LMA,wsg,Nmass,Pmass) %>%
+  filter(Nmass > 0.005) %>% 
+  reshape2::melt(id.var = "species",
+       variable.name = "trait") %>% 
+  mutate(origin = "New dataset") 
+ghistbase <- traitnew %>% 
+  # filter(trait == "LMA") %>% 
+  ggplot(aes(value)) +
+  geom_histogram(aes(y = ..density..)) +
+  geom_density()+
+  facet_wrap(~trait, scales = "free")
+# ghistbase
+traitmice %>% filter(trait != "Height") %>%  rbind(traitnew%>% filter(trait != "Height")) %>%
+  # rbind(traitsp %>% filter(trait %in% c("LMA","Nmass","Pmass","wsg"))) %>% 
+  ggplot(aes(value, fill = origin)) +
+  geom_histogram(aes(y = ..density..), alpha = 0.7,position = "identity") +
+  # geom_density(aes(y = ..density..), alpha = 0.3)+
+  facet_wrap(~trait, scales = "free")
+```
+
+What appears obvious here is that the range of estimated species means is more narrow that the one of raw species means, estimated on the dataset we performed the inference from. This is due to shrinkage of the distributions by estimating hierarchically the species means distribution, to keep only punctual estimators (the mean of the MCMC sampled species means) as a final output. In more poetic terms, what happens here is an illustration of the precaution principle: species with extreme and with very few observations are attributed more reasonable estimates, because of the uncertainties.
+ 
+
+# Comparisons
+```{r compareall, eval = T}
+traitnew <-  baseline %>%
+  select(species, LMA,wsg,Nmass,Pmass) %>%
+  filter(Nmass > 0.005) %>% 
+  reshape2::melt(id.var = "species",
+       variable.name = "trait") %>% 
+  mutate(origin = "New dataset") 
+ghistbase <- traitnew %>% 
+  # filter(trait == "LMA") %>% 
+  ggplot(aes(value)) +
+  geom_histogram(aes(y = ..density..)) +
+  geom_density()+
+  facet_wrap(~trait, scales = "free")
+ghistbase
+traitbridgetot %>% filter(trait != "Height") %>%  rbind(traitnew%>% filter(trait != "Height")) %>%
+  rbind(traitsp %>% filter(trait %in% c("LMA","Nmass","Pmass","wsg"))) %>% 
+  ggplot(aes(value, fill = origin)) +
+  geom_histogram(aes(y = ..density..), alpha = 0.7,position = "identity") +
+  # geom_density(aes(y = ..density..), alpha = 0.3)+
+  facet_wrap(~trait, scales = "free")
+```
+# Discussion and perspectives
+
+The hierarchical models used here, species means are derived from the general trait mean,and thus depend on both the number of observations for each species and the observed trait values. If a species is observed very few (or one) time, its inferred mean is "attracted" by the overall mean value because of the poorly informative value of a few observations. Singleton species with "extreme" trait values will be attributed more reasonable means. On the contrary, abundant species have narrow confidence intervals around their deviation to the overall mean, thus, a reliably *distinct* trait mean, even if close to the global mean value. This is consistent with the arguable assumption that measuring only one extreme value can be the outcome of picking one special tree by chance, and that this is barely more informative than attributing it the community mean. These models thus offer the advantage to account for the uncertainties due to scarce observations. Even further, considering the number of rare species in tropical plant trait databases such as BRIDGE, and given that each of them contribute to the overall mean, it is wise to include them and "let the data speak", instead of setting an arbitraty cutoff: why would a species mean computed with 5 observations more reliable than one computed with 4 measurements ? The adjustment of an extreme estimate to a more moderate one is termed shrinkage, and is well known for being inherent to many hierarchical models, and can either be considered a advantageous phenomenon or a real problem (see @Rouder2005, @Mould2013, @Savic2009).The main drawback of this approach is that shrinkage effect leads to an overestimation of traits distribution densities around the overall mean, thus giving more weight to the whole dataset (*i.e.*, the some of each individual contribution) than to lower layers. Given the fact that our final output is a table of species means, the uncertainties around these means, thus, a part of the diversity of possible trait value, are ignored. But the validity of this approach is not jeopardized by these considerations. Using hierarchical modeling and the underlying shrinkage as a "precaution principle" to work with scarce species-specific observations, and datasets such as Bridge, is advisable. The main perspective of improvement on this inference is the use of a new feature of TROLL, recently implemented by Fabian Fischer: intraspecific, lognormal trait variability, and trait covariance. This approaches allows both to recreate continuums such as those observed in real forests, by conserving at least the overall links between every trait. This other approach has been already tested by @Fyllas(2014) We did not have the time to adapt our study to this feature, for it came out a very few months ago.
+
+
+
+
+
+```{r, eval = F}
+# grid.arrange(ghistsp, ghistb, nrow = 1)
+# grid.arrange(ghistb, ghistbase, nrow = 1)
+
+# traitmice %>% rbind(traitbridge) %>% ggplot(aes(value, fill = origin)) +
+  # geom_histogram(aes(y = ..density.., alpha = 0.2), position = "identity") +
+  # geom_density(aes(y = ..density..))+
+  # facet_wrap(~trait, scales = "free")
+```
+
+
+
+
+
+
+<!--chapter:end:10-Species_draw.Rmd-->
+

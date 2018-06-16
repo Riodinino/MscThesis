@@ -1,0 +1,111 @@
+# Selective Logging experiment
+
+
+## Experiment design
+
+### GFClim scenarios: Adaptation to the study scale
+
+Currently, the GFClim project tackles the problematics of climate change and its interrelation with tropical forests in GF. The second Work Package of the project aims at defining scenarii regarding forest management and timber industry in the region, and examine their potential impact in this context, among others carbon emissions and required forest area.
+
+Nowadays, about 80 000 m3 of wood are harvested by selective logging each year in French Guiana. This quantity slowly increases year by year. Current demographic growth in French Guyana is at a level which arguably can lean to a double increase of the population by 2030. Given this estimate, and a general aim to develop wood industry (the only possibly sustainable lucrative activity in French Guiana, opposed to gold mining), current projections aim at 200 000m3 of timber harvested per year, to be reached by 2025, along with a substantial quantity of fuelwood to supply biomass-fueled power station. This involves either an increased need to designate areas for logging, or an increase in harvest intensities. Moreover, public policies and the international context are supposed to give a rising importance to biodiversity preservation and carbon-accounting problems.
+Whilst neotropical forests are possibly no longer an important carbon sink (XXX REF BRUNO) [@Baccini2017] [@Brienen2015], thy still represent an important stock (200-400 T.ha) of carbon (XXX REFS STOCK).
+
+In French Guiana, 77% of carbon emissions would be due to deforestation (XXX FIND REF : “CIRAD GEC 2016”??), and selective logging would account for 5% of these emissions, although uncertainties are high  [@Cabon2015]. 
+
+The fuelwood supply is a problematic of growing interest in the region. Three solutions could answer the increasing demand of wood for energy supply :
+Valorize the wastes that are usually left on the ground during timber extraction
+Dedicate plots for this particular activity
+Take advantage of plantation wood and local species to minimize pressure on natural forests.
+The scenarii defined in the GFClim wp3 are the following:
+
+### Simulated forests
+
+
+### Diversification of the harvested species
+
+Primary neotropical rainforests are hyperdiverse. The main point of studying selective logging is to determine how these mixed-age, mixed-species stands, recover from the occasioned disturbance and damages to ensure the production of timber and the maintenance of ecosystemic services. Most of the harvested primary forest tree species are non-pioneer, long-lived tree species with dense and imputrescible hardwood, low number of individuals per surface area, and which growth is supposed to be extremely slow [@Zimmerman2014]. It is critical to define the best way to manage the stands to ensure ecosystem resilience, that is in this context a synonymous with long-term, sustainable incomes. 
+
+The choice of harvested trees is essential to allow for regrowth of merchantable timber species instead of pioneer trees. The diversification of harvested species has long been proposed as a solution to mitigate the adverse demographic impacts of logging of these species [@Guitet2011]. 
+
+In French Guiana, more than 100 tree species are recognized for their technological qualities, and are referred to as commercial species. However, only a handful of species constitute over a 70% of the overall extracted timber volume [add graph XXX]. Commercial species are classified according to 4 categories: 
+* Principal Major Commercial Timbers (ECMP)
+* Other Major Commercial Timbers (ECMA)
+* Precious Timbers (BP)
+* Other Commercial Timbers (AEC)
+Currently, only every ECMPs (*Peltogyne sp., Sextonia rubra, Dicorynia Guianensis*)[XXX names] and one ECMA (*Bagassa guianensis*) are subject to designation to be harvested. One the one hand, the ONF insist on the need to diversify the set of harvested species, without what current choices can only lead to ressource depletion within a few cutting cycles. On the other hand, they have to collaborate with logging companies to ensure the operations economical viability, which is impossible if too much non-demanded timbers, that can't be sold in the current market context, are designated.
+ 
+ 
+We simulated three situations of preferences starting from the actual preferences to ideal, total diversification, resulting in three cases which we refer to as "realistic", "intermediate" and "diverse". Diversification is modelled with a species-specific interest variable, and our 3 modalities correspond to three cases: 
+
+* Species interest are split into three rank levels :
+  + 1: the few species that are overharvested in reality
+  + 2: species that are occasionally harvested as a complement of the firsts
+  + 3: species that are generally avoided, *i.e.* the majority.
+* Species interest are split into two rank levels
+  + 1: the previous first and second categories, i.e. the diversification occurs on the species that loggers currently accept only.
+  + 2: the often-avoided species set
+* Every commercial species have the same rank
+  + This is the ideal diversification, the case where every technically usable species would be valorised.
+  
+### Silvicultural parameters
+
+#### Both types of selective logging
+
+We simulated both Reduced Impact Logging and “improved” conventional logging, as implemented in the new version of the silviculture module. The reason of this choice is that both logging types can still happen in French Guiana: logging companies undergo a rapid turnover, and the degree of collaboration with the ONF is not constantly ideal. Careless operations, yet supposed to follow EFI guidelines, can lead to unoptimized skidding tracks opening and be, in terms of damages, relatable to conventional logging (Laurent Descroix, pers. com.). 
+
+#### Target and designated volumes
+ 
+Current harvests in French Guiana target timber volumes of 25m3 per hectare in average, and the actual quantity of wood that is extracted is generally around 20 m3 due to rotten trees that are not yet valorised. This can however have advantages, such as conserving carbon stocks and seeding trees.
+
+In the present regional and international contexts, harvest intensity is a central element of forest management, and can be influenced by  two adverse forces: human needs or ecological concern. A growing body of evidence suggests that harvests must be regulated at low intensities, to make selective logging less harmful to the ecosystem. However, in a region such as French Guiana, experiencing high demographic growth and with ambitions relative to timber valorisation, there is a pressure to either uprise logging intensities, or log more forest areas.
+
+We thus tested two target harvesting intensities:
+
+- 20 $m^3$, which is in agreement with the current practices
+- 30 $m^3$, which may be a future target according to GFClim scenarii
+
+Since the overall proportion of rotten trees is about one third of the total designated trees, we parametrized the module accounting for this. The total designated volumes thus were uprisen to 30 and 45 $m^3$, to obtain the target volume at the first rotation, in average.
+
+#### Cutting cycles
+
+The cutting cycle duration is equally a key parameter in sustainable management. It varies widely in the Tropics depending on the continent, region, or even the country. In the Amazon, most of the cutting cycles are currently set to 40 approximately (XXX check exact values). French Guiana is somehow an exception, with cutting cycles fixed at 65 years for the moment. This exception is thought to be the minimum time that should elapse between two cutting operations, but this is often inadequate considering economic and development purposes. This situation may change in French Guiana someday, if logging is to be intensified in the region.
+
+We tested two durations for a complete cutting cycle: 35 years, which is the duration that matches most current practices in neighboring countries (for example Brasil); and 65 years, the choice currently adopted by the ONF in French Guiana.
+To assess the alleged sustainability of such cutting cycles, we simulated logging operations, and stopped the simulations just before the sixth. This resulted in 175 years of simulation for the short cycle, and 325 years for the long one.
+
+
+#### Seed-rain scaling: personal choices
+Most of tree species rely on animal pollinators and dispersers to perpetuate their lineage. Selective logging has certainly adverse effects on these animals, be it directly (changes in forest structure, depletion of ecologically important trees) or indirectly (increased hunting pressure subsequently to road opening) [XXX REF]. The remaining reproductive adult trees are probably the major dispersers of seeds in logged plots. Since regeneration processes and timber species autecology remain mysterious, the way we model seed dispersion may have a wide range of impacts on the results obtained with logging simulations. 
+
+We think that the default value of the seed-rain scaling constant -used in TROLL to model external seed arrival- overestimates the actual regeneration potential in the case of logged forests. This default parameter (50000 seeds/ha/month) is convenient to simulate regeneration from bare soil of craft forests with predictible species frequencies, but is not adapted to simulate regeneration from already-established, disturbed, or logged forests, in which we assume a more enclosed demographic functioning. 
+
+Moreover, in our experiment, we assume that our simulated logged plots are surrounded by equally logged plots, that thus cannot supply a high number of seeds to neighboring areas. Thus, we believe that it would be safer to underestimate the seedrain than overestimate it. We set TROLL's seed-rain constant on an arbitrary 5% of its value (2500 seeds/ha/mmonth)
+
+#### Replication of the experiment
+
+The experiment is constrained by time and high computational costs. The present experiment design already yields a total of 48 factor combinations. We replicated each simulation 5 times with a distinct random seed, resulting in 240 simulations.
+
+### Grouping effects to analyse the output
+
+With the continuous screening of the ecosystem variables by commercial group, and from the damage maps saved at each operation, we produced five different types of outputs. 
+
+* Model's general features, for control and facultative model evaluation
+* Timber quantities over time and cutting cycles, to evaluate the sustainability of the practices we testes
+* Volumes per merchantable species class, to assess the effects of diversification
+* Fuelwood volumes, to estimate the quantities obtainable from colateral damages
+* Overal abovegroune biomass, to assess the impact of selective logging on carbon stocks
+
+## Results
+
+
+### Model features
+
+
+### Selective logging sustainability
+
+### Diversification
+
+### Fuelwood volumes
+
+### Carbon
+

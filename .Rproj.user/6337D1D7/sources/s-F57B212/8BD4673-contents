@@ -1,0 +1,322 @@
+# Cleaning the biniou -----------------------------------------------------
+rm(list=ls())
+gc()
+graphics.off()
+
+
+# Settings and loads ------------------------------------------------------
+
+setwd("C:/Users/nino.page/Desktop/TrollR_data/")
+read.csv("bridge.csv")
+load("missingspecies_paracou")
+
+speciestroll <- as.character(sp$X....)
+bridge <- read.csv("C:/Users/nino.page/Desktop/TrollR_data/BRIDGE/bridge.csv", sep = ";", dec = ".")
+sp <- read.table("C:/Users/nino.page/Desktop/TrollR_data/species.txt", header = T)
+cor(sp[2:10])
+
+library(tidyverse)
+
+sp %>% 
+  rename(species = X....) %>%
+  select(-seedvolume, -Freg, -ah) %>% 
+  reshape2::melt(id.var = "species",
+       variable.name = "trait") %>% 
+  # filter(trait == "LMA") %>% 
+  ggplot(aes(value)) +
+  geom_histogram() +
+  facet_wrap(~trait, scales = "free")
+
+sp %>% 
+  mutate(hm = hmax*(3*dmax/(3*dmax + 2*ah))) %>% 
+  select(hm) %>% 
+  ggplot(aes(hm)) +
+  geom_histogram()
+
+sp_list <- sample(gsub("_", " ", as.character(sp$X....)), 30)
+bridge %>% 
+  as.tbl() %>% 
+  mutate(sp = paste(Genus, species)) %>% 
+  select(sp, DBH, Height) %>% 
+  filter(sp %in% sp_list) %>% 
+  ggplot(aes(DBH, Height)) +
+  geom_point() +
+  facet_wrap(~sp)
+
+sp %>% 
+  filter(hmax > 80) %>% 
+  as.tbl()
+
+sp %>% 
+  rename(species = X....) %>% 
+  ggplot(aes(LMA, Nmass, 
+             col = wsg,
+             size = Pmass)) +
+  geom_point()
+
+g <- bridge %>% 
+  as.tbl() %>% 
+  mutate(sp = paste(Genus, species)) %>% 
+  mutate(LMA = 10000*dry_mass/traits_surf_area) %>% 
+  rename(wsg = sapwood_dens) %>% 
+  select(sp, LMA, wsg) %>% 
+  group_by(sp) %>% 
+  summarise_all(mean, na.rm = T) %>% 
+  mutate(TROLL = 0) %>% 
+  rbind(sp %>% 
+          rename(sp = X....) %>%
+          select(sp, LMA, wsg) %>% 
+          mutate(TROLL = 1)) %>% 
+  ggplot(aes(LMA, wsg, 
+             col = as.factor(TROLL),
+             #size = as.factor(TROLL),
+             label = sp)) +
+  geom_point(alpha = 0.9)
+plotly::ggplotly(g)
+graphics.off()
+
+# new bridge dataset ------------------------------------------------------
+
+bridge2 <- read.csv("C:/Users/nino.page/Desktop/TROLL project/data/traits/BRIDGE_data_ind_2013_10_29.csv", header = T, sep = ";")
+bridge2 <- bridge2 %>% mutate(species = paste(Genus, species, sep = "_")) %>% mutate(LA = NA)
+for(i in 1:nrow(bridge2)){
+if(!is.na(bridge2$traits_surf_area[i])){
+bridge2$LA[i] <- bridge2$traits_surf_area[i]
+}
+else{
+bridge2$LA[i] <- (bridge2$ind_surf_area[i])/3
+}
+}
+
+bridge2 <- bridge2 %>% mutate(LMA = 10000*dry_mass/LA)
+bridge3 <- bridge2 %>% filter(Family != "Arecaceae")
+bridge2 %>% select(plot_code) %>% unique
+dat <- bridge2 %>% 
+  filter(plot_code == "P006"| plot_code == "T1") %>% 
+  as.tbl() %>% 
+  mutate(sp = paste(Genus, species)) %>% 
+  rename(wsg = sapwood_dens) %>% 
+  rename(Nmass=N, Pmass = P) %>% 
+  filter(LMA < 250) %>% 
+  select(sp, LMA, wsg, Nmass, Pmass) %>% 
+  # group_by(sp) %>% 
+  # summarise_all(mean, na.rm = T) %>% 
+  mutate(TROLL = 0) %>% 
+  rbind(sp %>% 
+          rename(sp = X....) %>%
+          select(sp, LMA, wsg, Nmass, Pmass) %>% 
+          mutate(TROLL = 1)) %>%
+  rbind(baseline %>% 
+          rename(sp = species) %>% 
+          select(sp, LMA, wsg, Nmass, Pmass) %>% 
+          mutate(TROLL = 2)) %>% 
+  mutate(TROLL = as.factor(TROLL))
+
+dat %>% 
+  filter(TROLL !=2) %>% 
+  ggplot(aes(LMA, wsg, 
+             col = as.factor(TROLL),
+             #size = as.factor(TROLL),
+             label = sp)) +
+  geom_point(alpha = 0.5)
+g2
+campagne == 1992 
+P2 <- DataParacou %>% 
+  mutate(species = paste(Genre,Espece, sep= "_")) %>% 
+  filter(n_parcelle == 2) %>% select(species) %>%
+  unique() 
+
+P <- DataParacou %>% 
+  mutate(species = paste(Genre,Espece, sep= "_")) %>% 
+  select(species) %>%
+  unique() 
+p2traits <- sp %>% filter(X.... %in% P2$species)
+
+dat2 <- bridge2 %>% 
+  filter(plot_code == "P006"| plot_code == "T1") %>% 
+  as.tbl() %>% 
+  mutate(sp = paste(Genus, species)) %>% 
+  rename(wsg = sapwood_dens) %>% 
+  rename(Nmass=N, Pmass = P) %>% 
+  filter(LMA < 250) %>% 
+  select(sp, LMA, wsg, Nmass, Pmass) %>% 
+  # group_by(sp) %>% 
+  # summarise_all(mean, na.rm = T) %>% 
+  mutate(TROLL = 0) %>% 
+  rbind(p1traits %>% 
+          rename(sp = X....) %>%
+          select(sp, LMA, wsg, Nmass, Pmass) %>% 
+          mutate(TROLL = 1)) %>%
+  rbind(p2traits %>% 
+          rename(sp = X....) %>% 
+          select(sp, LMA, wsg, Nmass, Pmass) %>% 
+          mutate(TROLL = 2)) %>% 
+  mutate(TROLL = as.factor(TROLL))
+
+dat3 <- bridge2 %>% 
+  # filter(plot_code == "P006"| plot_code == "T1") %>%
+  as.tbl() %>% 
+  mutate(sp = paste(Genus, species)) %>% 
+  rename(wsg = sapwood_dens) %>% 
+  rename(Nmass=N, Pmass = P) %>% 
+  filter(LMA < 250) %>% 
+  select(sp, LMA, wsg, Nmass, Pmass) %>%
+  group_by(sp) %>%
+  summarise_all(mean, na.rm = T) %>%
+  mutate(TROLL = 0) %>% 
+  rbind(baseline %>%
+          filter(species%in% P$species) %>% 
+          rename(sp = species) %>%
+          select(sp, LMA, wsg, Nmass, Pmass) %>% 
+          mutate(TROLL = 1)) %>%
+  rbind(sp %>%
+          rename(sp = X....) %>%
+          filter(sp%in% P$species) %>% 
+          select(sp, LMA, wsg, Nmass, Pmass) %>% 
+          mutate(TROLL = 2)) %>% 
+  mutate(TROLL = as.factor(TROLL))
+dat4 <- miced_bridge %>% 
+  # filter(plot_code == "P006"| plot_code == "T1") %>%
+  as.tbl() %>% 
+  mutate(sp =  species) %>% 
+  # rename(wsg = sapwood_dens) %>% 
+  rename(Nmass=N, Pmass = P) %>% 
+  filter(LMA < 250) %>% 
+  select(sp, LMA, wsg, Nmass, Pmass) %>%
+  group_by(sp) %>%
+  summarise_all(mean, na.rm = T) %>%
+  mutate(TROLL = 0) %>% 
+  rbind(baseline %>%
+          # filter(species%in% P$species) %>% 
+          rename(sp = species) %>%
+          select(sp, LMA, wsg, Nmass, Pmass) %>% 
+          mutate(TROLL = 1)) %>%
+  rbind(baseline %>%
+          filter(species%in% P$species) %>%
+          rename(sp = species) %>%
+          select(sp, LMA, wsg, Nmass, Pmass) %>% 
+          mutate(TROLL = 2)) %>%
+  mutate(TROLL = as.factor(TROLL))
+
+dat
+
+# ??qplot
+# library(tidyverse)
+g2 <- ggplot2::qplot(LMA,wsg, data=dat4 %>% filter(TROLL !=2), col=TROLL)  + 
+  # scale_x_continuous(limits=c(min(dat$wsg),max(dat$wsg))) + 
+  # scale_y_continuous(limits=c(min(dat$LMA),max(dat$LMA))) + 
+  geom_rug(aes(col = TROLL),alpha=.5)
+g1 <- ggplot2::qplot(LMA,wsg, data=dat4 %>% filter(TROLL !=1), col=TROLL)  + 
+  # scale_x_continuous(limits=c(min(dat$wsg),max(dat$wsg))) + 
+  # scale_y_continuous(limits=c(min(dat$LMA),max(dat$LMA))) + 
+  geom_rug(aes(col = TROLL),alpha=.5)
+# g2 <- ggplot2::qplot(wsg,LMA, data=dat %>% filter(TROLL !=1), col=TROLL)  + 
+  # scale_x_continuous(limits=c(min(dat$wsg),max(dat$wsg))) + 
+  # scale_y_continuous(limits=c(min(dat$LMA),max(dat$LMA))) + 
+  # geom_rug(aes(col = TROLL),alpha=.5)
+# 
+g1 <- g1+scale_color_discrete(name="Dataset", labels=c("Bridge","Paracou (New)"))+
+  theme(legend.position = "bottom")+ ggtitle("A")
+
+g2 <- g2+scale_color_discrete(name="Dataset", labels=c("Bridge","Total (New)"))+
+theme(legend.position = "bottom")+
+  theme(legend.position = "bottom")+ ggtitle("B")
+gridExtra::grid.arrange(g1,g2, nrow=1, respect=T)
+save(g1, file = "C:/Users/nino.page/Desktop/my_thesis/paracou_new.RData")
+save(g2, file = "C:/Users/nino.page/Desktop/my_thesis/total_new.RData" )
+getwd()
+
+# col=rgb(.5,0,0,
+# Scatter plot colored by groups ("Species")
+ spe <- ggscatter(dat, x = "LMA", y = "wsg",
+                color = "TROLL", palette = "jco",
+                size = 3, alpha = 0.8)+
+  border() 
+ 
+# Marginal density plot of x (top panel) and y (right panel)
+xplot <- ggdensity(dat, "LMA", fill = "TROLL",
+                   palette = "jco")
+yplot <- ggdensity(dat, "wsg", fill = "TROLL", 
+                   palette = "jco")+
+  rotate()
+# Cleaning the plots
+yplot <- yplot + clean_theme() 
+xplot <- xplot + clean_theme()
+# Arranging the plot
+k <- ggarrange(xplot, NULL, spe, yplot, 
+          ncol = 2, nrow = 2,  align = "hv", 
+          widths = c(2, 1), heights = c(1, 2),
+          common.legend = TRUE)
+k
+g3 <- bridge2 %>% 
+  as.tbl() %>% 
+  mutate(sp = paste(Genus, species)) %>% 
+  rename(wsg = sapwood_dens) %>% 
+  select(sp, LMA, wsg) %>%
+  filter(LMA < 250) %>% 
+  group_by(sp) %>% 
+  summarise_all(mean, na.rm = T) %>% 
+  mutate(TROLL = 0) %>% 
+  rbind(sp %>% 
+          rename(sp = X....) %>%
+          select(sp, LMA, wsg) %>% 
+          mutate(TROLL = 1)) %>% 
+  ggplot(aes(LMA, wsg, 
+             col = as.factor(TROLL),
+             #size = as.factor(TROLL),
+             label = sp))+
+  geom_density2d()
+g3
+g3 + stat_density2d()
+g3 + stat_density_2d(aes(fill = calc(level)), geom = "polygon", alpha = 0.5)
+g5 <- 
+g3 + stat_density_2d(geom = "raster", aes(fill = calc(density)), contour = FALSE)
++
+  geom_density2d()
+g7  <- bridge3 %>% 
+  as.tbl() %>% 
+  mutate(sp = paste(Genus, species)) %>% 
+  rename(wsg = sapwood_dens) %>% 
+  select(sp, LMA, wsg) %>%
+  filter(LMA < 250) %>% 
+  group_by(sp) %>% 
+  summarise_all(mean, na.rm = T) %>% 
+  mutate(TROLL = 0) %>% 
+  ggplot(aes(LMA, wsg, 
+             col = as.factor(TROLL),
+             #size = as.factor(TROLL),
+             label = sp))+ stat_density_2d(aes(fill = calc(level)), geom = "polygon")
+g8 <- sp %>% 
+              rename(sp = X....) %>%
+              select(sp, LMA, wsg) %>% 
+              mutate(TROLL = 1) %>% 
+  ggplot(aes(LMA, wsg, 
+             col = as.factor(TROLL),
+             #size = as.factor(TROLL),
+             label = sp))+ stat_density_2d(aes(fill = calc(level)), geom = "polygon")
+
+gridExtra::grid.arrange(g7, g8, nrow = 1, respect = T)
+?gridExtra::grid.arrange
+# miced bridge dataset ----------------------------------------------------
+
+
+miced_bridge <- read.csv("C:/Users/nino.page/Desktop/TROLL project/data/traits/traits_miced.csv", header = T, sep = ",")
+g4 <- miced_bridge %>% 
+  as.tbl() %>% 
+  mutate(sp = paste(Genus, species)) %>% 
+  select(sp, LMA, wsg) %>%
+  filter(LMA < 250) %>% 
+  group_by(sp) %>% 
+  summarise_all(mean, na.rm = T) %>% 
+  mutate(TROLL = 0) %>% 
+  rbind(sp %>% 
+          rename(sp = X....) %>%
+          select(sp, LMA, wsg) %>% 
+          mutate(TROLL = 1)) %>% 
+  ggplot(aes(LMA, wsg, 
+             col = as.factor(TROLL),
+             #size = as.factor(TROLL),
+             label = sp)) +
+  stat_density_2d(geom = "raster", aes(fill = calc(density)), contour = FALSE)
+g4
+  geom_point(alpha = 0.9)

@@ -1,0 +1,1 @@
+fonctional_div_species <- function(data, speciescol, speciestraits)

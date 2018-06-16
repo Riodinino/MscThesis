@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Master thesis</title>
+  <meta name="description" content="Master thesis">
+  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
+
+  <meta property="og:title" content="Master thesis" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:image" content="images/main.png" />
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Master thesis" />
+  
+  
+  <meta name="twitter:image" content="images/main.png" />
+
+<meta name="author" content="Nino PAGE">
+
+
+<meta name="date" content="2018-06-16">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="troll-model.html">
+<link rel="next" href="can-troll-simulate-real-forests-and-post-logging-trajectories.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="html\style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Master thesis</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
+<li class="chapter" data-level="" data-path="resume.html"><a href="resume.html"><i class="fa fa-check"></i>Résumé</a></li>
+<li class="chapter" data-level="1" data-path="abstract.html"><a href="abstract.html"><i class="fa fa-check"></i><b>1</b> Abstract</a></li>
+<li class="chapter" data-level="2" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>2</b> Introduction</a></li>
+<li class="chapter" data-level="3" data-path="troll-model.html"><a href="troll-model.html"><i class="fa fa-check"></i><b>3</b> TROLL model</a><ul>
+<li class="chapter" data-level="3.1" data-path="troll-model.html"><a href="troll-model.html#overview"><i class="fa fa-check"></i><b>3.1</b> Overview</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="including-more-species-in-troll-simulations.html"><a href="including-more-species-in-troll-simulations.html"><i class="fa fa-check"></i><b>4</b> Including more species in TROLL simulations</a><ul>
+<li class="chapter" data-level="4.1" data-path="including-more-species-in-troll-simulations.html"><a href="including-more-species-in-troll-simulations.html#introduction-1"><i class="fa fa-check"></i><b>4.1</b> Introduction</a></li>
+<li class="chapter" data-level="4.2" data-path="including-more-species-in-troll-simulations.html"><a href="including-more-species-in-troll-simulations.html#context-and-problem"><i class="fa fa-check"></i><b>4.2</b> Context and Problem</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="including-more-species-in-troll-simulations.html"><a href="including-more-species-in-troll-simulations.html#the-initial-species-list"><i class="fa fa-check"></i><b>4.2.1</b> The initial species list</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="including-more-species-in-troll-simulations.html"><a href="including-more-species-in-troll-simulations.html#can-we-represent-paracou-plots-composition-with-trolls-species-list"><i class="fa fa-check"></i><b>4.3</b> Can we represent Paracou plots composition with TROLL’s species list ?</a></li>
+<li class="chapter" data-level="4.4" data-path="including-more-species-in-troll-simulations.html"><a href="including-more-species-in-troll-simulations.html#how-to-parametrise-more-species"><i class="fa fa-check"></i><b>4.4</b> How to parametrise more species ?</a><ul>
+<li class="chapter" data-level="4.4.1" data-path="including-more-species-in-troll-simulations.html"><a href="including-more-species-in-troll-simulations.html#datasets"><i class="fa fa-check"></i><b>4.4.1</b> Datasets</a></li>
+<li class="chapter" data-level="4.4.2" data-path="including-more-species-in-troll-simulations.html"><a href="including-more-species-in-troll-simulations.html#preliminary-completion-with-predictive-mean-matching"><i class="fa fa-check"></i><b>4.4.2</b> Preliminary completion with Predictive mean matching</a></li>
+<li class="chapter" data-level="4.4.3" data-path="including-more-species-in-troll-simulations.html"><a href="including-more-species-in-troll-simulations.html#hierarchical-modeling-framework"><i class="fa fa-check"></i><b>4.4.3</b> Hierarchical modeling framework</a></li>
+<li class="chapter" data-level="4.4.4" data-path="including-more-species-in-troll-simulations.html"><a href="including-more-species-in-troll-simulations.html#leaf-and-stem-traits"><i class="fa fa-check"></i><b>4.4.4</b> Leaf and stem traits</a></li>
+<li class="chapter" data-level="4.4.5" data-path="including-more-species-in-troll-simulations.html"><a href="including-more-species-in-troll-simulations.html#michaelis-menten-hierarchical-model"><i class="fa fa-check"></i><b>4.4.5</b> Michaelis-Menten hierarchical model</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="including-more-species-in-troll-simulations.html"><a href="including-more-species-in-troll-simulations.html#more-species-for-troll"><i class="fa fa-check"></i><b>4.5</b> More species for TROLL</a></li>
+<li class="chapter" data-level="4.6" data-path="including-more-species-in-troll-simulations.html"><a href="including-more-species-in-troll-simulations.html#discussion"><i class="fa fa-check"></i><b>4.6</b> Discussion</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="can-troll-simulate-real-forests-and-post-logging-trajectories.html"><a href="can-troll-simulate-real-forests-and-post-logging-trajectories.html"><i class="fa fa-check"></i><b>5</b> Can TROLL simulate real forests and post-logging trajectories ?</a><ul>
+<li class="chapter" data-level="5.1" data-path="can-troll-simulate-real-forests-and-post-logging-trajectories.html"><a href="can-troll-simulate-real-forests-and-post-logging-trajectories.html#overview-1"><i class="fa fa-check"></i><b>5.1</b> Overview</a></li>
+<li class="chapter" data-level="5.2" data-path="can-troll-simulate-real-forests-and-post-logging-trajectories.html"><a href="can-troll-simulate-real-forests-and-post-logging-trajectories.html#methods"><i class="fa fa-check"></i><b>5.2</b> Methods</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="can-troll-simulate-real-forests-and-post-logging-trajectories.html"><a href="can-troll-simulate-real-forests-and-post-logging-trajectories.html#handling-missing-species"><i class="fa fa-check"></i><b>5.2.1</b> Handling missing species</a></li>
+<li class="chapter" data-level="5.2.2" data-path="can-troll-simulate-real-forests-and-post-logging-trajectories.html"><a href="can-troll-simulate-real-forests-and-post-logging-trajectories.html#residual-mortality-after-logging-where-to-start-from"><i class="fa fa-check"></i><b>5.2.2</b> Residual mortality after logging: where to start from ?</a></li>
+<li class="chapter" data-level="5.2.3" data-path="can-troll-simulate-real-forests-and-post-logging-trajectories.html"><a href="can-troll-simulate-real-forests-and-post-logging-trajectories.html#coordinates-and-duplicates-moving-or-removing"><i class="fa fa-check"></i><b>5.2.3</b> Coordinates and duplicates: moving, or removing</a></li>
+<li class="chapter" data-level="5.2.4" data-path="can-troll-simulate-real-forests-and-post-logging-trajectories.html"><a href="can-troll-simulate-real-forests-and-post-logging-trajectories.html#missing-understoreys"><i class="fa fa-check"></i><b>5.2.4</b> Missing understoreys</a></li>
+<li class="chapter" data-level="5.2.5" data-path="can-troll-simulate-real-forests-and-post-logging-trajectories.html"><a href="can-troll-simulate-real-forests-and-post-logging-trajectories.html#simulation-parameters"><i class="fa fa-check"></i><b>5.2.5</b> Simulation parameters</a></li>
+<li class="chapter" data-level="5.2.6" data-path="can-troll-simulate-real-forests-and-post-logging-trajectories.html"><a href="can-troll-simulate-real-forests-and-post-logging-trajectories.html#spatial-structure-analysis"><i class="fa fa-check"></i><b>5.2.6</b> Spatial structure analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="can-troll-simulate-real-forests-and-post-logging-trajectories.html"><a href="can-troll-simulate-real-forests-and-post-logging-trajectories.html#results-and-discussion"><i class="fa fa-check"></i><b>5.3</b> Results and discussion</a><ul>
+<li class="chapter" data-level="5.3.1" data-path="can-troll-simulate-real-forests-and-post-logging-trajectories.html"><a href="can-troll-simulate-real-forests-and-post-logging-trajectories.html#simulated-trajectories"><i class="fa fa-check"></i><b>5.3.1</b> Simulated trajectories</a></li>
+<li class="chapter" data-level="5.3.2" data-path="can-troll-simulate-real-forests-and-post-logging-trajectories.html"><a href="can-troll-simulate-real-forests-and-post-logging-trajectories.html#spatial-statistics"><i class="fa fa-check"></i><b>5.3.2</b> Spatial statistics</a></li>
+<li class="chapter" data-level="5.3.3" data-path="can-troll-simulate-real-forests-and-post-logging-trajectories.html"><a href="can-troll-simulate-real-forests-and-post-logging-trajectories.html#synthesis"><i class="fa fa-check"></i><b>5.3.3</b> Synthesis</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="modelling-silviculture-with-troll-from-reality-to-simulations.html"><a href="modelling-silviculture-with-troll-from-reality-to-simulations.html"><i class="fa fa-check"></i><b>6</b> Modelling silviculture with TROLL: from reality to simulations</a><ul>
+<li class="chapter" data-level="6.1" data-path="modelling-silviculture-with-troll-from-reality-to-simulations.html"><a href="modelling-silviculture-with-troll-from-reality-to-simulations.html#introduction-2"><i class="fa fa-check"></i><b>6.1</b> Introduction</a></li>
+<li class="chapter" data-level="6.2" data-path="modelling-silviculture-with-troll-from-reality-to-simulations.html"><a href="modelling-silviculture-with-troll-from-reality-to-simulations.html#choosing-area-and-trees"><i class="fa fa-check"></i><b>6.2</b> Choosing area and trees</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="modelling-silviculture-with-troll-from-reality-to-simulations.html"><a href="modelling-silviculture-with-troll-from-reality-to-simulations.html#harvestable-areas"><i class="fa fa-check"></i><b>6.2.1</b> Harvestable areas</a></li>
+<li class="chapter" data-level="6.2.2" data-path="modelling-silviculture-with-troll-from-reality-to-simulations.html"><a href="modelling-silviculture-with-troll-from-reality-to-simulations.html#designation"><i class="fa fa-check"></i><b>6.2.2</b> Designation</a></li>
+<li class="chapter" data-level="6.2.3" data-path="modelling-silviculture-with-troll-from-reality-to-simulations.html"><a href="modelling-silviculture-with-troll-from-reality-to-simulations.html#tree-probing"><i class="fa fa-check"></i><b>6.2.3</b> Tree Probing</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="modelling-silviculture-with-troll-from-reality-to-simulations.html"><a href="modelling-silviculture-with-troll-from-reality-to-simulations.html#then-harvesting"><i class="fa fa-check"></i><b>6.3</b> Then, harvesting</a><ul>
+<li class="chapter" data-level="6.3.1" data-path="modelling-silviculture-with-troll-from-reality-to-simulations.html"><a href="modelling-silviculture-with-troll-from-reality-to-simulations.html#felling-trees"><i class="fa fa-check"></i><b>6.3.1</b> Felling trees</a></li>
+<li class="chapter" data-level="6.3.2" data-path="modelling-silviculture-with-troll-from-reality-to-simulations.html"><a href="modelling-silviculture-with-troll-from-reality-to-simulations.html#main-track"><i class="fa fa-check"></i><b>6.3.2</b> Main Track</a></li>
+<li class="chapter" data-level="6.3.3" data-path="modelling-silviculture-with-troll-from-reality-to-simulations.html"><a href="modelling-silviculture-with-troll-from-reality-to-simulations.html#secondary-tracks"><i class="fa fa-check"></i><b>6.3.3</b> Secondary tracks</a></li>
+<li class="chapter" data-level="6.3.4" data-path="modelling-silviculture-with-troll-from-reality-to-simulations.html"><a href="modelling-silviculture-with-troll-from-reality-to-simulations.html#residual-mortality"><i class="fa fa-check"></i><b>6.3.4</b> Residual mortality</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="selective-logging-experiment.html"><a href="selective-logging-experiment.html"><i class="fa fa-check"></i><b>7</b> Selective Logging experiment</a><ul>
+<li class="chapter" data-level="7.1" data-path="selective-logging-experiment.html"><a href="selective-logging-experiment.html#experiment-design"><i class="fa fa-check"></i><b>7.1</b> Experiment design</a><ul>
+<li class="chapter" data-level="7.1.1" data-path="selective-logging-experiment.html"><a href="selective-logging-experiment.html#simulated-forests"><i class="fa fa-check"></i><b>7.1.1</b> Simulated forests</a></li>
+<li class="chapter" data-level="7.1.2" data-path="selective-logging-experiment.html"><a href="selective-logging-experiment.html#diversification-of-the-harvested-species"><i class="fa fa-check"></i><b>7.1.2</b> Diversification of the harvested species</a></li>
+<li class="chapter" data-level="7.1.3" data-path="selective-logging-experiment.html"><a href="selective-logging-experiment.html#silvicultural-parameters"><i class="fa fa-check"></i><b>7.1.3</b> Silvicultural parameters</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="selective-logging-experiment.html"><a href="selective-logging-experiment.html#results"><i class="fa fa-check"></i><b>7.2</b> Results</a><ul>
+<li class="chapter" data-level="7.2.1" data-path="selective-logging-experiment.html"><a href="selective-logging-experiment.html#model-features"><i class="fa fa-check"></i><b>7.2.1</b> Model features</a></li>
+<li class="chapter" data-level="7.2.2" data-path="selective-logging-experiment.html"><a href="selective-logging-experiment.html#selective-logging-sustainability"><i class="fa fa-check"></i><b>7.2.2</b> Selective logging sustainability</a></li>
+<li class="chapter" data-level="7.2.3" data-path="selective-logging-experiment.html"><a href="selective-logging-experiment.html#diversification"><i class="fa fa-check"></i><b>7.2.3</b> Diversification</a></li>
+<li class="chapter" data-level="7.2.4" data-path="selective-logging-experiment.html"><a href="selective-logging-experiment.html#carbon"><i class="fa fa-check"></i><b>7.2.4</b> Carbon</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="selective-logging-experiment.html"><a href="selective-logging-experiment.html#discussion-1"><i class="fa fa-check"></i><b>7.3</b> Discussion</a><ul>
+<li class="chapter" data-level="7.3.1" data-path="selective-logging-experiment.html"><a href="selective-logging-experiment.html#timber-volumes-are-not-sustained"><i class="fa fa-check"></i><b>7.3.1</b> Timber volumes are not sustained</a></li>
+<li class="chapter" data-level="7.3.2" data-path="selective-logging-experiment.html"><a href="selective-logging-experiment.html#carbon-stocks-decrease"><i class="fa fa-check"></i><b>7.3.2</b> Carbon stocks decrease</a></li>
+<li class="chapter" data-level="7.3.3" data-path="selective-logging-experiment.html"><a href="selective-logging-experiment.html#in-a-nutshell"><i class="fa fa-check"></i><b>7.3.3</b> In a nutshell</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="conclusions-and-perspectives.html"><a href="conclusions-and-perspectives.html"><i class="fa fa-check"></i><b>8</b> Conclusions and perspectives</a></li>
+<li class="appendix"><span><b>Appendix</b></span></li>
+<li class="chapter" data-level="A" data-path="appendix-1-troll-model.html"><a href="appendix-1-troll-model.html"><i class="fa fa-check"></i><b>A</b> Appendix 1: TROLL model</a><ul>
+<li class="chapter" data-level="A.1" data-path="appendix-1-troll-model.html"><a href="appendix-1-troll-model.html#abiotic-environment"><i class="fa fa-check"></i><b>A.1</b> Abiotic environment</a></li>
+<li class="chapter" data-level="A.2" data-path="appendix-1-troll-model.html"><a href="appendix-1-troll-model.html#photosynthesis"><i class="fa fa-check"></i><b>A.2</b> Photosynthesis</a><ul>
+<li class="chapter" data-level="A.2.1" data-path="appendix-1-troll-model.html"><a href="appendix-1-troll-model.html#theory"><i class="fa fa-check"></i><b>A.2.1</b> Theory</a></li>
+<li class="chapter" data-level="A.2.2" data-path="appendix-1-troll-model.html"><a href="appendix-1-troll-model.html#parametrization"><i class="fa fa-check"></i><b>A.2.2</b> Parametrization</a></li>
+</ul></li>
+<li class="chapter" data-level="A.3" data-path="appendix-1-troll-model.html"><a href="appendix-1-troll-model.html#autotrophic-respiration"><i class="fa fa-check"></i><b>A.3</b> Autotrophic respiration</a></li>
+<li class="chapter" data-level="A.4" data-path="appendix-1-troll-model.html"><a href="appendix-1-troll-model.html#net-carbon-uptake"><i class="fa fa-check"></i><b>A.4</b> Net carbon uptake</a></li>
+<li class="chapter" data-level="A.5" data-path="appendix-1-troll-model.html"><a href="appendix-1-troll-model.html#tree-growth"><i class="fa fa-check"></i><b>A.5</b> Tree growth</a></li>
+<li class="chapter" data-level="A.6" data-path="appendix-1-troll-model.html"><a href="appendix-1-troll-model.html#mortality"><i class="fa fa-check"></i><b>A.6</b> Mortality</a></li>
+<li class="chapter" data-level="A.7" data-path="appendix-1-troll-model.html"><a href="appendix-1-troll-model.html#recruitment"><i class="fa fa-check"></i><b>A.7</b> Recruitment</a></li>
+</ul></li>
+<li class="chapter" data-level="B" data-path="appendix-2-including-more-species-in-trolls-list-supplementary-material.html"><a href="appendix-2-including-more-species-in-trolls-list-supplementary-material.html"><i class="fa fa-check"></i><b>B</b> Appendix 2: Including more species in TROLl’s list - Supplementary material</a><ul>
+<li class="chapter" data-level="B.1" data-path="appendix-2-including-more-species-in-trolls-list-supplementary-material.html"><a href="appendix-2-including-more-species-in-trolls-list-supplementary-material.html#phosphorous-measurements-are-mainly-singletons"><i class="fa fa-check"></i><b>B.1</b> Phosphorous measurements are mainly singletons</a></li>
+<li class="chapter" data-level="B.2" data-path="appendix-2-including-more-species-in-trolls-list-supplementary-material.html"><a href="appendix-2-including-more-species-in-trolls-list-supplementary-material.html#distribution-of-traits-for-the-newly-inferred-species"><i class="fa fa-check"></i><b>B.2</b> Distribution of traits for the newly inferred species</a></li>
+</ul></li>
+<li class="chapter" data-level="C" data-path="appendix-3-predictive-mean-matching-pmm-explained.html"><a href="appendix-3-predictive-mean-matching-pmm-explained.html"><i class="fa fa-check"></i><b>C</b> Appendix 3: Predictive mean matching (PMM) explained</a></li>
+<li class="chapter" data-level="D" data-path="appendix-4-complementary-fuelwood-graphics.html"><a href="appendix-4-complementary-fuelwood-graphics.html"><i class="fa fa-check"></i><b>D</b> Appendix 4: Complementary fuelwood graphics</a></li>
+<li class="chapter" data-level="E" data-path="appendix-5-mortality-curve-for-paracou.html"><a href="appendix-5-mortality-curve-for-paracou.html"><i class="fa fa-check"></i><b>E</b> Appendix 5: Mortality curve for Paracou</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/sylvainschmitt/master-thesis" target="blank">work in progress</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Master thesis</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="including-more-species-in-troll-simulations" class="section level1">
+<h1><span class="header-section-number">4</span> Including more species in TROLL simulations</h1>
+<div id="introduction-1" class="section level2">
+<h2><span class="header-section-number">4.1</span> Introduction</h2>
+<p>Biodiversity affects most of the ecosystemic characteristics, among others productivity, stability, resistance to invasion <span class="citation">(Huston <em>et al.</em> <a href="#ref-Huston2001">2001</a>; Lyons &amp; Schwartz <a href="#ref-Lyons2001">2001</a>)</span>. Recent advances in Functional Ecology suggest that the most relevant approach to study ecosystem functioning is through its functional composition, that can be assessed using functional traits. Functional traits are formally defined as morpho-physio-phenological traits that indirectly impact fitness via their effect on growth, survival, and reproduction <span class="citation">(Violle <em>et al.</em> <a href="#ref-Violle2007">2007</a>)</span>. Accounting for functional traits and their effects on processes is necessary to model forest dynamics with a finer accuracy. Classical models often use a limited number of species groups defined according to restrictive criteria <span class="citation">(Maréchaux &amp; Chave <a href="#ref-Marechaux2017a">2017</a>)</span>. TROLL directly uses 5 functional traits (LMA, Nmass, Pmass, and wsg) and 2 allometric parameters at the species-specific level. All are obtained from real data.</p>
+<p>We included more species to the existing dataset used for TROLL simulations. This choice was motivated by both theoretical and practical reasons. The aims were either to enhance the coverage (in number of trees) for Paracou simulations (see next section) and to have enough species to simulate large plots, for the logging experiment. We hierarchically inferred species-specific means for leaf traits, stem traits and allometric parameters, with the BRIDGE dataset. We estimated the 99th quantiles of species diameter from the whole Guyafor dataset, pooled with BRIDGE. We used Predictive Mean Matching to complete the dataset beforehand, due to a variable -Pmass- that considerably limited our possibilities. The model blueprints were generously provided by Fabian Fischer (EDB, Toulouse).</p>
+</div>
+<div id="context-and-problem" class="section level2">
+<h2><span class="header-section-number">4.2</span> Context and Problem</h2>
+<div id="the-initial-species-list" class="section level3">
+<h3><span class="header-section-number">4.2.1</span> The initial species list</h3>
+<p>TROLL’s current species-specific trait dataset contains 8 variables: <span class="math inline">\(LMA\)</span>, <span class="math inline">\(Nmass\)</span>, <span class="math inline">\(Pmass\)</span>, <span class="math inline">\(wsg\)</span>, <span class="math inline">\(hmax\)</span>, <span class="math inline">\(dmax\)</span>, <span class="math inline">\(ah\)</span>, and <span class="math inline">\(Freg\)</span> (see table <a href="troll-model.html#tab:traits">3.1</a>, in the previous section). We decided to let apart the regional frequency of a species, which are adapted for each simulation depending on the forest composition and simulation aims.</p>
+</div>
+</div>
+<div id="can-we-represent-paracou-plots-composition-with-trolls-species-list" class="section level2">
+<h2><span class="header-section-number">4.3</span> Can we represent Paracou plots composition with TROLL’s species list ?</h2>
+<p>Paracou plots display a high proportion of species that are absent of TROLL dataset (Figure <a href="including-more-species-in-troll-simulations.html#fig:paracousummary">4.1</a>). Based on preliminary exploration of the Paracou dataset, we noticed that the proportion of individuals belonging to missing species is slightly reducing over time, possibly linked with an increase in botanical determination reliability. This proportion is rather low compared to the proportions of missing species. However, such proportions were questioning the <em>a priori</em> validity of our intent to simulate real forest plots. These species are mainly less common ones and may be absent either because they were not present in the plots sampled in BRIDGE or because their number of observations did not allow including them.</p>
+<div class="figure"><span id="fig:paracousummary"></span>
+<img src="master-thesis_files/figure-html/paracousummary-1.png" alt=" Total number of species, proportions of missing species and individuals in two censuses (1984,1992) for twelve Paracou Plots (1-12). A: Total number of species in the plots, at the plot scale; B: Proportion of individuals belonging to missing species; C: Proportion of missing species; All are computed at the plot scale. Colors represent the census years (red: 1984, blue: 1992)" width="0.6\textwidth" />
+<p class="caption">
+Figure 4.1:  Total number of species, proportions of missing species and individuals in two censuses (1984,1992) for twelve Paracou Plots (1-12). A: Total number of species in the plots, at the plot scale; B: Proportion of individuals belonging to missing species; C: Proportion of missing species; All are computed at the plot scale. Colors represent the census years (red: 1984, blue: 1992)
+</p>
+</div>
+<div id="missing-species-and-individuals" class="section level4">
+<h4><span class="header-section-number">4.3.0.1</span> Missing species and individuals</h4>
+</div>
+<div id="functional-representativity" class="section level4">
+<h4><span class="header-section-number">4.3.0.2</span> Functional representativity</h4>
+<p>Figure <a href="#fig:representat"><strong>??</strong></a> compares the distribution of LMA and wsg for BRIDGE and species from TROLL’s list that occur in Paracou. These traits are linked to construction costs for the trees and are part of the leaf and wood economics spectra <span class="citation">(Wright <em>et al.</em> <a href="#ref-Wright2004">2004</a>; Chave <em>et al.</em> <a href="#ref-Chave2009">2009</a>)</span>. According to <span class="citation">Baraloto <em>et al.</em> (<a href="#ref-Baraloto2010">2010</a>)</span>, both spectra are decoupled and represent two components of the plants’ strategy. In TROLL, LMA is linked to leaf lifespan, photosynthesis In Figure <a href="#fig:representat"><strong>??</strong></a>, the fraction of TROLL species list that matches with Paracou (137 species) is rather representative of the bridge dataset (which we assume to be itself well representative of the real forests’ functional traits ranges). However, each plot had from 70 to 115 species matching with those of TROLL, out of 300 species present As explained above, not only the number of species matching those of TROLL was low, but also, the corresponding number of individuals was problematic. We thus decided to perform a new trait means inference to reach a better representativity, and to simulate Paracou plots.</p>
+<p><img src="master-thesis_files/figure-html/representat-1.png" width="0.6\textwidth" /></p>
+</div>
+</div>
+<div id="how-to-parametrise-more-species" class="section level2">
+<h2><span class="header-section-number">4.4</span> How to parametrise more species ?</h2>
+<div id="datasets" class="section level3">
+<h3><span class="header-section-number">4.4.1</span> Datasets</h3>
+<p>We used the BRIDGE trait database <span class="citation">(Baraloto <em>et al.</em> <a href="#ref-Baraloto2010">2010</a>, <a href="#ref-Baraloto2012">2012</a>)</span> which was further completed by <span class="citation">Marechaux (<a href="#ref-Marechaux2017">2017</a>)</span>, to infer leaf, stem and allometric parameters. We used both BRIDGE and Guyafor datasets to estimate dmax, as the 99th percentil of speces diameters. The BRIDGE dataset contains measurements for ten leaf and stem traits, with a total of 4709 individuals. One of the strengths of BRIDGE is that nine plots were sampled exhaustively, thus providing an exceptional representation of the French Guianese forests functional composition for &gt;10cm dbh trees. However, another feature of the BRIDGE dataset is that the plots sampled are tropical rainforest: the dataset contains numerous species with a majority of rare (&gt;4 observations) and a minority of highly dominant (&gt; 200 observations) species. We used six individual-level traits and characteristics, namely: LMA, Nmass, Pmass, wsg, H, d ((tab:traits)).</p>
+<table>
+<caption><span id="tab:tablebridge2">Table 4.1: </span>Summary table of the trait data obtained from the BRIDGE database. The two last rows “Total” and “LMA, N, wsg” are the complete observation for all traits and with P excluded, respectively.</caption>
+<thead>
+<tr class="header">
+<th align="left">Trait</th>
+<th align="left">Unit</th>
+<th align="left">N (complete)</th>
+<th align="left">Missing data</th>
+<th align="left">Species</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">LMA</td>
+<td align="left">g.cm^{2}</td>
+<td align="left">4460</td>
+<td align="left">265</td>
+<td align="left">642</td>
+</tr>
+<tr class="even">
+<td align="left">Nmass</td>
+<td align="left">mg.g^{-1}</td>
+<td align="left">2928</td>
+<td align="left">1797</td>
+<td align="left">537</td>
+</tr>
+<tr class="odd">
+<td align="left">Pmass</td>
+<td align="left">mg.g^{-1}</td>
+<td align="left">931</td>
+<td align="left">3794</td>
+<td align="left">270</td>
+</tr>
+<tr class="even">
+<td align="left">wsg</td>
+<td align="left">g.cm^{-3}</td>
+<td align="left">2875</td>
+<td align="left">1850</td>
+<td align="left">630</td>
+</tr>
+<tr class="odd">
+<td align="left">Height</td>
+<td align="left">m</td>
+<td align="left">4399</td>
+<td align="left">326</td>
+<td align="left">645</td>
+</tr>
+<tr class="even">
+<td align="left">dbh</td>
+<td align="left">m</td>
+<td align="left">4597</td>
+<td align="left">128</td>
+<td align="left">663</td>
+</tr>
+<tr class="odd">
+<td align="left">Total</td>
+<td align="left">-</td>
+<td align="left">651</td>
+<td align="left">-</td>
+<td align="left">251</td>
+</tr>
+<tr class="even">
+<td align="left">LMA, N, wsg</td>
+<td align="left">-</td>
+<td align="left">1726</td>
+<td align="left">-</td>
+<td align="left">505</td>
+</tr>
+</tbody>
+</table>
+<p>The dataset we used contains significant amounts of missing data, as the majority of functional trait databases <span class="citation">(Taugourdeau <em>et al.</em> <a href="#ref-Taugourdeau2014">2014</a>)</span>. Still, we can infer a high number of species means for LMA, Nmass, wsg and height-diameter allometries. For Pmass, however, very few observations are available compared to other variables. It is by far the most limiting variable. Indeed, out of the 270 species, the overwhelming majority of them are singletons (see Figure <a href="appendix-2-including-more-species-in-trolls-list-supplementary-material.html#fig:phosphorus">B.1</a> in the second Appendix section). <span class="citation">Maréchaux &amp; Chave (<a href="#ref-Marechaux2017a">2017</a>)</span> have further completed this dataset, probably with TRY database <span class="citation">(Kattge <em>et al.</em> <a href="#ref-Kattge2011">2011</a>)</span> to achieve parametrization for 163 species in TROLL.</p>
+</div>
+<div id="preliminary-completion-with-predictive-mean-matching" class="section level3">
+<h3><span class="header-section-number">4.4.2</span> Preliminary completion with Predictive mean matching</h3>
+<p>We used aPredictive Mean Matching algorithm (described in the third Appendix), implemented in the R-package mice <span class="citation">(Buuren &amp; Groothuis-Oudshoorn <a href="#ref-Buuren2011">2011</a>)</span>. We used the default <span class="math inline">\(k=5\)</span> (the number of matched cases per iteration) proposed in the mice package and repeated the imputations ten times, then pooled the datasets and averaged the obtained proposals for missing values. To improve predictive power based on inter-trait correlation, we included additional variables that were correlated with our target variables, and selected with an automatic, stepwise linear model comparison procedure: leaf toughness, leaf thickness, SPAD (a proxy of chlorophyll content), and leaf carbon content. Palms were excluded from the analysis beforehand since there are not currently modeled with TROLL. Individuals belonging to indeterminate genera and species were discarded (except those present in Paracou, for example, <em>Symphonia sp.1</em>), as well as individuals with only one trait measured or high taxonomic uncertainty. Moreover, we clustered the observations according to taxonomical levels: Imputations were performed at the genus level if more than 30 complete observations were available. If not, imputation was made at the family level, with the same threshold. Monogeneric and underrepresented families were treated at the overall level. This separation aimed at reducing the errors due to using overall relationships to infer values.</p>
+<p>We obtained a completed dataset of 4245 observations, with a total of 599 represented species, which is less than the original species number for LMA and wsg. Pmass have more inferred values than actual measures in this completed dataset.</p>
+</div>
+<div id="hierarchical-modeling-framework" class="section level3">
+<h3><span class="header-section-number">4.4.3</span> Hierarchical modeling framework</h3>
+<p>We used a simple but efficient modeling framework, which was blueprinted by Fabian Fisher (<em>pers. comm.</em>), to hierarchically infer species means and take advantage of every available observation.</p>
+<p>The idea is quite simple: for a trait (or an allometric parameter), the value observed in individuals depends on a species mean (modulo a variance, assumed homogenous across species), which is itself related to an higher-level grouping entity mean. For example, we can consider that species mean depends on genus mean, that is itself related to the family mean, and so on up to the overall observed mean (<em>i.e.</em> regardless to grouping entities). The most critical choices here are the number of grouping entities, an appropriate distribution, and informative priors for the target parameters.</p>
+<p>After testing several configurations, we decided to stick with only two layers, namely species and overall levels. The main reason for this choice was parsimony. Genera means, variance, and species raw/actual deviation from its genus mean represented a high number of extra parameters, which is excessive compared to the predictive power enhancement it represents. This was confirmed by a quick comparison using the WAIC criterion, that confirmed our intuition (data not shown)</p>
+</div>
+<div id="leaf-and-stem-traits" class="section level3">
+<h3><span class="header-section-number">4.4.4</span> Leaf and stem traits</h3>
+<p>To infer species mean traits, we used two types of hierarchical models. Both accounted for two layers only, for reasons of parsimony: adding grouping variables (Genus or Family) did not bring significant improvement considering the number of parameters added.</p>
+<p>We used the following model:</p>
+<span class="math display" id="eq:leaftraits1">\[\begin{equation}
+  X_{sp} \sim \mathcal{N}(\mu_{sp}, \sigma_{intra})
+  \tag{4.1}
+\end{equation}\]</span>
+<p>Where, for individuals belonging to species <span class="math inline">\(s\)</span>, and a given trait (or log-transformed trait) <span class="math inline">\(X\)</span>, the <span class="math inline">\(X\)</span> attribute of these individual follows a <span class="math inline">\(Gaussian\)</span> prodability distribution, of parameters <span class="math inline">\(\mu_{sp}\)</span>, a species-level trait mean, and <span class="math inline">\(sigma_{intra}\)</span>, the intraspecific variance (here assumer to be homogen among species). Moreover:</p>
+<span class="math display" id="eq:leaftraits2">\[\begin{equation}
+  \mu_{sp} \sim \mathcal{N}(\mu_{tot}, \sigma)
+  \tag{4.2}
+\end{equation}\]</span>
+<p>The species mean <span class="math inline">\(\mu_{sp}\)</span> itself is normally distributed, depending on an overall mean <span class="math inline">\(\mu_{tot}\)</span> and an overall variance <span class="math inline">\(\sigma\)</span>.</p>
+</div>
+<div id="michaelis-menten-hierarchical-model" class="section level3">
+<h3><span class="header-section-number">4.4.5</span> Michaelis-Menten hierarchical model</h3>
+<p>In TROLL model, the allometries used to model trees height/dbh relationship is a Michaelis-Menten form, defined as:</p>
+<span class="math display" id="eq:michaelis">\[\begin{equation}
+  \hat h = log(\frac{h_{max_{sp[i]}}*dbh[i]}{dbh[i]+a_h}
+  \tag{4.3}
+\end{equation}\]</span>
+Originally, the model provided by Fabian has the form:
+<span class="math display" id="eq:michaelis2">\[\begin{equation}
+  [log(h_i) |sp_i; dbh_i] \sim \mathcal{N}([\hat h_i | sp_i; dbh_i], \sigma)
+  \tag{4.4}
+\end{equation}\]</span>
+<p>Where <span class="math inline">\(h\)</span> is the observed height for tree <span class="math inline">\(i\)</span>, which varies lognormally around <span class="math inline">\(\hat h_i\)</span>, the expectation of its height knowing its species <span class="math inline">\(sp_i\)</span> and diameter <span class="math inline">\(dbh_i\)</span>, with variance <span class="math inline">\(\sigma\)</span>. <span class="math inline">\(\hat h_i\)</span> is computed with:</p>
+<span class="math display" id="eq:leaftraits1">\[\begin{equation}
+  [\hat h_i | sp_i; dbh_i] = log(\frac{1}{(\frac{1}{h_{max_{sp_i}}}+\frac{1}{\beta_{sp_i}*dbh_i})})
+  \tag{4.1}
+\end{equation}\]</span>
+Where <span class="math inline">\(h_{max_{sp_i}}\)</span> is the asymptotic height of species <span class="math inline">\(i\)</span>, and <span class="math inline">\(\beta_{sp_i}\)</span>, a shape parameter of the model. Both are define by:
+<span class="math display" id="eq:michaelis2">\[\begin{equation}
+  \beta_{sp[i]}  \sim \mathcal{N}(\bar \beta, \sigma_{\beta}) and  h_{max_{sp[i]}}  \sim \mathcal{N}(\bar h_{max}, \sigma_{\beta}) 
+  \tag{4.4}
+\end{equation}\]</span>
+<p>Equation <a href="including-more-species-in-troll-simulations.html#eq:leaftraits2">(4.2)</a> can be rewritten to the classical Michaelis-Menten form:</p>
+<span class="math display" id="eq:leaftraits2">\[\begin{equation}
+  \hat h = log(\frac{h_{max_{sp[i]}}*dbh[i]}{dbh[i]+\frac{h_{max_{sp[i]}}}{\beta_{sp[i]}}}
+  \tag{4.2}
+\end{equation}\]</span>
+<p>Thus, with <span class="math inline">\(\frac{h_{max_{sp[i]}}}{\beta_{sp}}\)</span> corresponding to <span class="math inline">\(a_h\)</span> in the equation <a href="including-more-species-in-troll-simulations.html#eq:michaelis">(4.3)</a></p>
+</div>
+</div>
+<div id="more-species-for-troll" class="section level2">
+<h2><span class="header-section-number">4.5</span> More species for TROLL</h2>
+<p>We obtained a new set of 599 species means for Nmass, Pmass, wsg and LMA using the inference procedure. Allometric parameters and <span class="math inline">\(dmax\)</span> limited the final dataset for TROLL to 547 species. 347 of those species matched with Paracou species. Figure <a href="including-more-species-in-troll-simulations.html#fig:representatfin">4.2</a> shows that the new species set has a better coverage of wsg and LMA distributions. The histograms for each trait are available in the second Appendix sections. Overall, the inferred species set allowed to better represent trait distributions in TROLL, and enhanced the coverage for Paracou.</p>
+<div class="figure"><span id="fig:representatfin"></span>
+<img src="master-thesis_files/figure-html/representatfin-1.png" alt=" Joint representation of LMA and wsg distributions for A: the 347 new species set for Paracou, B: the 547 species set used for the selective logging experiment; Compared to the distribution of the same traits in the total BRIDGE dataset. Colors indicate whether points belong to bridge (red) or to the inferred species set (blue). Marginal rugs help to visualise each trait distribution, and highlight the coverage of their distribution in BRIDGE (red) by the new species set (blue)." width="672" />
+<p class="caption">
+Figure 4.2:  Joint representation of LMA and wsg distributions for A: the 347 new species set for Paracou, B: the 547 species set used for the selective logging experiment; Compared to the distribution of the same traits in the total BRIDGE dataset. Colors indicate whether points belong to bridge (red) or to the inferred species set (blue). Marginal rugs help to visualise each trait distribution, and highlight the coverage of their distribution in BRIDGE (red) by the new species set (blue).
+</p>
+</div>
+</div>
+<div id="discussion" class="section level2">
+<h2><span class="header-section-number">4.6</span> Discussion</h2>
+<p>In the hierarchical models used here, species means are derived from the general trait mean. They thus depend on both the number of observations for each species and the observed trait values. These models allow to account for uncertainties due to scarce observations: The inferred mean of a species with few data but extreme trait values is attracted towards the overall mean, because of high uncertainty due to a low number of observations. On the contrary, abundant species have narrow confidence intervals around their deviation to the overall mean; thus a reliably <em>distinct</em> trait mean, even when close to the global mean value.</p>
+<p>This is consistent with the idea that using only one measure for a species is barely more informative than attributing it the community means, due to sampling stochasticity. Considering the number of rare species in tropical plant trait databases such as BRIDGE, and given that each of them contributes to the overall mean, it is arguably to include them instead of setting an arbitrary cutoff: why would a species mean computed with five observations more reliable than one computed with four measurements?</p>
+<p>The adjustment of an extreme estimate to a more moderate one is termed shrinkage and is inherent to many hierarchical models. It can either be considered an advantageous phenomenon or a problem <span class="citation">(Rouder <em>et al.</em> <a href="#ref-Rouder2005">2005</a>, <span class="citation">Mould &amp; Upton (<a href="#ref-Mould2013">2013</a>)</span>, <span class="citation">Savic &amp; Karlsson (<a href="#ref-Savic2009">2009</a>)</span>)</span>. The main drawback of this approach is that shrinkage effect leads to an overestimation of traits distribution densities around the overall mean. A solution to reduce this bias would be to account for the inferred distributions of every means: we only used punctual estimations, and thus ignored a part of the information. This can be enhanced for subsequent works thanks to a new feature of TROLL, recently implemented by Fabian Fischer: a species parametrization simulating intraspecific trait variability constrained by between-trait covariance. This allows to recreate continuums such as those observed in real forests, by conserving at least the overall links between every trait. <span class="citation">Fyllas <em>et al.</em> (<a href="#ref-Fyllas2014">2014</a>)</span>, for example, used this approach. We could not adapt our study to this feature, for it was released a few months ago.</p>
+
+</div>
+</div>
+<h3>References</h3>
+<div id="refs" class="references">
+<div id="ref-Huston2001">
+<p>Huston, M.A., Loreau, M., Naeem, S., Inchausti, P., Bengtsson, J., Grime, J.P., Hector, A., Hooper, D.U., Raffaelli, D., Schmid, B., Tilman, D. &amp; Wardle, D.A. (2001). Biodiversity and Ecosystem Functioning: Current Knowledge and Future Challenges. <strong>294</strong>, 804–808.</p>
+</div>
+<div id="ref-Lyons2001">
+<p>Lyons, K.G. &amp; Schwartz, M.W. (2001). Rare species loss alters ecosystem function - Invasion resistance. <em>Ecology Letters</em>, <strong>4</strong>, 358–365.</p>
+</div>
+<div id="ref-Violle2007">
+<p>Violle, C., Navas, M.-L., Vile, D., Kazakou, E., Fortunel, C., Hummel, I. &amp; Garnier, E. (2007). Let the concept of trait be functional! <em>Oikos</em>, <strong>116</strong>, 882–892.</p>
+</div>
+<div id="ref-Marechaux2017a">
+<p>Maréchaux, I. &amp; Chave, J. (2017). An individual-based forest model to jointly simulate carbon and tree diversity in Amazonia: description and applications. <em>Ecological Monographs</em>, <strong>87</strong>, 632–664.</p>
+</div>
+<div id="ref-Wright2004">
+<p>Wright, I.J., Reich, P.B., Westoby, M., Ackerly, D.D., Baruch, Z., Bongers, F., Cavender-Bares, J., Chapin, T., Cornellssen, J.H., Diemer, M., Flexas, J., Garnier, E., Groom, P.K., Gulias, J., Hikosaka, K., Lamont, B.B., Lee, T., Lee, W., Lusk, C., Midgley, J.J., Navas, M.L., Niinemets, Ü., Oleksyn, J., Osada, H., Poorter, H., Pool, P., Prior, L., Pyankov, V.I., Roumet, C., Thomas, S.C., Tjoelker, M.G., Veneklaas, E.J. &amp; Villar, R. (2004). The worldwide leaf economics spectrum. <em>Nature</em>, <strong>428</strong>, 821–827.</p>
+</div>
+<div id="ref-Chave2009">
+<p>Chave, J., Coomes, D., Jansen, S., Lewis, S.L., Swenson, N.G. &amp; Zanne, A.E. (2009). Towards a worldwide wood economics spectrum. <em>Ecology Letters</em>, <strong>12</strong>, 351–366.</p>
+</div>
+<div id="ref-Baraloto2010">
+<p>Baraloto, C., Timothy Paine, C.E., Patiño, S., Bonal, D., Hérault, B. &amp; Chave, J. (2010). Functional trait variation and sampling strategies in species-rich plant communities. <em>Functional Ecology</em>, <strong>24</strong>, 208–216.</p>
+</div>
+<div id="ref-Baraloto2012">
+<p>Baraloto, C., Hardy, O.J., Paine, C.E.T., Dexter, K.G., Cruaud, C., Dunning, L.T., Gonzalez, M.-A., Molino, J.-F., Sabatier, D., Savolainen, V. &amp; Chave, J. (2012). Using functional traits and phylogenetic trees to examine the assembly of tropical tree communities. <em>Journal of Ecology</em>, <strong>100</strong>, 690–701.</p>
+</div>
+<div id="ref-Marechaux2017">
+<p>Marechaux, I. (2017). Biodiversity and Responses To Drought. </p>
+</div>
+<div id="ref-Taugourdeau2014">
+<p>Taugourdeau, S., Villerd, J., Plantureux, S., Huguenin-Elie, O. &amp; Amiaud, B. (2014). Filling the gap in functional trait databases: Use of ecological hypotheses to replace missing data. <em>Ecology and Evolution</em>, <strong>4</strong>, 944–958.</p>
+</div>
+<div id="ref-Kattge2011">
+<p>Kattge, J., Díaz, S., Lavorel, S., Prentice, I.C., Leadley, P., Bönisch, G., Garnier, E., Westoby, M., Reich, P.B., Wright, I.J., Cornelissen, J.H., Violle, C., Harrison, S.P., Van Bodegom, P.M., Reichstein, M., Enquist, B.J., Soudzilovskaia, N.A., Ackerly, D.D., Anand, M., Atkin, O., Bahn, M., Baker, T.R., Baldocchi, D., Bekker, R., Blanco, C.C., Blonder, B., Bond, W.J., Bradstock, R., Bunker, D.E., Casanoves, F., Cavender-Bares, J., Chambers, J.Q., Chapin, F.S., Chave, J., Coomes, D., Cornwell, W.K., Craine, J.M., Dobrin, B.H., Duarte, L., Durka, W., Elser, J., Esser, G., Estiarte, M., Fagan, W.F., Fang, J., Fernández-Méndez, F., Fidelis, A., Finegan, B., Flores, O., Ford, H., Frank, D., Freschet, G.T., Fyllas, N.M., Gallagher, R.V., Green, W.A., Gutierrez, A.G., Hickler, T., Higgins, S.I., Hodgson, J.G., Jalili, A., Jansen, S., Joly, C.A., Kerkhoff, A.J., Kirkup, D., Kitajima, K., Kleyer, M., Klotz, S., Knops, J.M., Kramer, K., Kühn, I., Kurokawa, H., Laughlin, D., Lee, T.D., Leishman, M., Lens, F., Lenz, T., Lewis, S.L., Lloyd, J., Llusià, J., Louault, F., Ma, S., Mahecha, M.D., Manning, P., Massad, T., Medlyn, B.E., Messier, J., Moles, A.T., Müller, S.C., Nadrowski, K., Naeem, S., Niinemets, Ü., Nöllert, S., Nüske, A., Ogaya, R., Oleksyn, J., Onipchenko, V.G., Onoda, Y., Ordoñez, J., Overbeck, G., Ozinga, W.A., Patiño, S., Paula, S., Pausas, J.G., Peñuelas, J., Phillips, O.L., Pillar, V., Poorter, H., Poorter, L., Poschlod, P., Prinzing, A., Proulx, R., Rammig, A., Reinsch, S., Reu, B., Sack, L., Salgado-Negret, B., Sardans, J., Shiodera, S., Shipley, B., Siefert, A., Sosinski, E., Soussana, J.F., Swaine, E., Swenson, N., Thompson, K., Thornton, P., Waldram, M., Weiher, E., White, M., White, S., Wright, S.J., Yguel, B., Zaehle, S., Zanne, A.E. &amp; Wirth, C. (2011). TRY - a global database of plant traits. <em>Global Change Biology</em>, <strong>17</strong>, 2905–2935.</p>
+</div>
+<div id="ref-Buuren2011">
+<p>Buuren, S. van &amp; Groothuis-Oudshoorn, K. (2011). &lt;b&gt;mice&lt;/b&gt; : Multivariate Imputation by Chained Equations in &lt;i&gt;R&lt;/i&gt;. <em>Journal of Statistical Software</em>, <strong>45</strong>.</p>
+</div>
+<div id="ref-Rouder2005">
+<p>Rouder, J.N., Lu, J., Speckman, P., Sun, D. &amp; Jiang, Y. (2005). A hierarchical model for estimating response time distributions. <em>Psychonomic Bulletin &amp; Review</em>, <strong>12</strong>, 195–223.</p>
+</div>
+<div id="ref-Mould2013">
+<p>Mould, D.R. &amp; Upton, R.N. (2013). Basic Concepts in Population Modeling, Simulation, and Model-Based Drug Development—Part 2: Introduction to Pharmacokinetic Modeling Methods. <em>CPT: Pharmacometrics &amp; Systems Pharmacology</em>, <strong>2</strong>, e38.</p>
+</div>
+<div id="ref-Savic2009">
+<p>Savic, R.M. &amp; Karlsson, M.O. (2009). Importance of shrinkage in empirical bayes estimates for diagnostics: problems and solutions. <em>The AAPS journal</em>, <strong>11</strong>, 558–69.</p>
+</div>
+<div id="ref-Fyllas2014">
+<p>Fyllas, N.M., Gloor, E., Mercado, L.M., Sitch, S., Quesada, C.A., Domingues, T.F., Galbraith, D.R., Torre-Lezama, A., Vilanova, E., Ramírez-Angulo, H., Higuchi, N., Neill, D.A., Silveira, M., Ferreira, L., Aymard C., G.A., Malhi, Y., Phillips, O.L. &amp; Lloyd, J. (2014). Analysing Amazonian forest productivity using a new individual and trait-based model (TFS v.1). <em>Geoscientific Model Development</em>, <strong>7</strong>, 1251–1269.</p>
+</div>
+</div>
+<div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://master-thesis-1.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="troll-model.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="can-troll-simulate-real-forests-and-post-logging-trajectories.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/sylvainschmitt/master-thesis/blob/master/03-Species.Rmd",
+"text": "Edit"
+},
+"download": ["master-thesis.pdf"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

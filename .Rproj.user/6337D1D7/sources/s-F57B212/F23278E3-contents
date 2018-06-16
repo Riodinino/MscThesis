@@ -1,0 +1,159 @@
+# Can TROLL simulate real forests and post-logging trajectories ?
+```{r efezfz, echo = F}
+library(tidyverse)
+library(gridExtra)
+```
+## Overview
+
+The original goal of this section was to evaluate TROLL’s aptitude to simulate post-logging trajectories by using real data. Preliminary comparison of the model understoreys with seedling and sapling censuses in Paracou (from the Mariwenn Database), showed that TROLL underestimates seedling *abundances*, due to discrete space assumptions (data not shown). It however reliably depicts diameter structure for higher $dbh$ categories (@Marechaux2017). We compared simulated ecosystem trajectories with regular censuses ($>10\ cm\ dbh$), after adapting the data to the model input format and simulating the understorey strata. Since the obtained results showed anomalies, this yielded another question: is TROLL adapted to simulate forests from real data? We used a spatial statistic approach, comparing real censuses with mature forests simulated with comparable species composition.
+
+
+## Methods
+
+### Handling missing species 
+
+We used our new species dataset to simulate post-logging trajectories at Paracou. Overall, 347 Paracou species matched with our dataset, resulting in higher yet still high proportions of individuals belonging to missing species. The number of species matching at a plot’s scale was enhanced with the new dataset, but still low (100 to 220), compared to the 200-350 species that can occur in a single plot (\@ref(fig:newhistrol). The representativities of these subsets was overall correct (data not shown). To handle species that were still missing, we replaced the individuals belonging to missing species by individuals of parametrized species, by diameter class. 
+
+```{r newhistrol, out.width = "0.7\\textwidth", fig.cap= "Comparison of the coverage (species and individuals) between the initial and new dataset. A: Total number of species in the plots. B: Proportion of missing (uncovered) individuals. C: Proportion of missing species. Colors indicate the dataset used: blue for the initial set, red for the new one. ", echo = FALSE}
+ tab2 <- read.csv("paracoupost.csv", sep = ";", dec = ",", header = T)
+ 
+ hist21 <-tab2 %>%
+  filter(Variable == "ind_old" | Variable == "ind_new") %>% 
+  ggplot(aes(y=Value, fill = Variable))+ geom_boxplot()+
+  scale_fill_discrete(name = "Dataset", labels = c("New","Intial"))+
+  ylab("Missing individuals (%)")+
+  ggtitle("B")
+ 
+ 
+ hist22 <- tab2 %>% 
+  filter(Variable == "sp_old" | Variable == "sp_now") %>% 
+  ggplot(aes(y=Value, fill = Variable))+ geom_boxplot()+
+  scale_fill_discrete(name = "Dataset", labels = c("New","Intial"))+
+  ylab("Missing species (%)")+
+  ggtitle("C")
+ 
+ hist23 <- tab2 %>% 
+  filter(Variable == "tot_new") %>% 
+  ggplot(aes(y=Value, fill = Variable))+ geom_boxplot()+
+  scale_fill_discrete(name = "Année", labels = c("1992"))+
+  ylab("Total number of species")+
+  ggtitle("A")
+ library(gridExtra)
+ grid.arrange(
+  grobs = list(hist22,hist21,hist23),
+  layout_matrix = rbind(c(3, 2),
+                        c(3, 1))
+)
+
+```
+
+
+ 
+
+
+
+### Residual mortality after logging: where to start from ? 
+
+Residual mortality after selective logging is a well-observed phenomenon, which has been documented for seven sites in the Amazon [five in Brazil, one in Suriname, and Paracou - see @Blanc2009 for a summary table and references]. During six to sixteen years after disturbance, logged stands undergo high persistent mortality which is due to several factors:
+
+* Many trees are hurt during operations. They do not die immediately, but rather a few years after being hurt, especially when poison girdling is carried out.
+* Soil modifications (compaction, degradation, and ultimately erosion) can also stress the trees located near the main or secondary tracks. 
+* Changes in the abiotic environment due to gap opening can be detrimental to some trees.
+
+We used Paracou data and Geraldine Derroire's mortality function (unpublished) to check the annual mortality rates in the 12 plots at Paracou. Paracou plots have undergone different treatments, consisting in conventional selective logging (T1), additional Timber Stand Improvement (TSI - thinning by poison girdling: T2, T3), and additional fuelwood harvest (T3). Control plots (natural forests, T0) are also included. The annual mortality rates observed at logged plots to go back to levels comparable to control plots about ten years after logging (Figure \@ref(fig:mortality) in appendix 5, and see @Blanc2009), although there is no neat transition. Still, for treatments 1 to 3, the mortality levels six years after logging are reasonable compared to rates observed in the first three years following disturbance.
+
+Considering that 1. the number of botanical indeterminations decreased, and the "coverage" by TROLL species list increased over time at Paracou; 2. residual mortality decreases between 6 and 8 years after logging in this dataset; and 3. we want to model as much as possible the entire trajectory following logging; we started the simulations from 1992, which is an acceptable compromise.
+
+
+### Coordinates and duplicates: moving, or removing
+
+
+Paracou inventories are real forest data at a $0.5m*0.5m$ resolution, and TROLL simulates forests with horizontal cell size set to 1m². Other resolutions are technically possible, but were not further explored, and increase computation time. As TROLL supports only one tree per cell, we handled cells containing several trees: the solution was either to keep only the most prominent tree in each conflicting cell or to replace the smallest trees in a randomly sampled, nearby free cell with an algorithm (details available on demand). Both introduce some bias, as it consists of direct modification of the raw data. Deleting trees is, in our opinion, worse than moving them of 1 or 2 meters, because it has more impact on canopy structure, thus on competition for light, which is the central process modeled with TROLL.
+
+### Missing understoreys
+
+Paracou censuses only include trees over 10 cm dbh, whereas TROLL simulates trees from 1 cm dbh (or 1m height). Direct similation from Paracou censuses, without any tree under 10 cm dbh initially present, is highly erroneous. The regeneration of the understorey strata from scratch would inducs a latency between the beginning of the simulation and the first “recruitment” events(*sensu* reaching $10\ cm\ dbh$). In reality, recruitment happens continuously and new trees over $10\ cm\ dbh$ are registered every year. We thus had to dodge this problem the most reasonably as can be: We first simulated the forests' understoreys, that we re-injected in the initial maps.
+ 
+We considered the following simplifying assumptions:
+
+
+*  To simulate an understorey with TROLL in order to simulate a plot with TROLL is than using another solution (for consistency).
+*  TROLL simulates explicitely competition for ligth, so the upper-stratae spatial structure impact the lower-stratae.
+*  Even if logging damages let part of the >10cm trees survive, the understorey must have been more impacted in the corresponding areas : skidders and bulldozers tend to avoid big trees, but slaughter small trees. 
+*  Thus, the understorey of a logged plot is finally a spatial mixture of “mature state” and “early stage” understoreys.
+
+
+We derived modeling choices considering these assumptions:
+
+* The final understorey we use to inject to the $>10dbh$ census for logged plots is constructed from two distinct TROLL simulations of two different censuses, and spatially consistent with  the geographic data available for the plots and the upper strata structure.
+
+* For undamaged zones in disturbed plots, we simulated the understoreys from the last Paracou prelogging census during 30 years, which was a compromise between a “mature state” understorey and having initial (real) trees still alive, for spatial consistency.
+
+* For areas located within damaged zones, we simulated an understorey from the 1992 censuses for 5 years, to obtain a young understorey that has undergone high enlightenment in opened areas
+
+* For control plots, a single understorey was simulated for 30 years and reinjected in the census.
+
+We used damaged areas shapefiles obtained from https://paracoumaps.cirad.fr.
+
+
+### Simulation parameters
+
+The simulation parameters were all TROLL default parameters (calibrated in @Marechaux2017, adapted for the new version by Fabian Fischer (*pers. comm.*), except the seedrain scaling constant and the mortality rate parameters. 
+
+We initlally tested a wide range of seedrain parameters to determine the values that gave realistic results, to use if for our subsequent *in silico* experiment. This constant can have a strong influence on commercial tree species regeneration, of which depends directly the conclusions we can draw from logging experiments. TROLL’s default to simulate forests from bare ground is C_seedrain = 50000 seeds/ha, and certainly overestimates the importance of this process in our framework. We tested 100%, 50%, 25%, 10% and 5% of the default value.
+
+Mortality parameters were first let to default values (i.e. the minimum mortality rate, m0 = 0.025; and the slope, m1 = 0.025), but we tested softer mortality rates *a posteriori*, decreasing from 0.020 to 0.010 since the results were highly unrealistic.
+
+### Spatial structure analysis
+
+After seeing the first outputs, we simulated mature forests corresponding to each plot in terms of species composition (regional frequencies set to plot frequencies and default seed-rain scaling constant). Simulations lasted 600 years, which is assumed to be the time needed to reach ecosystem maturity in TROLL for high seed-rain constant values [@Marechaux2017].
+
+Spatial statistical analyses were performed using the ads R-package [@Amap2015]. We compared the spatial structure of TROLL and Paracou forests using classical spatial indices, based upon Ripley's K function [@Ripley1977]: L(r), a linearization of Ripley’s K [@Besag1977]; and g(r), the pair density function;. The first (L) is linked to the expected number of neighbours present in a circle of radii r and centered on each point of the map. The second (g) is linked to the mean number of neighbours present between two consecutive circles at a distance r and r+dr, for all the points in the map.  
+
+
+
+
+## Results and discussion
+
+### Simulated trajectories
+
+```{r paracoutest, echo=FALSE, out.width = "0.8\\textwidth", fig.cap = "Trajectories obtained with TROLL, using real data as an input. A and B are outputs obtained with the plot number 11 (undisturbed). D and C are the results obtained with plot 2 (selectively logged). A and D show tree density per hectare for individuals above 30 cm dbh over time. B and D display the evolution of above-ground biomass over time. Each curve is a distinct simulation. Simulations lasted 5 years. "}
+load("./images/Output_paracoutest.RData")
+g_paracoutest
+```
+
+
+Figure \@ref(fig:paracoutest) shows the trajectories obtained for a control plot (T0) and a logged plot (T1), in terms of above-ground carbon biomass (AGB, $kgC.ha^{-1}$) and densities of canopy trees ($dbh > 30$,N30,$ha^{-1}$). In every plot and for every simulation, we observed an anormal decrease in AGB and N30. This pattern holded at every mortality rate tested, although high mortality lead to stronger decreases in AGB and N30. This surprinsing behavior is not likely to be linked to the way we simulated the understorey, because it affects trees over 30 dbh. To understand these results, we adopted a spatial analysis approch, wich results are presented hereafter.
+
+
+
+### Spatial statistics
+
+
+The spatial distribution of trees over 30 cm dbh differed greatly between real forests (year 1992) and mature simulated forests, regardless if real plots have been logged or are undisturbed (Figures \@ref(fig:spatialcontrol) and \@ref(fig:spatiallogged)). This pattern holds for every plot (not shown). The $L(r)$ function (C and D, on both) curves slightly differ for logged and disturbed plots, with a slightly overdispersed spatial structure for radii between 3 and 10 meters in control plots. In simulated mature forests, $L(r)$ reaches extremely low values for radii up to 10 meters. The rest of the curve probably stays out of the confidence interval because of the well-known autocorrelation inherent to $L(r)$. The $g(r)$ function curves bring more reasonable results, yet still showing an stong significant overdispersion in simulated mature forests, for radii between 1 and 5 meters. The $g(r)$ curves are computed for consecutive crowns (the inner-most circle is eliminated). This yields more reasonable, autocorrelation-free results, yet loosing discrimination power. These results show that TROLL severely overdisperses trees over 30 cm dbh compared to real forests at relatively small scale (radius < 5m). 
+
+```{r spatialcontrol, echo = FALSE,out.width = "0.8\\textwidth",fig.cap="Spatial structure of simulated (A and C) and real (B and D) forests for Paracou plot P1 (undisturbed). A and B show the distribution of g(r), the pair density function. C and D show the distribution or L(r), a linearization of Ripley's K. Both were computed for 30 radii ranging from 1 to 30 meters. Solid black lines are the observed distributions, dotted red lines represent the expected mean distribution under null hypothesis (Complete Spatial Randomness, CSR). Green areas are 99% confidence intervals (CIs) around the CSR null distribution means (for each radius), that were obtained by resampling randomly trees coordinates (1000 simulations). Parts of the curves that are out the CIs, for a given radius, violate the assumption of CSR for this radius. Values under the CIs indicate an overdispersed repartition, and values over the CIs, a clustered repartition"}
+knitr::include_graphics('./plots/p01/Plot_1.pdf', dpi = NA)
+```
+
+
+```{r spatiallogged, echo=FALSE, out.width = "0.8\\textwidth",fig.cap="Spatial structure of simulated (A and B) and real (C and D) forests for Paracou plot P1 (logged). These graphics correspond rigourously to the figure, please refer to its label for description and interpretation tips."}
+knitr::include_graphics('./plots/p01/Plot_3.pdf', dpi = NA)
+```
+
+
+### Synthesis
+
+There are several possible reasons to the results of the simulations from real data. First, it might an inaccurate parametrization of the model, but  @Marechaux2017a intensively calibrated TROLL. Another can be an overestimated basal mortality rate, we tested a wide range of values, and the lowest (0.001) attenuated the phenomenon (not shown). However, this mortality event was always conspicuously displayed in the output graphs, for . A factor also influencing the results may be our data pre-treatment, consisting in replacing trees with duplicated coordinates. The observed pattern is however homogen for all simulations, that were led with different random seeds. Our last hypothesis is that the observed result are due to a difference in spatial structure between TROLL and real forests, influencing the modeled light competition effects. 
+
+It may seem difficult to disentangle the effects of light competition and discretisation (cells of 1m²) on TROLL's spatiallisation. We are comparing two structurally different objects. TROLL is constrained to homogen spatial structure at fine scale (say, from 1-2 m radius) because of its assumption of a discrete space, with maximum 1 tree per cell, while Paracou plots are mapped with a 0.5m resolution. Whilst the same analysis for saplings or poles (*sensu* $<10$ and $<20$ cm dbh) might only reveal the obvious effects of TROLL's design, focusing on big trees (over 30cm dbh) brings interesting clues to explain the results observed with simulations from real data.
+
+Competition for light is the principal ressource-limiting process modelled in TROLL, which reproduces realistic forests in terms of global variables and floristic composition [see @Marechaux2017]. It seems likely that TROLL underestimates trees' tolerance to shade or vicinity with other big trees, thus making simulation from real data irrelevant for structural reasons.
+
+  We can question the validity of the model, because in natural forest, certain demographic and successional processes rely on trees vicinity, for example what we can call *substitution*, a successful strategy some trees, consisting in thriving close to bigger "pairs" to benefit additional water and nutrients (Stéphane Traissac, *pers. comm.*). However, the fact that TROLL might overestimate competition for light, and makes forest with overdispersion of big trees, certainly does not take away its numerous strengths. TROLL is still an valuable tool for various purposes, such as jointly simulating carbon and biodiversity (@Marechaux2017), exploring the impact of forests composition on ecosystem resilience (@Schmitt2017), or simulate selective logging with unequalized spatial resolution. Modelling real forest with TROLL is just not what it is meant to... for now. Future developments may enable to do it.
+
+
+
+
+ 
+

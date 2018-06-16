@@ -1,0 +1,265 @@
+#### This script calculate mortality rates for Paracou
+#############################################################################
+
+# it solve the problem of trees not seen
+# it uses data.table rather than dplyer
+# here it's done on the control plot (but can be changed to be used for other plots)
+
+library(EcoFoG)
+library(data.table)
+
+
+
+#### function correcting the wrong CodeAlive
+  # can be used in the origical data frame (so correct only the cases when the tree was noted as dead but seen alive after, so not really dead)
+  # can also be used on an extended data set with a row for eahc tree and each year (observed or not)
+  # in this case alive (TRUE), not recruited (NA), dead (FALSE)
+  correct.status = function(X){
+    CodeAliveCor = X
+    if (sum(X, na.rm=TRUE)!=0) { # only do something for tree for which there is a least one Alive obs
+      # first to last alive measure are alive
+      CodeAliveCor[(min(which(X==TRUE))):(max(which(X==TRUE)))] = TRUE
+      # all measure after the last one alive are dead
+      if (max(which(X==TRUE))<length(X)) {
+        CodeAliveCor[(max(which(X==TRUE))+1):length(X)] = FALSE
+      }
+    }
+    return(CodeAliveCor)
+  }
+
+
+#### function calculting mortality rate
+  # NB: this fonction can be easily changed to calculate by something else (eg by Species), change Plot by something else in the function
+  # Data is a data.table with colums (one per year) giving the CodeAliveCorr for each tree
+  # t0 is the first year of the time span on which the mortality is calculated in years
+  # t1 is the last year of the time span on which the mortality is calculated in years
+  # if byPlot is True, calculate mortality by plot
+  Mortality = function (Data, t0, t1, byPlot=FALSE) {
+    if (byPlot==TRUE) {
+      N0 = Data[Data[[which(colnames(Data) == as.character(t0))]]=="TRUE", .(N0=.N), by=.(Plot)]
+      N1 = Data[Data[[which(colnames(Data) == as.character(t0))]]=="TRUE" &
+                  Data[[which(colnames(Data) == as.character(t1))]]=="TRUE", .(N1=.N), by=.(Plot)]
+      nb=merge(N0, N1, by = "Plot")
+      result=nb[,.(Plot, mortality=1-(N1/N0) ^ (1/(t1-t0)))]
+      #colnames(result)[2]=paste(Year[i],Year[i+1], sep="/")
+      return(result)
+    } else {
+      N0 = Data[Data[[which(colnames(Data) == as.character(t0))]]=="TRUE", .N]
+      N1 = Data[Data[[which(colnames(Data) == as.character(t0))]]=="TRUE" &
+                  Data[[which(colnames(Data) == as.character(t1))]]=="TRUE", .N]
+      return(1-(N1/N0) ^ (1/(t1-t0)))
+    }
+
+  }
+
+
+#### get data and tidying up
+  DataParacou  <- read.csv("C:/Users/nino.page/Desktop/TROLL project/DataParacou_geraldine.csv", header =T, sep = ",",dec = ".")
+  # = Guyafor2df(WHERE = "Forest='Paracou'")
+  table(DataParacou_g$Plot, DataParacou_g$CensusYear)
+  DataParacou_g <- DataParacou
+  Data = data.table(DataParacou)
+  # calculate DBH
+  Data$DBH = Data$CircCorr / pi
+  # keep only DBH >=0 (a few tree have a circ-corr < 0, mostly Bois Cathédrale, cf code correction Camilia)
+  Data = Data[DBH >= 10]
+
+  # keep only the control plots
+  PlotControl = c(1,2,3,4,5,6,7,8,9,10,11,12) # control plots
+  DataControl = Data[Plot %in% PlotControl]  # select the plots
+  DataControl = DataControl[!(CensusYear %in% c(1996,1998,2000, 2002,2004,2006,2008,2010,2012,2014,2016,2017,2018))] # select the years for which an inventory has been made
+
+
+#### correct for unseen trees (for which we don't know if dead or alive) using the function correct.status
+  dataControlStatus = dcast(DataControl, idTree + Plot  ~ CensusYear, value.var = "CodeAlive") # create a wide table with each colum is a CensusYear
+  # NB possible to add some stuff in the line above
+  # either information that are fixed by tree (eg species) => add them after Plot and change the next line
+  # or things that are different for each observation of a same tree (eg DBH)
+  # see https://cran.r-project.org/web/packages/data.table/vignettes/datatable-reshape.html
+  CensuYear = colnames(dataControlStatus)[-c(1,2)] # get all the CensusYear
+  # re-transform table with one row for each census year and each tree (to be able to fill in unseen year)
+  DataControlall = melt(dataControlStatus, measure.vars = CensuYear, variable.name = "CensusYear", value.name="CodeAlive")
+  DataControlall= DataControlall[order(DataControlall$idTree,DataControlall$CensusYear),] # make sure years in right order (!!! important)
+  # create a variable CodeAliveCorr to deal with the unseen : alive (TRUE), not recruited (NA), dead (FALSE)
+  DataControlall$CodeAliveCorr = DataControlall[,.(correct.status(CodeAlive)), by=.(as.factor(idTree))]$V1
+  # transform CensusYear to integer
+  DataControlall$CensusYear = as.numeric(as.character(DataControlall$CensusYear))
+  # create a wide table to be used with mortality function
+  DataControlStatusCorr = dcast(DataControlall, idTree + Plot  ~ CensusYear, value.var = "CodeAliveCorr")
+
+  # library(tidyverse)
+
+  # Data_nino <- as.data.frame(DataControlStatusCorr) %>% mutate(Plot = as.character(Plot))
+  # Data_nino <- Data_nino %>% dplyr::filter(Plot %in% c(2,3,4,5,7,8,9,10,12))
+  # Data_nino %>% class
+  # colnames(Data_nino)
+  # names(Data_nino)
+  # Data_nino[which(Data_nino$idTree == 99336),"Plot"]
+  # Data_nino %>% summary
+#### example on how to calcultate mortality for two given years
+  # Mortality(data.table(Data_nino), t0=1984, t1=1985, byPlot=TRUE)   # by plots => gives a data.table
+  Mortality(DataControlStatusCorr, t0=1984, t1=1985,byPlot = TRUE) # all plots together => gives a value
+
+#### Calculation of mortality rates by interval for the plots
+  # mortality_rates <- matrix(NA, nrow = length(unique(Data_nino$Plot))*length(4:22), ncol = 3)
+  # mortality_rates <- as.data.frame(mortality_rates)
+  # names(mortality_rates) <- c("Year","Plot","Mortality")
+  # for(i in 4:22){
+  #   t_0 <- colnames(Data_nino)[i-1] %>% as.numeric
+  #   t_1 <- colnames(Data_nino)[i] %>% as.numeric
+  #   yeartemp <- paste(t_0,t_1,sep = "/")
+  #   mortemp <- Mortality(data.table(Data_nino),t0=t_0,t1=t_1,byPlot = TRUE)
+  #
+  #     mortality_rates[(i-1)*nrow(mortemp)+(1:nrow(mortemp)),"Plot"] <- mortemp[1:9,"Plot"]
+  #     mortality_rates[(i-1)*nrow(mortemp)+(1:nrow(mortemp)),"Mortality"] <- mortemp[1:9,"mortality"]
+  #     mortality_rates[(i-1)*nrow(mortemp)+(1:nrow(mortemp)),"Year"] <- rep(yeartemp,nrow(mortemp))
+  # print(nrow(mortemp))
+  #
+  #   # rm(yeartemp);rm(mortemp)
+  # }
+  # colnames(DataControlStatusCorr)[3]
+
+  # reshape::melt(data,plot,)
+#### calculate mortality for all intervals between two consecutive inventories
+  Year=sort(unique(DataControlall$CensusYear))
+  I=length(Year)-1 # number of intervals
+  MortRate=data.table(Plot=c(unique(DataControlall$Plot),"allPlots")) # create a data table to store the results
+  for (i in 1:I) {
+    res=Mortality(DataControlStatusCorr, t0=Year[i], t1=Year[i+1], byPlot=TRUE)
+    resall=data.table(Plot="allPlots", mortality=Mortality(DataControlStatusCorr, t0=Year[i], t1=Year[i+1]))
+    res=rbind(res, resall)
+    MortRate=merge(MortRate, res, by = "Plot", all=TRUE)
+    colnames(MortRate)[i+1] = paste(Year[i],Year[i+1], sep="/") # give col names of time
+  }
+  MortRate
+library(tidyverse)
+  mymort <- MortRate %>% filter(Plot %in% c(1,2,3,4,5,6,7,8,9,10,11,12))
+  mymortlong <- mymort %>% reshape2::melt(id = "Plot") %>% rename(period = variable) %>% rename(mortality = value)
+
+
+  adaptdate <- function(period){
+    return(which(levels(mymortlong$period) == as.character(period)))
+  }
+
+
+  mymortlong <- mymortlong %>% mutate(xst = NA)
+  for(i in 1:nrow(mymortlong)){
+    mymortlong$xst[i] <- adaptdate(mymortlong$period[i] %>% as.character)
+  }
+
+  group_t0 <- c(1,6,11)
+  group_t1 <- c(2,7,9)
+  group_t2 <- c(3,5,10)
+  group_t3 <- c(4,8,12)
+  mymortlong$Treament <- NA
+  for(j in 1:nrow(mymortlong)){
+    if(mymortlong$Plot[j] %in% group_t1){
+      mymortlong$Treatment[j] <- "T1"
+    }
+    else if(mymortlong$Plot[j] %in% group_t2){
+      mymortlong$Treatment[j] <- "T2"
+    }
+    else if(mymortlong$Plot[j] %in% group_t3){
+      mymortlong$Treatment[j] <- "T3"
+    }
+    else if(mymortlong$Plot[j] %in% group_t0){
+      mymortlong$Treatment[j] <- "T0"
+    }
+    else  mymortlong$Treatment[j] <- NA
+  }
+
+  m <- mymortlong %>%
+    filter(Treatment != 0) %>% group_by(Treatment,xst) %>%
+    summarise_at("mortality",mean) %>%
+    ggplot(aes(x = xst, y = mortality, color = Treatment))+
+    geom_line()+
+    geom_smooth(data = mymortlong %>% filter(Treament == 0),aes(x = xst, y = mortality, color = Treatment))
+  
+  m <- mymortlong %>%
+    group_by(Plot,xst) %>%
+    summarise_at("mortality",mean) %>%
+    ggplot(aes(x = xst, y = mortality, color = Plot))+
+    geom_line()
+  m
+  
+
+  ggplot()+
+    geom_line(aes(x = xst,
+                  y = mortality,
+                  color = Treatment),
+              data = mymortlong %>%
+                filter(Treatment != "T0") %>%
+                group_by(Treatment,xst) %>%
+                summarise_at("mortality",mean))+
+     geom_smooth(data = mymortlong %>% filter(Treatment == "T0"),
+                aes(x = xst,
+                    y = mortality,
+                    color = Treatment),
+                level = 0.99999,
+                span= 0.2)
+
+
+  gmort <-  ggplot(mymortlong)+
+    geom_smooth(aes(x = xst,
+                    y = mortality,
+                    color = Treatment),
+                data = mymortlong %>%
+                  filter(Treatment != "T0"),
+                level = 0.6,
+                span= 0.1,
+                fullrange = F)+
+    geom_smooth(data = mymortlong %>% filter(Treatment == "T0"),
+                aes(x = xst,
+                    y = mortality,
+                    color = Treatment),
+                level = 0.99999,
+                span= 0.2)+
+    geom_vline(xintercept= 9.5,
+               color="red",
+               linetype= 2)+
+    geom_vline(xintercept= 8.5,
+               color="red",
+               linetype= 2)+
+    geom_hline(yintercept = 0.005,
+               color = "black",
+               linetype = 2)+
+    geom_hline(yintercept = 0.02,
+               color = "black",
+               linetype = 2)+
+    scale_color_manual(values = c("dark green",
+                                  "yellow",
+                                  "orange",
+                                  "red"))+
+    scale_y_continuous(breaks = seq(0,0.3,by = 0.03),
+
+                       name = "Annual mortality rate")+
+    scale_x_continuous(breaks = c(1,3,5,7,9,11,13,15,17,19,21),
+                       labels = ok,
+                       name = "Time period" )+
+    # labs(title="Paracou disturbance experiment: Mortality rates in function of time, by treatment intensity ",
+    #      subtitle = "computed between two consecutive censuses and annualised")+
+    theme(axis.text.x = element_text(angle=45),
+          axis.text.y = element_text(angle=45)
+          # axis.title.y = element_text(face="bold"),
+          # axis.title.x = element_text(face="bold"),
+          # legend.text = element_text(face="bold"),
+          # legend.title = element_text(face="bold"),
+          # plot.title  = element_text(face="bold"),
+          # plot.subtitle  = element_text(face="italic")
+          )
+  gmort
+  save(gmort, file = "C:/Users/nino.page/Desktop/my_thesis/data_ready/ggplot_mortalite.RData")
+  ?geom_smooth
+  plotly::ggplotly(m2)
+
+#### this script has been checked with the other way of getting mortality rates use for Robinson
+  # no problem
+  ok <- unique(mymortlong$period %>% as.character)[c(1,3,5,7,9,11,13,15,17,19,21)]
+
+###### to calculate mortality by diameter class
+  # try (not sure, not tested)
+  # add the DBH in dataControlStatus (when doing dcast) and again in DataControlStatusCorr
+  # do a new function mortality that would calculate the mortality only for trees that are in a given size class in t0
+    # at the very beginning of the function, add a line to get the idTree of trees for which DBH_t0 (transform t0 in char and concatenate to the name of colum)
+    # do a subset of Data for the trees that have this idTree
+    # keep the rest of the function as it is

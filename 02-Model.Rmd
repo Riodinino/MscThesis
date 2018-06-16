@@ -1,0 +1,28 @@
+# TROLL model
+
+## Overview
+
+
+
+TROLL simulates every tree starting from 1 meter high (formerly, 1 cm dbh) in a spatialized light environment, where every process of the trees life cycle are modeled according to global rates, species-specific traits, and photosynthetic rates influenced by individual-level light incomes. TROLL can thus be defined as an individual-based and spatially explicit forest growth model, along with SORTIE  [@Pacala1996; @Uriarte2009] and FORMIND [@Fischer2016]. Actually, TROLL can be qualified with many adjectives. The most important among them are individual tree-based, spatially-explicit, and process- and physiology-based.
+
+TROLL simulates two classes of objects: species, and trees. Trees are simulated in a tridimensional (voxel) space of one-meter resolution, in which the light environment is explicitly computed. One tree can settle in each horizontal pixel of 1$m^2$. Each tree has a number of attributes, which we can classify into two categories: biometric, state variables, and species-specific variables (see Figure \@ref(fig:TROLLtree). 
+
+```{r TROLLtree, echo=FALSE, out.width = "0.6\\textwidth", fig.cap='Individuals tree inside TROLL explicit spatial grid from @Marechaux2017a. Tree geometry (crown radius CR, crown depth CD, height h, diameter at breast height dbh) is updated at each timestep (1 months) using allometric relationship with assimilated carbon allocated to growth. Each tree inherits a species label linking to its species-specific attributes. Light is computed explicitly at each timestep for each voxel, and trees are asymetrically shading each-other.'}
+knitr::include_graphics('images/TROLLtree.png', dpi = NA)
+```
+The firsts encompass tree age, diameter at brease height ($dbh$), height ($h$), crown radius ($CR$) and depth ($CD$), leaf area ($LA$). 
+The second encompass five functional traits and two allometric parameters (*cf.* Table \@ref(tab:traits)). Species are linked to trees with by a species label, which is inherited from the parent (mother) tree.
+
+```{r traits, echo=FALSE}
+table <- data.frame(
+  Abbreviation = c('$LMA$', '$N_m$', '$P_m$', '$wsg$', '$dbh_{thresh}$', '$h_{lim}$', '$a_h$'),
+  Description = c('leaf mass per area', 'leaf nitrogen content per dry mass', 'leaf phosphorous content per dry mass', 'wood specific gravity', 'diameter at breasth height threshold', 'asymptotic height', 'parameter of the tree-height-dbh allometry'),
+  Units = c('$g.m^{-2}$', '$mg.g^{-1}$', '$mg.g^{-1}$', '$g.cm^{-3}$', '$m$', '$m$', '$\\mu$')
+)
+knitr::kable(table, caption = 'Species-specific parameters used in TROLL from @Marechaux2017a. Data originates from the BRIDGE [@Baraloto2010] and TRY [@Kattge2011] datasets.', format = 'pandoc')
+# library(natbib)
+```
+
+Tree geometry is derived from its diameter according to allometric relations, whereas leaf area varies dynamically within each tree crown.  Contrasting with other forest simulators, TROLL models tree growth as the result of an explicitly computed carbon balance between assimilation by photosynthesis, emissions from respiration, and allocation to the different tree compartments. Assimilation is computed according to climate input data, over half-hourly periods of a representative day, and influences the simulated environment at the next time step, which defaults to one month. Seeds and seedlings are not explicitly modeled and are considered part of a seedling/seed pool.  Every tree belongs to a species through a species label, and thus shares common species features that are inherited from the mother tree through the seed. The species label established the correspondence between a tree and species-specific parameters, i.e. trait values obtained from field measurements (and inference).
+Currently, soil processes and topography are not explicitly modeled. Their overall influence on a real forest at a plot's scale is implicit, partly accounted for when using site-specific species datasets.

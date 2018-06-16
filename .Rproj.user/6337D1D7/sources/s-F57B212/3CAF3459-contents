@@ -1,0 +1,492 @@
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+rm(list = ls()); invisible(gc());
+library("knitr")
+library("tidyverse")
+library("gridExtra")
+library(kableExtra)
+```
+# Summary
+
+# Introduction
+
+# Datasets used
+
+
+```{r load, echo = FALSE}
+bridge <- read.csv("C:/Users/nino.page/Desktop/TrollR_data/BRIDGE/bridge.csv", sep = ";", dec = ".")
+sp <- read.table("C:/Users/nino.page/Desktop/TrollR_data/species.txt", header = T)
+
+bridge2 <- read.csv("C:/Users/nino.page/Desktop/TROLL project/data/traits/BRIDGE_data_ind_2013_10_29.csv", header = T, sep = ";")
+
+for(i in 1:nrow(bridge2)){
+if(!is.na(bridge2$traits_surf_area[i])){
+bridge2$LA[i] <- bridge2$traits_surf_area[i]
+}
+else{
+bridge2$LA[i] <- (bridge2$ind_surf_area[i])/3
+}
+}
+bridge2 <- bridge2 %>% mutate(LMA = 10000*dry_mass/LA)
+bridge2 <- bridge2 %>% filter(Family != "Arecaceae")
+bridge2 <- bridge2 %>% mutate(species = paste(Genus, species, sep = "_")) %>% 
+  rename(wsg = sapwood_dens, Nmass = N, Pmass = P, dbh = DBH) %>% 
+  select(species, LMA, wsg,Nmass,Pmass, Height,dbh) %>%
+  mutate(LA = NA)
+
+
+
+baseline <- read.table("file:///C:/Users/nino.page/Desktop/TROLL project/logging/input_forests/baseline/baseline.txt",header = T)
+
+miced_bridge <- read.csv("C:/Users/nino.page/Desktop/TROLL project/data/traits/miced_dataset_straight.csv", header = T, sep = ",")
+```
+## The BRIDGE trait database
+
+We used the BRIDGE trait database (@Baraloto2010, @Baraloto2012) which was further completed by the Toulouse EDB team (@Marechaux2017a, @Marechaux2017b XXX REF). 
+The BRIDGE dataset contains measurements for ten leaf and stem traits, with a total of 4709 individuals. One of the strengths of BRIDGE is that XXX REF plots were sampled exhaustively, thus providing an exceptional representation of the diversity and functional composition for >10cm dbh trees. However, another feature of the BRIDGE dataset is that the plots sampled are tropical rainforest: the dataset contains numerous species with a majority of rare (>4 observations) and a minority of highly dominant (> 200 observations) species.We used six individual-level traits and characteristics, namely: LMA, Nmass, Pmass, wsg, H, d (@tablebridge). Trait distributions are shown in \@ref(fig:tablebridge).
+
+```{r tablebridge, fig.cap='Summary table of the trait data obtained from the BRIDGE database'}
+n_species <- c(0,0,0,0,0,0)
+traits <- c("LMA","Nmass","Pmass","wsg","Height","dbh")
+for(i in 1:length(traits)){
+  col <- which(names(bridge2) == traits[i])
+  n_species[i] <- bridge2[which(!is.na(bridge2[,col])),"species"] %>% unique %>% length
+}
+
+total <- bridge2 %>% filter(!is.na(LMA) &
+                              !is.na(Nmass)&
+                              !is.na(Pmass)&
+                              !is.na(wsg)&
+                              !is.na(Height)&
+                              !is.na(dbh))
+completerows <- total %>% nrow
+completesp <- total %>% select(species) %>% unique %>% nrow
+
+totalwP <- bridge2 %>% filter(!is.na(LMA) &
+                              !is.na(Nmass)&
+                              !is.na(wsg)&
+                              !is.na(Height)&
+                              !is.na(dbh))
+completerowsP <- totalwP %>% nrow
+completespP <- totalwP %>% select(species) %>% unique %>% nrow
+
+totalrow = c("Total","entities\ with\ complete\ observations","\ -\ ", completerows, "\ -\ ", completesp)
+totalrowP = c("LMA, N, wsg","entities\ with\ complete\ observations\ (Pmass\ excluded)","\ -\ ", completerowsP, "\ -\ ", completespP)
+
+tabs <- bridge2 %>%
+  select(species,LMA, Nmass, Pmass, wsg, Height, dbh) %>%
+  reshape2::melt(id.var = "species",
+       variable.name = "trait") %>% 
+  mutate(isna = if_else(is.na(value), 1, 0))%>% 
+  group_by(trait) %>% 
+  summarize(missing = sum(isna), complete = sum(if_else(isna == 0, 1, 0))) %>% 
+  mutate(trait = paste0('', trait, '')) %>% 
+  mutate(dataset_unit = c("g.cm^{2}", "mg.g^{-1}","mg.g^{-1}", "g.cm^{-3}","m","m")) %>% 
+  mutate(full_name = c("leaf\ mass\ per\ areaa",
+                       "leaf\ nitrogen\ content\ per\ dry\ mass",
+                       "leaf\ phosphorous\ content\ per\ dry\ mass",
+                       "wood \ specific\ gravity",
+                       "tree\ height",
+                       "diameter at breast hight"))%>% 
+  rowwise() %>% 
+  cbind(n_species) %>%
+  select(trait, full_name, dataset_unit, complete, missing, n_species) %>% 
+  rename_("Full\ name" = "full_name",
+          "Trait" = "trait",
+          "Unit" = "dataset_unit",
+          "N\ (complete)" = "complete",
+          "Missing\ data" = "missing",
+          "Species" = "n_species"
+          ) 
+tabs%>% 
+  rbind(totalrow) %>% 
+  rbind(totalrowP) %>% 
+  knitr::kable("html") %>%
+  kable_styling(
+      bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+      full_width = T
+    )
+
+
+
+```
+ The dataset we used contains large amounts of missing data, as the majority of functional trait databases (@Taugourdeau2014). The sampling plan carried out by the authors of the database -which probably relies on a tradeoff between costs and statistical power- allows us to use the data to infer a great number of species means for LMA, Nmass, wsh and height-diameter allometries. For Pmass, however, very few observations are available compared to the rest of the variables. Comparing the number of complete observations and species with and without including Pmass leads to the conclusion that it is by far the most limiting variable. Then, the inference of a great number of new species would require consistent increment in Pmass data... or an alternative method to estimate it.
+
+
+## TROLL initial species list
+
+We started from TROLL's species-specific trait dataset (V2.3.1). This contains 9 variables, namely LMA, Nmass, Pmass, wsg, hmax, dmax, ah, SeedVolume (the volume of a species seeds), and Freg (the regional frequency of a species). We decided to let SeedVolume and Freg apart for this presentation and subsequent inference. We do not use the seed trade-off module, and regional frequencies will be adapted for every analysis depending on the study aims. Details are found in the table \@ref(fig:listtroll)
+```{rlisttroll, echo=FALSE, fig.cap='Species in TROLL ', cache=TRUE, message=FALSE}
+sp %>%
+  rename(species = X....) %>% 
+  select(species,LMA, Nmass, Pmass, wsg, dmax,hmax,ah) %>%
+  reshape2::melt(id.var = "species",
+       variable.name = "trait") %>% 
+  group_by(trait) %>% 
+  summarize(N = n()) %>% 
+  # mutate(trait = paste0(trait)) %>% 
+  mutate(dataset_unit = c("g.cm^{2}", "mg.g^{-1}","mg.g^{-1}", "g.cm^{-3}","m","m", "m")) %>% 
+  mutate(full_name = c("leaf\ mass\ per\ areaa",
+                       "leaf\ nitrogen\ content\ per\ dry\ mass",
+                       "leaf\ phosphorous\ content\ per\ dry\ mass",
+                       "wood \ specific\ gravity",
+                       "maximum\ diameter\ at\ breast\ height",
+                       "asymptotic\ height",
+                       "tree\ height-dbh\ allometry\ parameter"))%>% 
+  select(trait, full_name, dataset_unit, N) %>% 
+  rename_("Full\ name" = "full_name",
+          "Trait" = "trait",
+          "Unit" = "dataset_unit",
+          "N\ (species)" = "N"
+  ) %>% 
+  knitr::kable(format = "html") %>% 
+  kable_styling()%>% 
+  collapse_rows(columns = 4)  
+
+
+```
+Originally, dmax is taken as the maximum observed diameter, of the 99th percentile of this value. hmax and ah are the parameters of the diameter-height allometry used in TROLL, which is a Michaelis Menten equation (for details, see corresponding section in the inference procedure). These parameters are highly correlated. Although its name may be quite confusing, hmax corresponds to an asymptotic height, which rigourously means that this height will never be reacher by any tree of a given species. The real maximum height a tree can reach in TROLL model depends on both its maximum diameter, and the H-dbh allometric relationship at the species level. and is given by:  $h_{max[real]} = \frac{1.5*h_{max}*d_{max}}{(1.5*d_{max}+ah)}$. We fill focus on this trait instead on allometric parameters, because it can be compared to observed maximum heights in the BRIDGE dataset, and because its interpretation is more convenient and meaningful. The species gathered in this dataset have the following trait distributions :
+
+```{r distritroll}
+sp %>% rename(species = X....) %>%
+  mutate(hrealmax = 1.5*hmax*dmax/(1.5*dmax+ah)) %>%
+  select(-seedvolume,-Freg, -ah , -hmax) %>%
+  reshape2::melt(id.var = "species",
+       variable.name = "trait") %>% 
+  # filter(trait == "LMA") %>% 
+  ggplot(aes(value)) +
+  geom_histogram() +
+  facet_wrap(~trait, scales = "free")
+```
+## Comparison
+
+To estimate the representativeness of TROLL's species dataset, we have to compare its distribution with something that we think is representative of a real forest. We have to consider that the BRIDGE dataset is large enough, and comes from a sufficient number of sites, to be representative of the French Guianean forests, because there is no other such complete and big datasets to compare it with. Since TROLL species were infered from BRIDGE, the least we can expect is to observe rather similar traits distributions (in terms of density) comparing the species list and BRIDGE data pooled and averaged by species. However, it is interesting to examing the trait distribution at the individual level in BRIDGE, to estimate if there is a need to parametrize more species or account for intraspecific variability in TROLL.
+```{r preparesp, echo = F}
+traitsp <- sp %>% rename(species = X....) %>%
+  mutate(hrealmax = 1.5*hmax*dmax/(1.5*dmax+ah)) %>% 
+  select(species, LMA,wsg,Nmass,Pmass, hrealmax) %>% 
+  reshape2::melt(id.var = "species",
+       variable.name = "trait") %>% 
+  mutate(origin = "Troll") 
+ghistsp <- traitsp %>% 
+  # filter(trait == "LMA") %>% 
+  ggplot(aes(value)) +
+  geom_histogram() +
+  facet_wrap(~trait, scales = "free")
+```
+
+```{r preparebridge, echo = F}
+  traitbridge <- bridge2 %>% 
+  as.tbl() %>%
+  # mutate(sp = Species) %>% 
+  # mutate(species = paste(Genus, sp)) %>% 
+   # rename(wsg = sapwood_dens) %>% 
+  select(species, LMA, wsg,Nmass,Pmass, Height) %>% 
+  filter(LMA < 250) %>% 
+  group_by(species) %>%
+  summarise(LMA = mean(LMA, na.rm = T),
+            wsg = mean(wsg, na.rm = T),
+            Nmass = mean(Nmass, na.rm = T),
+            Pmass = mean(Pmass, na.rm = T),
+            hrealmax = max(Height, na.rm = T)) %>%
+  reshape2::melt(id.var = "species",
+       variable.name = "trait")  %>% 
+  mutate(origin = "Bridge") 
+
+  ghistb <- traitbridge %>% ggplot(aes(value)) +
+  geom_histogram() +
+  facet_wrap(~trait, scales = "free")
+  # ghistb
+  
+  
+  
+  traitbridgetot <- bridge2 %>% 
+  as.tbl() %>%
+  # mutate(sp = Species) %>% 
+  # mutate(species = paste(Genus, sp)) %>% 
+   # rename(wsg = sapwood_dens) %>% 
+  select(species, LMA, wsg,Nmass,Pmass, Height) %>% 
+  filter(LMA < 250) %>% 
+  # group_by(species) %>%
+  # summarise(LMA = mean(LMA, na.rm = T),
+            # wsg = mean(wsg, na.rm = T),
+            # Nmass = mean(Nmass, na.rm = T),
+            # Pmass = mean(Pmass, na.rm = T),
+            # hrealmax = max(Height, na.rm = T)) %>%
+  reshape2::melt(id.var = "species",
+       variable.name = "trait")  %>% 
+  mutate(origin = "Bridge") 
+```
+ ### Species scale
+```{r histo, warning=F, info = F, message=F}
+traitsp %>% rbind(traitbridge) %>% ggplot(aes(value, fill = origin)) +
+  geom_histogram(aes(y = ..density..), alpha = 0.7,position = "identity") +
+  # geom_density(aes(y = ..density..), alpha = 0.3)+
+  facet_wrap(~trait, scales = "free")
+```
+TROLL species list covers an apparently good part of the functional variability estimated at the species level for Paracou. It seems, however, that low LMA and low wsg species, as well as high Nmass species, are slightly underrepresented. These combinations of traits are somewhat typical of pioneer species, that may have been scarce sampled in undisturbed plots where BRIDGE sampling took place.
+```{r, eval = T}
+traitsp %>% rbind(traitbridge) %>% ggplot(aes(value, fill = origin)) +
+  # geom_histogram(aes(y = ..density..), alpha = 0.7,position = "identity") +
+  geom_density(aes(y = ..density..), alpha = 0.3)+
+  facet_wrap(~trait, scales = "free")
+```
+
+### Individual level variability
+```{r hists, warning=F, info = F}
+traitsp %>% filter(trait != "hrealmax") %>%  rbind(traitbridgetot %>% filter(trait != "Height")) %>% ggplot(aes(value, fill = origin)) +
+  geom_histogram(aes(y = ..density..), alpha = 0.7,position = "identity") +
+  # geom_density(aes(y = ..density..), alpha = 0.3)+
+  facet_wrap(~trait, scales = "free")
+```
+The individual scale variability is not totally captured by TROLL's species dataset. Extreme traits values are slightly underrepresented, for example, for low LMA, Pmass, and wsg. The distribution seems however representative of the total variability, that is arguably higher at the intraspecific level than at the interspecific level. Problems arises when using subsets of this dataset, as we did to simulate Paracou forest plots.
+
+# Paracou plots: subsetting issues
+
+Paracou plots display a high proportion of species that are absent of TROLL dataset. These species are mainly less common ones, and may be absent either because they were not present in the plots sampled for BRIDGE (Tropical forests show high fine-scale heterogeneity and species composition turnover), or because theirnumber of observations did not allow including them with the strict inference procedure that was followed. Based on preliminary exploration of the Paracou dataset, we noticed that the proportion of individuals belonging to missing species is reducing over time (maybe with increase in botanical determination reliability), and is low compared to the number of missing species. However, such proportion was deeply questioning the *a priori* validity of our intent to simulate real forest plots. table \@ref(fig:paracou) shows the observed proportions of missing and simulable species with the initial dataset.
+```{r paracou}
+tab <- read.csv("C:/Users/nino.page/Desktop/my_thesis/initial_paracou.csv", sep = ";")
+tab  %>% 
+   # mutate(Treatment = cell_spec(Treatment, ifelse(Treatment == "T0", "green","red"))) %>% 
+  rename_("1984" = "X1984","1992"="X1992", "1984" = "X1984.1","1992"="X1992.1") %>% 
+  kable("html") %>%
+  kable_styling("striped") %>%
+  add_header_above(c(" " = 2, "Species" = 2, "Individuals" = 2)) %>% 
+  row_spec(seq(1,35,by = 3), bold = T, color = "#339900", align = "c") %>% 
+  row_spec(seq(2,35,by = 3), bold = T, color = "#D7261E", align = "c") %>% 
+  row_spec(seq(3,35,by = 3), bold = T, align = "c") %>% 
+    kableExtra::collapse_rows(columns = 1:2) %>% 
+  group_rows("Plot 1", 1, 3, latex_gap_space = "2em") %>% 
+  group_rows("Plot 2", 4, 6, latex_gap_space = "2em") %>% 
+  group_rows("Plot 3", 7, 9, latex_gap_space = "2em") %>% 
+  group_rows("Plot 4", 10, 12, latex_gap_space = "2em") %>% 
+  group_rows("Plot 5", 13, 15, latex_gap_space = "2em") %>% 
+  group_rows("Plot 6", 16, 18, latex_gap_space = "2em") %>% 
+  group_rows("Plot 7", 19, 21, latex_gap_space = "2em") %>% 
+  group_rows("Plot 8", 22, 24, latex_gap_space = "2em") %>% 
+  group_rows("Plot 9", 25, 27, latex_gap_space = "2em") %>% 
+  group_rows("Plot 10", 28, 30, latex_gap_space = "2em") %>% 
+  group_rows("Plot 11", 31, 33, latex_gap_space = "2em") %>% 
+  group_rows("Plot 12", 34, 36, latex_gap_space = "2em")
+  
+
+# ?row_spec
+ # add_header_above(c(" " = 1, "Group 1" = 2, "Group 2" = 2, "Group 3" = 2)) 
+```
+
+
+# Multivariate imputed dataset
+
+## Rationale
+
+We used the mice R-package implemented procedures to perform multiple imputation by chained equations, using predictive mean matching (PMM). The aim of this step, however criticizable, was to infer Pmass values using the available observations and the correlations between Pmass and the other traits [XXX REF to say that phosphorous is correlated + summary?]. This was however necessary, because although Pmass has already observations for 270 specie, the overwhelming majority of them are singletons (\@ref(fig:phosphorous)). @Marechaux2017b have apparently further completed this dataset, probably with TRY database (@Kattge2011) to achieve parametrization of 163 species in TROLL. 
+
+```{r phosphorous, fig.cap = 'ok'}
+bridge2 %>%  
+  filter(!is.na(Pmass)) %>% 
+  group_by(species) %>% 
+  summarise(n = n()) %>% 
+  arrange(desc(n)) %>% 
+  ggplot(aes(x = n))+
+  geom_histogram(binwidth = 1)+
+  xlab("Number of observatons")+
+  ylab("Species count")
+  
+```
+
+Pmass
+
+## Method
+
+In simple words, here is how PMM works, based on Paul Allison's description: 
+
+Let $X$ be a single variable that has cases with missing data, and a set of variables $Z$ (with no missing data) that are used to impute x. PMM follows the above procedure:
+
+1/ For cases with no missing data, it estimates a linear regression of $X$ on $Z$, producing a set of coefficients $\beta$.
+2/ It then makes a random draw from the “posterior predictive distribution” of $\beta$, producing a new set of coefficients $\beta*$. This would typically be a random draw from a multivariate normal distribution with mean $\beta$, and the estimated covariance matrix of $\beta$ (with an additional random draw for the residual variance). This step aims at producing variability in the imputed values, and is common to all efficient methods for multiple imputation.
+3/Using $\beta*$, it generates predicted values for $x$ for all cases, both those with data missing on $x$ and those with data present.
+4/For each case with missing $x$, if identifies a set of cases with observed $X$ whose predicted values are close to the predicted value for the case with missing data.
+5/It then randomly chooses one and assign its observed value to substitute for the missing value.
+6/ Steps 2 through 5 are then repeated for each completed data set. 
+
+Unlike many methods of imputation, the purpose of the linear regression is not to generate imputed values. It rather aims at constructing a reference to match cases with missing data to similar cases with data present.
+
+There are several variations to this method (Morris et al. 2014), but the most important issue to settle is how many cases ($k$) should be in each match set. The default in the MICE package for R is k=5, i.e. each case with missing data on $X$ is matched to the 5 cases (with data present) that have the closest predicted values. One of the 5 is chosen at random and its $X$ value is assigned to the case with missing data. 
+
+We used the default $k=5$ proposed in the mice package and repeated the imputation 10 times, then pooled the datasets and averaged the obtained proposals for missing values. We aimed at avoiding extreme imputations by reducing the variability, averaging the repetitions, but we neither did we want to force the values to be too close to the predictive distribution used to match cases. This is quite discussable, but the hierarchical inference that was then used to estimate species means was by nature attenuating possible aberrations, giving low weight to underrepresented species (see below). To improve predictive power based on inter-trait correlation, we included additional variables that were correlated with our target variables, and selected with an automatic, stepwise linear model comparison procedure (step, reference needed): leaf toughness, leaf thickness, SPAD (a proxy of chlorophyll content) and leaf carbon content. Palms were excluded of the analysis beforehand, since there are not currently modelled with TROLL. Last but not least, we clustered the observations according to taxonomical levels: Imputations were performed at the genus level if more than 30 complete observations were available. If not, imputation was made at the family level, with the same threshold. Monogeneric and underrepresented families were treated at the overall level. The aim of this separation was to reduce the errors due to using overall relationships to infer values. We assumed that functional strategies were more accurately captured by grouping according to taxonomical position than using a global, unique set of relationships between trait. This however can be a source of errors: intergeneric and intrageneric variation is high in tropical trees, be it regarding morphological characteristics, light response and trade-offs. [REF XXX]
+
+## Results and discussion
+
+### Summary
+
+We obtained a completed dataset of 4245 observations (\@ref(fig:tablo), with a total of 599 represented species, which is less than the original species number for LMA and wsg. This is due to the fact that individuals belonging to indeterminated genera and species were discarded (except the ones present in Paracou, for example *Symphonia sp.1*), as well as idividuals which had only one trait measured, or with high taxonomic uncertainty, thus having to be excluded according to the authors' guidelines. Interesting is to note that Pmass have more inferred values than actually measured values in the completed dataset. One has to keep this in mind for further interpretations.
+
+```{r tablo, echo = F, fig.cap="Comparative summary of the original and completed datasets"}
+tabl <- cbind(trait = tabs[1:4, "Trait"], full = tabs$`Full\ name`[1:4],n=tabs$`N\ (complete)`[1:4],n2=rep(4245, 4),s=tabs$`Species`[1:4], s2=rep(miced_bridge %>% select(species) %>% unique %>% nrow, 4))
+tabl <- as.data.frame(tabl)
+names(tabl) <- c("Trait",
+                 "Full name",
+                 "N (original)",
+                 "N (completed)",
+                 "Species (original)",
+                 "Species (completed)")
+tabl %>% knitr::kable("html") %>% 
+  kable_styling()
+```
+
+### Consistency
+```{r, eval = T}
+# miced_bridge <- miced_bridge %>% 
+  # rowwise() %>% 
+  # mutate(species = strsplit(as.character(species), "_NA")[[1]][1])
+traitmice <- miced_bridge %>% 
+  as.tbl() %>%
+   rename(Nmass = N, Pmass = P) %>% 
+  select(species, LMA, wsg,Nmass,Pmass) %>% 
+  filter(LMA < 250) %>% 
+  # group_by(sp) %>% 
+  # summarise(LMA = mean(LMA, na.rm = T),
+            # wsg = mean(wsg, na.rm = T),
+            # Nmass = mean(N, na.rm = T),
+            # Pmass = mean(P, na.rm = T),) %>% 
+  reshape2::melt(id.var = "species",
+       variable.name = "trait")  %>% 
+  mutate(origin = "Mice")
+
+traitmicemean <- miced_bridge %>% 
+  as.tbl() %>%
+   rename(Nmass = N, Pmass = P) %>%
+  select(species, LMA, wsg,Nmass,Pmass) %>% 
+  filter(LMA < 250) %>% 
+  group_by(species) %>%
+  summarise(LMA = mean(LMA, na.rm = T),
+            wsg = mean(wsg, na.rm = T),
+            Nmass = mean(Nmass, na.rm = T),
+            Pmass = mean(Pmass, na.rm = T),) %>%
+  reshape2::melt(id.var = "species",
+       variable.name = "trait")  %>% 
+  mutate(origin = "Mice") 
+```
+Figure \@ref(fig:comparehistspecies) compares the distributions of traits species means, and figure \@ref(fig:comparehistglobal) shows the unpooled trait distributions. The mice inference did not modify significantly trait distributions for LMA, and wsg at the species level (species means, regardless of number of observations). It however modified the distributions of Nmass and Pmass, which are left left-hand skewed in the completed dataset. The imputation procedure did not generate outliers, and both the original and modified dataset have distributions within the same range, which is the main advantage of the imputation by PMM.
+```{r comparehistspecies, fig.cap= "caption" }
+traitbridge %>% filter(trait != "hrealmax") %>%  rbind(traitmicemean %>% filter(trait != "Height")) %>% ggplot(aes(value, fill = origin)) +
+  geom_histogram(aes(y = ..density..), alpha = 0.7,position = "identity") +
+  # geom_density(aes(y = ..density..), alpha = 0.3)+
+  facet_wrap(~trait, scales = "free")
+
+```
+
+```{r comparehistglobal, fig.cap= "caption2"}
+traitbridgetot %>% filter(trait != "Height") %>%  rbind(traitmice%>% filter(trait != "Height")) %>% ggplot(aes(value, fill = origin)) +
+  geom_histogram(aes(y = ..density..), alpha = 0.7,position = "identity") +
+  # geom_density(aes(y = ..density..), alpha = 0.3)+
+  facet_wrap(~trait, scales = "free")
+
+```
+### Discussion
+
+We obtained the aforementioned distributions and checked for consistency of the imputation. PMM is not supposed to have a strong influence on the overall distributions, provided observation are missing completely at random. In our case, Pmass have clearly less observations than other traits, and Nmass is missing for a great number of species. This is probably because measurment is expensive and time consuming. Thus, we expect Pmass to represent only the most common species, because this is the best sampling strategy to adopt if one wants to have good representativness with few measurements. We thus have a possible underrepresentation of original, or less common species, for example pioneers. Table \@ref(fig:comparehistspecies) shows that the mice inference did not modify significantly trait distributions for LMA, and wsg at the species level (species means, regardless of number of observations). It however modified the distributions of Nmass and Pmass, which are left left-hand skewed in the completed dataset. For the first, this may be due to the inclusion of more species (see table) with values between 0.02 and 0.025, that slightly reduced the left-hand-side asymetry of the distribution. For the second, the same effect is observed and is neater, probably because the original dataset had few available observation. Indeed, most of the Pmass values in this completed dataset were inferred than really measured. We thus rely on the assumptions that 1/ Pmass is correlated enough with other traits to have been accurately inferred; 2/ Correlation between traits are more informatively taken at the adequate taxonomic level rather that the overall level; and 3/ the threshold used (*i.e.* minimum 30 observations) allows to have enough observations at a given taxonomical level, to capure accurately relationships between traits and draw reliable posterior distributions with PMM. The extent to which these assumption may be violated has not been further explored as part of this work. Our method would require a rigorous, more detailed scrutiny to be accepted as valid. However, this is the best solution that we could choose given the amount of data and time for this internship. This preliminary step, although of prime importance to have the most valid model outputs as can be, was not the backbone of this work.
+
+
+# Hierarchical inference of traits and allometric parameters
+
+## Method
+
+### Generalities
+
+We used a simple but efficient modeling framework, which principle was suggested and blueprinted by Fabian Fisher (*pers. comm.*), to hierarchically infer species means and take advantage of every available observation. 
+
+The idea is quite simple: for a trait (or an allometric parameter), the value observed in individuals depends on a species mean (modulo a species-level variance), which is itself related to an higher-level grouping entity mean. For example, we can consider that species mean depends on genus mean, that is itself related to the family mean, and so on up to the overall observed mean (*i.e.* regardless to grouping entities). The most critical points to use this vision and turn it into a model are the choice of the number of grouping entities, of an appropriate distribution, and the use of informative priors for the target parameters. 
+
+After testing several configurations, we decided to stick with only two layers, namely species and overall levels. The main reason of this choice was parsimony. Genera means, variance, and species raw/actual deviation from its genus mean represented a high number of extra parameters, which is excessive compared to the predictive power enhancement it represents. This was estimated by a quick comparison using the WAIC criterion, that confirmed our intuition (data not shown)
+
+### Leaf and stem traits
+
+
+
+A simple but reliable solution is to use normal or lognormal distributions, according to the inferred trait. The number of layers was quite easy to decide: based on preliminary testing, we estimated that 
+$\log(trait) \sim \mathcal{N}( \hat{\mu}_{sp}, \sigma)$
+
+
+$\mu_{sp} = \mu_t + dev(\mu_{sp})$
+
+$dev(\mu_{sp}) = mu_sigma_species * dev(mu_{sp})_{raw}$
+
+$dev(mu_{sp})_{raw} ~ \mathcal{N}(0,1)$
+
+### Allometric relationships
+
+## Results
+
+### Leaf and stem traits
+
+We obtained a new set of 599 species means for Nmass, Pmass, wsg and LMA.
+```{r, eval = T}
+traitnew <-  baseline %>%
+  select(species, LMA,wsg,Nmass,Pmass) %>%
+  filter(Nmass > 0.005) %>% 
+  reshape2::melt(id.var = "species",
+       variable.name = "trait") %>% 
+  mutate(origin = "New dataset") 
+ghistbase <- traitnew %>% 
+  # filter(trait == "LMA") %>% 
+  ggplot(aes(value)) +
+  geom_histogram(aes(y = ..density..)) +
+  geom_density()+
+  facet_wrap(~trait, scales = "free")
+# ghistbase
+traitmice %>% filter(trait != "Height") %>%  rbind(traitnew%>% filter(trait != "Height")) %>%
+  # rbind(traitsp %>% filter(trait %in% c("LMA","Nmass","Pmass","wsg"))) %>% 
+  ggplot(aes(value, fill = origin)) +
+  geom_histogram(aes(y = ..density..), alpha = 0.7,position = "identity") +
+  # geom_density(aes(y = ..density..), alpha = 0.3)+
+  facet_wrap(~trait, scales = "free")
+```
+
+What appears obvious here is that the range of estimated species means is more narrow that the one of raw species means, estimated on the dataset we performed the inference from. This is due to shrinkage of the distributions by estimating hierarchically the species means distribution, to keep only punctual estimators (the mean of the MCMC sampled species means) as a final output. In more poetic terms, what happens here is an illustration of the precaution principle: species with extreme and with very few observations are attributed more reasonable estimates, because of the uncertainties.
+ 
+
+# Comparisons
+```{r compareall, eval = T}
+traitnew <-  baseline %>%
+  select(species, LMA,wsg,Nmass,Pmass) %>%
+  filter(Nmass > 0.005) %>% 
+  reshape2::melt(id.var = "species",
+       variable.name = "trait") %>% 
+  mutate(origin = "New dataset") 
+ghistbase <- traitnew %>% 
+  # filter(trait == "LMA") %>% 
+  ggplot(aes(value)) +
+  geom_histogram(aes(y = ..density..)) +
+  geom_density()+
+  facet_wrap(~trait, scales = "free")
+ghistbase
+traitbridgetot %>% filter(trait != "Height") %>%  rbind(traitnew%>% filter(trait != "Height")) %>%
+  rbind(traitsp %>% filter(trait %in% c("LMA","Nmass","Pmass","wsg"))) %>% 
+  ggplot(aes(value, fill = origin)) +
+  geom_histogram(aes(y = ..density..), alpha = 0.7,position = "identity") +
+  # geom_density(aes(y = ..density..), alpha = 0.3)+
+  facet_wrap(~trait, scales = "free")
+```
+# Discussion and perspectives
+
+The hierarchical models used here, species means are derived from the general trait mean,and thus depend on both the number of observations for each species and the observed trait values. If a species is observed very few (or one) time, its inferred mean is "attracted" by the overall mean value because of the poorly informative value of a few observations. Singleton species with "extreme" trait values will be attributed more reasonable means. On the contrary, abundant species have narrow confidence intervals around their deviation to the overall mean, thus, a reliably *distinct* trait mean, even if close to the global mean value. This is consistent with the arguable assumption that measuring only one extreme value can be the outcome of picking one special tree by chance, and that this is barely more informative than attributing it the community mean. These models thus offer the advantage to account for the uncertainties due to scarce observations. Even further, considering the number of rare species in tropical plant trait databases such as BRIDGE, and given that each of them contribute to the overall mean, it is wise to include them and "let the data speak", instead of setting an arbitraty cutoff: why would a species mean computed with 5 observations more reliable than one computed with 4 measurements ? The adjustment of an extreme estimate to a more moderate one is termed shrinkage, and is well known for being inherent to many hierarchical models, and can either be considered a advantageous phenomenon or a real problem (see @Rouder2005, @Mould2013, @Savic2009).The main drawback of this approach is that shrinkage effect leads to an overestimation of traits distribution densities around the overall mean, thus giving more weight to the whole dataset (*i.e.*, the some of each individual contribution) than to lower layers. Given the fact that our final output is a table of species means, the uncertainties around these means, thus, a part of the diversity of possible trait value, are ignored. But the validity of this approach is not jeopardized by these considerations. Using hierarchical modeling and the underlying shrinkage as a "precaution principle" to work with scarce species-specific observations, and datasets such as Bridge, is advisable. The main perspective of improvement on this inference is the use of a new feature of TROLL, recently implemented by Fabian Fischer: intraspecific, lognormal trait variability, and trait covariance. This approaches allows both to recreate continuums such as those observed in real forests, by conserving at least the overall links between every trait. This other approach has been already tested by @Fyllas(2014) We did not have the time to adapt our study to this feature, for it came out a very few months ago.
+
+
+
+
+
+```{r, eval = F}
+# grid.arrange(ghistsp, ghistb, nrow = 1)
+# grid.arrange(ghistb, ghistbase, nrow = 1)
+
+# traitmice %>% rbind(traitbridge) %>% ggplot(aes(value, fill = origin)) +
+  # geom_histogram(aes(y = ..density.., alpha = 0.2), position = "identity") +
+  # geom_density(aes(y = ..density..))+
+  # facet_wrap(~trait, scales = "free")
+```
+
+
+
+
+

@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Master thesis</title>
+  <meta name="description" content="Master thesis">
+  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
+
+  <meta property="og:title" content="Master thesis" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:image" content="images/main.png" />
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Master thesis" />
+  
+  
+  <meta name="twitter:image" content="images/main.png" />
+
+<meta name="author" content="Nino PAGE">
+
+
+<meta name="date" content="2018-06-13">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="datasets-used.html">
+<link rel="next" href="multivariate-imputed-dataset.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+<link rel="stylesheet" href="html\style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Master thesis</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
+<li class="chapter" data-level="" data-path="resume.html"><a href="resume.html"><i class="fa fa-check"></i>Résumé</a></li>
+<li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
+<li class="chapter" data-level="2" data-path="troll-model.html"><a href="troll-model.html"><i class="fa fa-check"></i><b>2</b> TROLL model</a><ul>
+<li class="chapter" data-level="2.1" data-path="troll-model.html"><a href="troll-model.html#overview"><i class="fa fa-check"></i><b>2.1</b> Overview</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="including-more-species-in-troll-simulations.html"><a href="including-more-species-in-troll-simulations.html"><i class="fa fa-check"></i><b>3</b> Including more species in TROLL simulations</a><ul>
+<li class="chapter" data-level="3.1" data-path="including-more-species-in-troll-simulations.html"><a href="including-more-species-in-troll-simulations.html#summary"><i class="fa fa-check"></i><b>3.1</b> Summary</a></li>
+<li class="chapter" data-level="3.2" data-path="including-more-species-in-troll-simulations.html"><a href="including-more-species-in-troll-simulations.html#introduction-1"><i class="fa fa-check"></i><b>3.2</b> Introduction</a></li>
+<li class="chapter" data-level="3.3" data-path="including-more-species-in-troll-simulations.html"><a href="including-more-species-in-troll-simulations.html#context-and-problem"><i class="fa fa-check"></i><b>3.3</b> Context and Problem</a><ul>
+<li class="chapter" data-level="3.3.1" data-path="including-more-species-in-troll-simulations.html"><a href="including-more-species-in-troll-simulations.html#the-initial-species-list"><i class="fa fa-check"></i><b>3.3.1</b> The initial species list</a></li>
+<li class="chapter" data-level="3.3.2" data-path="including-more-species-in-troll-simulations.html"><a href="including-more-species-in-troll-simulations.html#can-we-represent-paracou-forests-with-troll-species-list"><i class="fa fa-check"></i><b>3.3.2</b> Can we represent Paracou forests with TROLL species list ?</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="including-more-species-in-troll-simulations.html"><a href="including-more-species-in-troll-simulations.html#methods"><i class="fa fa-check"></i><b>3.4</b> Methods</a></li>
+<li class="chapter" data-level="3.5" data-path="including-more-species-in-troll-simulations.html"><a href="including-more-species-in-troll-simulations.html#data-used"><i class="fa fa-check"></i><b>3.5</b> Data used</a></li>
+<li class="chapter" data-level="3.6" data-path="including-more-species-in-troll-simulations.html"><a href="including-more-species-in-troll-simulations.html#the-bridge-trait-database"><i class="fa fa-check"></i><b>3.6</b> The BRIDGE trait database</a></li>
+<li class="chapter" data-level="3.7" data-path="including-more-species-in-troll-simulations.html"><a href="including-more-species-in-troll-simulations.html#preliminary-completion"><i class="fa fa-check"></i><b>3.7</b> Preliminary completion</a></li>
+<li class="chapter" data-level="3.8" data-path="including-more-species-in-troll-simulations.html"><a href="including-more-species-in-troll-simulations.html#simple-hierarchical-models"><i class="fa fa-check"></i><b>3.8</b> Simple hierarchical models</a></li>
+<li class="chapter" data-level="3.9" data-path="including-more-species-in-troll-simulations.html"><a href="including-more-species-in-troll-simulations.html#michaelis-menten-hierarchical-model"><i class="fa fa-check"></i><b>3.9</b> Michaelis-Menten hierarchical model</a><ul>
+<li class="chapter" data-level="3.9.1" data-path="including-more-species-in-troll-simulations.html"><a href="including-more-species-in-troll-simulations.html#leaf-and-stem-traits"><i class="fa fa-check"></i><b>3.9.1</b> Leaf and stem traits</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="can-troll-simulate-real-forests-and-post-logging-trajectories.html"><a href="can-troll-simulate-real-forests-and-post-logging-trajectories.html"><i class="fa fa-check"></i><b>4</b> Can TROLL simulate real forests and post-logging trajectories ?</a><ul>
+<li class="chapter" data-level="4.1" data-path="can-troll-simulate-real-forests-and-post-logging-trajectories.html"><a href="can-troll-simulate-real-forests-and-post-logging-trajectories.html#introduction-2"><i class="fa fa-check"></i><b>4.1</b> Introduction</a></li>
+<li class="chapter" data-level="4.2" data-path="can-troll-simulate-real-forests-and-post-logging-trajectories.html"><a href="can-troll-simulate-real-forests-and-post-logging-trajectories.html#methods-1"><i class="fa fa-check"></i><b>4.2</b> Methods</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="can-troll-simulate-real-forests-and-post-logging-trajectories.html"><a href="can-troll-simulate-real-forests-and-post-logging-trajectories.html#handling-missing-species"><i class="fa fa-check"></i><b>4.2.1</b> Handling missing species</a></li>
+<li class="chapter" data-level="4.2.2" data-path="can-troll-simulate-real-forests-and-post-logging-trajectories.html"><a href="can-troll-simulate-real-forests-and-post-logging-trajectories.html#residual-mortality-after-logging-where-to-start-from"><i class="fa fa-check"></i><b>4.2.2</b> Residual mortality after logging: where to start from ?</a></li>
+<li class="chapter" data-level="4.2.3" data-path="can-troll-simulate-real-forests-and-post-logging-trajectories.html"><a href="can-troll-simulate-real-forests-and-post-logging-trajectories.html#coordinates-and-duplicates"><i class="fa fa-check"></i><b>4.2.3</b> Coordinates and duplicates</a></li>
+<li class="chapter" data-level="4.2.4" data-path="can-troll-simulate-real-forests-and-post-logging-trajectories.html"><a href="can-troll-simulate-real-forests-and-post-logging-trajectories.html#missing-understorey"><i class="fa fa-check"></i><b>4.2.4</b> Missing understorey</a></li>
+<li class="chapter" data-level="4.2.5" data-path="can-troll-simulate-real-forests-and-post-logging-trajectories.html"><a href="can-troll-simulate-real-forests-and-post-logging-trajectories.html#simulation-parameters"><i class="fa fa-check"></i><b>4.2.5</b> Simulation parameters</a></li>
+<li class="chapter" data-level="4.2.6" data-path="can-troll-simulate-real-forests-and-post-logging-trajectories.html"><a href="can-troll-simulate-real-forests-and-post-logging-trajectories.html#spatial-structure-analysis"><i class="fa fa-check"></i><b>4.2.6</b> Spatial structure analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="can-troll-simulate-real-forests-and-post-logging-trajectories.html"><a href="can-troll-simulate-real-forests-and-post-logging-trajectories.html#results-and-discussion"><i class="fa fa-check"></i><b>4.3</b> Results and discussion</a><ul>
+<li class="chapter" data-level="4.3.1" data-path="can-troll-simulate-real-forests-and-post-logging-trajectories.html"><a href="can-troll-simulate-real-forests-and-post-logging-trajectories.html#simulated-trajectories"><i class="fa fa-check"></i><b>4.3.1</b> Simulated trajectories</a></li>
+<li class="chapter" data-level="4.3.2" data-path="can-troll-simulate-real-forests-and-post-logging-trajectories.html"><a href="can-troll-simulate-real-forests-and-post-logging-trajectories.html#spatial-statistics"><i class="fa fa-check"></i><b>4.3.2</b> Spatial statistics</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="modelling-silviculture-with-troll-from-reality-to-simulations.html"><a href="modelling-silviculture-with-troll-from-reality-to-simulations.html"><i class="fa fa-check"></i><b>5</b> Modelling silviculture with TROLL: from reality to simulations</a><ul>
+<li class="chapter" data-level="5.1" data-path="modelling-silviculture-with-troll-from-reality-to-simulations.html"><a href="modelling-silviculture-with-troll-from-reality-to-simulations.html#introduction-3"><i class="fa fa-check"></i><b>5.1</b> Introduction</a></li>
+<li class="chapter" data-level="5.2" data-path="modelling-silviculture-with-troll-from-reality-to-simulations.html"><a href="modelling-silviculture-with-troll-from-reality-to-simulations.html#choosing-area-and-trees"><i class="fa fa-check"></i><b>5.2</b> Choosing area and trees</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="modelling-silviculture-with-troll-from-reality-to-simulations.html"><a href="modelling-silviculture-with-troll-from-reality-to-simulations.html#harvestable-areas"><i class="fa fa-check"></i><b>5.2.1</b> Harvestable areas</a></li>
+<li class="chapter" data-level="5.2.2" data-path="modelling-silviculture-with-troll-from-reality-to-simulations.html"><a href="modelling-silviculture-with-troll-from-reality-to-simulations.html#designation"><i class="fa fa-check"></i><b>5.2.2</b> Designation</a></li>
+<li class="chapter" data-level="5.2.3" data-path="modelling-silviculture-with-troll-from-reality-to-simulations.html"><a href="modelling-silviculture-with-troll-from-reality-to-simulations.html#tree-probing"><i class="fa fa-check"></i><b>5.2.3</b> Tree Probing</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="modelling-silviculture-with-troll-from-reality-to-simulations.html"><a href="modelling-silviculture-with-troll-from-reality-to-simulations.html#then-harvesting"><i class="fa fa-check"></i><b>5.3</b> Then, harvesting</a><ul>
+<li class="chapter" data-level="5.3.1" data-path="modelling-silviculture-with-troll-from-reality-to-simulations.html"><a href="modelling-silviculture-with-troll-from-reality-to-simulations.html#felling-trees"><i class="fa fa-check"></i><b>5.3.1</b> Felling trees</a></li>
+<li class="chapter" data-level="5.3.2" data-path="modelling-silviculture-with-troll-from-reality-to-simulations.html"><a href="modelling-silviculture-with-troll-from-reality-to-simulations.html#main-track"><i class="fa fa-check"></i><b>5.3.2</b> Main Track</a></li>
+<li class="chapter" data-level="5.3.3" data-path="modelling-silviculture-with-troll-from-reality-to-simulations.html"><a href="modelling-silviculture-with-troll-from-reality-to-simulations.html#secondary-tracks"><i class="fa fa-check"></i><b>5.3.3</b> Secondary tracks</a></li>
+<li class="chapter" data-level="5.3.4" data-path="modelling-silviculture-with-troll-from-reality-to-simulations.html"><a href="modelling-silviculture-with-troll-from-reality-to-simulations.html#residual-mortality"><i class="fa fa-check"></i><b>5.3.4</b> Residual mortality</a></li>
+</ul></li>
+<li class="chapter" data-level="5.4" data-path="modelling-silviculture-with-troll-from-reality-to-simulations.html"><a href="modelling-silviculture-with-troll-from-reality-to-simulations.html#model-output-files"><i class="fa fa-check"></i><b>5.4</b> Model output files</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="selective-logging-experiment.html"><a href="selective-logging-experiment.html"><i class="fa fa-check"></i><b>6</b> Selective Logging experiment</a><ul>
+<li class="chapter" data-level="6.1" data-path="selective-logging-experiment.html"><a href="selective-logging-experiment.html#experiment-design"><i class="fa fa-check"></i><b>6.1</b> Experiment design</a><ul>
+<li class="chapter" data-level="6.1.1" data-path="selective-logging-experiment.html"><a href="selective-logging-experiment.html#gfclim-scenarios-adaptation-to-the-study-scale"><i class="fa fa-check"></i><b>6.1.1</b> GFClim scenarios: Adaptation to the study scale</a></li>
+<li class="chapter" data-level="6.1.2" data-path="selective-logging-experiment.html"><a href="selective-logging-experiment.html#simulated-forests"><i class="fa fa-check"></i><b>6.1.2</b> Simulated forests</a></li>
+<li class="chapter" data-level="6.1.3" data-path="selective-logging-experiment.html"><a href="selective-logging-experiment.html#diversification-of-the-harvested-species"><i class="fa fa-check"></i><b>6.1.3</b> Diversification of the harvested species</a></li>
+<li class="chapter" data-level="6.1.4" data-path="selective-logging-experiment.html"><a href="selective-logging-experiment.html#silvicultural-parameters"><i class="fa fa-check"></i><b>6.1.4</b> Silvicultural parameters</a></li>
+<li class="chapter" data-level="6.1.5" data-path="selective-logging-experiment.html"><a href="selective-logging-experiment.html#grouping-effects-to-analyse-the-output"><i class="fa fa-check"></i><b>6.1.5</b> Grouping effects to analyse the output</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="selective-logging-experiment.html"><a href="selective-logging-experiment.html#results"><i class="fa fa-check"></i><b>6.2</b> Results</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="selective-logging-experiment.html"><a href="selective-logging-experiment.html#model-features"><i class="fa fa-check"></i><b>6.2.1</b> Model features</a></li>
+<li class="chapter" data-level="6.2.2" data-path="selective-logging-experiment.html"><a href="selective-logging-experiment.html#fuelwood-volumes"><i class="fa fa-check"></i><b>6.2.2</b> Fuelwood volumes</a></li>
+<li class="chapter" data-level="6.2.3" data-path="selective-logging-experiment.html"><a href="selective-logging-experiment.html#carbon"><i class="fa fa-check"></i><b>6.2.3</b> Carbon</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="selective-logging-experiment.html"><a href="selective-logging-experiment.html#final-discutiion"><i class="fa fa-check"></i><b>6.3</b> Final discutiion</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="conclusions-and-perspectives.html"><a href="conclusions-and-perspectives.html"><i class="fa fa-check"></i><b>7</b> Conclusions and perspectives</a></li>
+<li class="chapter" data-level="8" data-path="a-few-words-on-this-work.html"><a href="a-few-words-on-this-work.html"><i class="fa fa-check"></i><b>8</b> A few words on this work</a></li>
+<li class="chapter" data-level="9" data-path="introductive-elements.html"><a href="introductive-elements.html"><i class="fa fa-check"></i><b>9</b> Introductive elements</a></li>
+<li class="chapter" data-level="10" data-path="the-module.html"><a href="the-module.html"><i class="fa fa-check"></i><b>10</b> The module</a><ul>
+<li class="chapter" data-level="10.1" data-path="the-module.html"><a href="the-module.html#spatial-planning"><i class="fa fa-check"></i><b>10.1</b> Spatial planning</a><ul>
+<li class="chapter" data-level="10.1.1" data-path="the-module.html"><a href="the-module.html#definition-of-the-forest-domain-where-the-plots-will-be-settled"><i class="fa fa-check"></i><b>10.1.1</b> Definition of the forest domain where the plots will be settled</a></li>
+<li class="chapter" data-level="10.1.2" data-path="the-module.html"><a href="the-module.html#definition-of-the-harvestable-areas"><i class="fa fa-check"></i><b>10.1.2</b> Definition of the harvestable areas</a></li>
+<li class="chapter" data-level="10.1.3" data-path="the-module.html"><a href="the-module.html#definition-of-the-sampling-units-and-the-position-of-the-main-tracks"><i class="fa fa-check"></i><b>10.1.3</b> Definition of the sampling units and the position of the main tracks</a></li>
+</ul></li>
+<li class="chapter" data-level="10.2" data-path="the-module.html"><a href="the-module.html#trees-choice"><i class="fa fa-check"></i><b>10.2</b> Trees choice</a><ul>
+<li class="chapter" data-level="10.2.1" data-path="the-module.html"><a href="the-module.html#designation-or-of-the-harvestable-trees"><i class="fa fa-check"></i><b>10.2.1</b> Designation or of the harvestable trees</a></li>
+<li class="chapter" data-level="10.2.2" data-path="the-module.html"><a href="the-module.html#tree-probing-1"><i class="fa fa-check"></i><b>10.2.2</b> Tree Probing</a></li>
+<li class="chapter" data-level="10.2.3" data-path="the-module.html"><a href="the-module.html#tree-felling"><i class="fa fa-check"></i><b>10.2.3</b> Tree Felling</a></li>
+<li class="chapter" data-level="10.2.4" data-path="the-module.html"><a href="the-module.html#main-tracks-opening"><i class="fa fa-check"></i><b>10.2.4</b> Main Tracks opening</a></li>
+<li class="chapter" data-level="10.2.5" data-path="the-module.html"><a href="the-module.html#secondary-tracks-opening"><i class="fa fa-check"></i><b>10.2.5</b> Secondary Tracks opening</a></li>
+<li class="chapter" data-level="10.2.6" data-path="the-module.html"><a href="the-module.html#post-logging-residual-mortality"><i class="fa fa-check"></i><b>10.2.6</b> Post-logging residual mortality</a></li>
+</ul></li>
+<li class="chapter" data-level="10.3" data-path="the-module.html"><a href="the-module.html#monitoring-and-post-logging-diagnostics"><i class="fa fa-check"></i><b>10.3</b> Monitoring and Post logging diagnostics</a></li>
+<li class="chapter" data-level="10.4" data-path="the-module.html"><a href="the-module.html#output-handling"><i class="fa fa-check"></i><b>10.4</b> Output handling</a></li>
+<li class="chapter" data-level="10.5" data-path="the-module.html"><a href="the-module.html#limits-perspectives-and-oncoming-developmentsimplementations"><i class="fa fa-check"></i><b>10.5</b> Limits, perspectives, and oncoming developments/implementations</a><ul>
+<li class="chapter" data-level="10.5.1" data-path="the-module.html"><a href="the-module.html#trolls-limits"><i class="fa fa-check"></i><b>10.5.1</b> TROLL’s limits</a></li>
+<li class="chapter" data-level="10.5.2" data-path="the-module.html"><a href="the-module.html#the-modules-limits"><i class="fa fa-check"></i><b>10.5.2</b> The module’s limits</a></li>
+<li class="chapter" data-level="10.5.3" data-path="the-module.html"><a href="the-module.html#wood-volume-calculation"><i class="fa fa-check"></i><b>10.5.3</b> Wood volume calculation</a></li>
+<li class="chapter" data-level="10.5.4" data-path="the-module.html"><a href="the-module.html#rotten-submodule"><i class="fa fa-check"></i><b>10.5.4</b> Rotten submodule</a></li>
+<li class="chapter" data-level="10.5.5" data-path="the-module.html"><a href="the-module.html#main-tracks-submodule"><i class="fa fa-check"></i><b>10.5.5</b> Main tracks submodule</a></li>
+<li class="chapter" data-level="10.5.6" data-path="the-module.html"><a href="the-module.html#secondary-tracks-submodule"><i class="fa fa-check"></i><b>10.5.6</b> Secondary tracks submodule</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="selective-logging-modelling-from-reality-to-computation.html"><a href="selective-logging-modelling-from-reality-to-computation.html"><i class="fa fa-check"></i><b>11</b> Selective Logging Modelling : From reality to computation</a><ul>
+<li class="chapter" data-level="11.1" data-path="selective-logging-modelling-from-reality-to-computation.html"><a href="selective-logging-modelling-from-reality-to-computation.html#a-few-words-on-this-work-1"><i class="fa fa-check"></i><b>11.1</b> A few words on this work</a></li>
+<li class="chapter" data-level="11.2" data-path="selective-logging-modelling-from-reality-to-computation.html"><a href="selective-logging-modelling-from-reality-to-computation.html#introductive-elements-1"><i class="fa fa-check"></i><b>11.2</b> Introductive elements</a></li>
+<li class="chapter" data-level="11.3" data-path="selective-logging-modelling-from-reality-to-computation.html"><a href="selective-logging-modelling-from-reality-to-computation.html#the-module-1"><i class="fa fa-check"></i><b>11.3</b> The module</a><ul>
+<li class="chapter" data-level="11.3.1" data-path="selective-logging-modelling-from-reality-to-computation.html"><a href="selective-logging-modelling-from-reality-to-computation.html#spatial-planning-1"><i class="fa fa-check"></i><b>11.3.1</b> Spatial planning</a></li>
+<li class="chapter" data-level="11.3.2" data-path="selective-logging-modelling-from-reality-to-computation.html"><a href="selective-logging-modelling-from-reality-to-computation.html#trees-choice-1"><i class="fa fa-check"></i><b>11.3.2</b> Trees choice</a></li>
+<li class="chapter" data-level="11.3.3" data-path="selective-logging-modelling-from-reality-to-computation.html"><a href="selective-logging-modelling-from-reality-to-computation.html#monitoring-and-post-logging-diagnostics-1"><i class="fa fa-check"></i><b>11.3.3</b> Monitoring and Post logging diagnostics</a></li>
+<li class="chapter" data-level="11.3.4" data-path="selective-logging-modelling-from-reality-to-computation.html"><a href="selective-logging-modelling-from-reality-to-computation.html#output-handling-1"><i class="fa fa-check"></i><b>11.3.4</b> Output handling</a></li>
+<li class="chapter" data-level="11.3.5" data-path="selective-logging-modelling-from-reality-to-computation.html"><a href="selective-logging-modelling-from-reality-to-computation.html#limits-perspectives-and-oncoming-developmentsimplementations-1"><i class="fa fa-check"></i><b>11.3.5</b> Limits, perspectives, and oncoming developments/implementations</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="including-more-species-in-trolls-dataset.html"><a href="including-more-species-in-trolls-dataset.html"><i class="fa fa-check"></i><b>12</b> Including more species in TROLL’s dataset</a></li>
+<li class="chapter" data-level="13" data-path="introduction-4.html"><a href="introduction-4.html"><i class="fa fa-check"></i><b>13</b> Introduction</a></li>
+<li class="chapter" data-level="14" data-path="datasets-used.html"><a href="datasets-used.html"><i class="fa fa-check"></i><b>14</b> Datasets used</a><ul>
+<li class="chapter" data-level="14.1" data-path="datasets-used.html"><a href="datasets-used.html#the-bridge-trait-database-1"><i class="fa fa-check"></i><b>14.1</b> The BRIDGE trait database</a></li>
+<li class="chapter" data-level="14.2" data-path="datasets-used.html"><a href="datasets-used.html#troll-initial-species-list"><i class="fa fa-check"></i><b>14.2</b> TROLL initial species list</a><ul>
+<li class="chapter" data-level="14.2.1" data-path="datasets-used.html"><a href="datasets-used.html#individual-level-variability"><i class="fa fa-check"></i><b>14.2.1</b> Individual level variability</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="15" data-path="paracou-plots-subsetting-issues.html"><a href="paracou-plots-subsetting-issues.html"><i class="fa fa-check"></i><b>15</b> Paracou plots: subsetting issues</a></li>
+<li class="chapter" data-level="16" data-path="multivariate-imputed-dataset.html"><a href="multivariate-imputed-dataset.html"><i class="fa fa-check"></i><b>16</b> Multivariate imputed dataset</a><ul>
+<li class="chapter" data-level="16.1" data-path="multivariate-imputed-dataset.html"><a href="multivariate-imputed-dataset.html#rationale"><i class="fa fa-check"></i><b>16.1</b> Rationale</a></li>
+<li class="chapter" data-level="16.2" data-path="multivariate-imputed-dataset.html"><a href="multivariate-imputed-dataset.html#method"><i class="fa fa-check"></i><b>16.2</b> Method</a></li>
+<li class="chapter" data-level="16.3" data-path="multivariate-imputed-dataset.html"><a href="multivariate-imputed-dataset.html#results-and-discussion-1"><i class="fa fa-check"></i><b>16.3</b> Results and discussion</a><ul>
+<li class="chapter" data-level="16.3.1" data-path="multivariate-imputed-dataset.html"><a href="multivariate-imputed-dataset.html#summary-1"><i class="fa fa-check"></i><b>16.3.1</b> Summary</a></li>
+<li class="chapter" data-level="16.3.2" data-path="multivariate-imputed-dataset.html"><a href="multivariate-imputed-dataset.html#consistency"><i class="fa fa-check"></i><b>16.3.2</b> Consistency</a></li>
+<li class="chapter" data-level="16.3.3" data-path="multivariate-imputed-dataset.html"><a href="multivariate-imputed-dataset.html#discussion"><i class="fa fa-check"></i><b>16.3.3</b> Discussion</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="17" data-path="hierarchical-inference-of-traits-and-allometric-parameters.html"><a href="hierarchical-inference-of-traits-and-allometric-parameters.html"><i class="fa fa-check"></i><b>17</b> Hierarchical inference of traits and allometric parameters</a><ul>
+<li class="chapter" data-level="17.1" data-path="hierarchical-inference-of-traits-and-allometric-parameters.html"><a href="hierarchical-inference-of-traits-and-allometric-parameters.html#method-1"><i class="fa fa-check"></i><b>17.1</b> Method</a><ul>
+<li class="chapter" data-level="17.1.1" data-path="hierarchical-inference-of-traits-and-allometric-parameters.html"><a href="hierarchical-inference-of-traits-and-allometric-parameters.html#generalities"><i class="fa fa-check"></i><b>17.1.1</b> Generalities</a></li>
+<li class="chapter" data-level="17.1.2" data-path="hierarchical-inference-of-traits-and-allometric-parameters.html"><a href="hierarchical-inference-of-traits-and-allometric-parameters.html#leaf-and-stem-traits-1"><i class="fa fa-check"></i><b>17.1.2</b> Leaf and stem traits</a></li>
+<li class="chapter" data-level="17.1.3" data-path="hierarchical-inference-of-traits-and-allometric-parameters.html"><a href="hierarchical-inference-of-traits-and-allometric-parameters.html#allometric-relationships"><i class="fa fa-check"></i><b>17.1.3</b> Allometric relationships</a></li>
+</ul></li>
+<li class="chapter" data-level="17.2" data-path="hierarchical-inference-of-traits-and-allometric-parameters.html"><a href="hierarchical-inference-of-traits-and-allometric-parameters.html#results-1"><i class="fa fa-check"></i><b>17.2</b> Results</a><ul>
+<li class="chapter" data-level="17.2.1" data-path="hierarchical-inference-of-traits-and-allometric-parameters.html"><a href="hierarchical-inference-of-traits-and-allometric-parameters.html#leaf-and-stem-traits-2"><i class="fa fa-check"></i><b>17.2.1</b> Leaf and stem traits</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="18" data-path="comparisons.html"><a href="comparisons.html"><i class="fa fa-check"></i><b>18</b> Comparisons</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/sylvainschmitt/master-thesis" target="blank">work in progress</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Master thesis</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="paracou-plots-subsetting-issues" class="section level1">
+<h1><span class="header-section-number">15</span> Paracou plots: subsetting issues</h1>
+<p>Paracou plots display a high proportion of species that are absent of TROLL dataset. These species are mainly less common ones, and may be absent either because they were not present in the plots sampled for BRIDGE (Tropical forests show high fine-scale heterogeneity and species composition turnover), or because theirnumber of observations did not allow including them with the strict inference procedure that was followed. Based on preliminary exploration of the Paracou dataset, we noticed that the proportion of individuals belonging to missing species is reducing over time (maybe with increase in botanical determination reliability), and is low compared to the number of missing species. However, such proportion was deeply questioning the <em>a priori</em> validity of our intent to simulate real forest plots. table <a href="#fig:paracou"><strong>??</strong></a> shows the observed proportions of missing and simulable species with the initial dataset.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tab &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;C:/Users/nino.page/Desktop/my_thesis/initial_paracou.csv&quot;</span>, <span class="dt">sep =</span> <span class="st">&quot;;&quot;</span>)
+tab  <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">   </span><span class="co"># mutate(Treatment = cell_spec(Treatment, ifelse(Treatment == &quot;T0&quot;, &quot;green&quot;,&quot;red&quot;))) %&gt;% </span>
+<span class="st">  </span><span class="kw">rename_</span>(<span class="st">&quot;1984&quot;</span> =<span class="st"> &quot;X1984&quot;</span>,<span class="st">&quot;1992&quot;</span>=<span class="st">&quot;X1992&quot;</span>, <span class="st">&quot;1984&quot;</span> =<span class="st"> &quot;X1984.1&quot;</span>,<span class="st">&quot;1992&quot;</span>=<span class="st">&quot;X1992.1&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">kable</span>(<span class="st">&quot;pandoc&quot;</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="co"># kable_styling(&quot;striped&quot;) %&gt;%</span>
+<span class="st">  </span><span class="kw">add_header_above</span>(<span class="kw">c</span>(<span class="st">&quot; &quot;</span> =<span class="st"> </span><span class="dv">2</span>, <span class="st">&quot;Species&quot;</span> =<span class="st"> </span><span class="dv">2</span>, <span class="st">&quot;Individuals&quot;</span> =<span class="st"> </span><span class="dv">2</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">row_spec</span>(<span class="kw">seq</span>(<span class="dv">1</span>,<span class="dv">35</span>,<span class="dt">by =</span> <span class="dv">3</span>), <span class="dt">bold =</span> T, <span class="dt">color =</span> <span class="st">&quot;#339900&quot;</span>, <span class="dt">align =</span> <span class="st">&quot;c&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">row_spec</span>(<span class="kw">seq</span>(<span class="dv">2</span>,<span class="dv">35</span>,<span class="dt">by =</span> <span class="dv">3</span>), <span class="dt">bold =</span> T, <span class="dt">color =</span> <span class="st">&quot;#D7261E&quot;</span>, <span class="dt">align =</span> <span class="st">&quot;c&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">row_spec</span>(<span class="kw">seq</span>(<span class="dv">3</span>,<span class="dv">35</span>,<span class="dt">by =</span> <span class="dv">3</span>), <span class="dt">bold =</span> T, <span class="dt">align =</span> <span class="st">&quot;c&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span>kableExtra<span class="op">::</span><span class="kw">collapse_rows</span>(<span class="dt">columns =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">2</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">group_rows</span>(<span class="st">&quot;Plot 1&quot;</span>, <span class="dv">1</span>, <span class="dv">3</span>, <span class="dt">latex_gap_space =</span> <span class="st">&quot;2em&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">group_rows</span>(<span class="st">&quot;Plot 2&quot;</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dt">latex_gap_space =</span> <span class="st">&quot;2em&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">group_rows</span>(<span class="st">&quot;Plot 3&quot;</span>, <span class="dv">7</span>, <span class="dv">9</span>, <span class="dt">latex_gap_space =</span> <span class="st">&quot;2em&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">group_rows</span>(<span class="st">&quot;Plot 4&quot;</span>, <span class="dv">10</span>, <span class="dv">12</span>, <span class="dt">latex_gap_space =</span> <span class="st">&quot;2em&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">group_rows</span>(<span class="st">&quot;Plot 5&quot;</span>, <span class="dv">13</span>, <span class="dv">15</span>, <span class="dt">latex_gap_space =</span> <span class="st">&quot;2em&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">group_rows</span>(<span class="st">&quot;Plot 6&quot;</span>, <span class="dv">16</span>, <span class="dv">18</span>, <span class="dt">latex_gap_space =</span> <span class="st">&quot;2em&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">group_rows</span>(<span class="st">&quot;Plot 7&quot;</span>, <span class="dv">19</span>, <span class="dv">21</span>, <span class="dt">latex_gap_space =</span> <span class="st">&quot;2em&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">group_rows</span>(<span class="st">&quot;Plot 8&quot;</span>, <span class="dv">22</span>, <span class="dv">24</span>, <span class="dt">latex_gap_space =</span> <span class="st">&quot;2em&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">group_rows</span>(<span class="st">&quot;Plot 9&quot;</span>, <span class="dv">25</span>, <span class="dv">27</span>, <span class="dt">latex_gap_space =</span> <span class="st">&quot;2em&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">group_rows</span>(<span class="st">&quot;Plot 10&quot;</span>, <span class="dv">28</span>, <span class="dv">30</span>, <span class="dt">latex_gap_space =</span> <span class="st">&quot;2em&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">group_rows</span>(<span class="st">&quot;Plot 11&quot;</span>, <span class="dv">31</span>, <span class="dv">33</span>, <span class="dt">latex_gap_space =</span> <span class="st">&quot;2em&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">group_rows</span>(<span class="st">&quot;Plot 12&quot;</span>, <span class="dv">34</span>, <span class="dv">36</span>, <span class="dt">latex_gap_space =</span> <span class="st">&quot;2em&quot;</span>)</code></pre></div>
+<pre><code>## Warning in add_header_above(., c(` ` = 2, Species = 2, Individuals = 2)):
+## Please specify format in kable. kableExtra can customize either HTML or
+## LaTeX outputs. See https://haozhu233.github.io/kableExtra/ for details.</code></pre>
+<pre><code>## Warning in row_spec(., seq(1, 35, by = 3), bold = T, color = &quot;#339900&quot;, :
+## Please specify format in kable. kableExtra can customize either HTML or
+## LaTeX outputs. See https://haozhu233.github.io/kableExtra/ for details.</code></pre>
+<pre><code>## Warning in row_spec(., seq(2, 35, by = 3), bold = T, color = &quot;#D7261E&quot;, :
+## Please specify format in kable. kableExtra can customize either HTML or
+## LaTeX outputs. See https://haozhu233.github.io/kableExtra/ for details.</code></pre>
+<pre><code>## Warning in row_spec(., seq(3, 35, by = 3), bold = T, align = &quot;c&quot;): Please
+## specify format in kable. kableExtra can customize either HTML or LaTeX
+## outputs. See https://haozhu233.github.io/kableExtra/ for details.</code></pre>
+<pre><code>## Warning in kableExtra::collapse_rows(., columns = 1:2): Please specify
+## format in kable. kableExtra can customize either HTML or LaTeX outputs. See
+## https://haozhu233.github.io/kableExtra/ for details.</code></pre>
+<pre><code>## Warning in group_rows(., &quot;Plot 1&quot;, 1, 3, latex_gap_space = &quot;2em&quot;): Please
+## specify format in kable. kableExtra can customize either HTML or LaTeX
+## outputs. See https://haozhu233.github.io/kableExtra/ for details.</code></pre>
+<pre><code>## Warning in group_rows(., &quot;Plot 2&quot;, 4, 6, latex_gap_space = &quot;2em&quot;): Please
+## specify format in kable. kableExtra can customize either HTML or LaTeX
+## outputs. See https://haozhu233.github.io/kableExtra/ for details.</code></pre>
+<pre><code>## Warning in group_rows(., &quot;Plot 3&quot;, 7, 9, latex_gap_space = &quot;2em&quot;): Please
+## specify format in kable. kableExtra can customize either HTML or LaTeX
+## outputs. See https://haozhu233.github.io/kableExtra/ for details.</code></pre>
+<pre><code>## Warning in group_rows(., &quot;Plot 4&quot;, 10, 12, latex_gap_space = &quot;2em&quot;): Please
+## specify format in kable. kableExtra can customize either HTML or LaTeX
+## outputs. See https://haozhu233.github.io/kableExtra/ for details.</code></pre>
+<pre><code>## Warning in group_rows(., &quot;Plot 5&quot;, 13, 15, latex_gap_space = &quot;2em&quot;): Please
+## specify format in kable. kableExtra can customize either HTML or LaTeX
+## outputs. See https://haozhu233.github.io/kableExtra/ for details.</code></pre>
+<pre><code>## Warning in group_rows(., &quot;Plot 6&quot;, 16, 18, latex_gap_space = &quot;2em&quot;): Please
+## specify format in kable. kableExtra can customize either HTML or LaTeX
+## outputs. See https://haozhu233.github.io/kableExtra/ for details.</code></pre>
+<pre><code>## Warning in group_rows(., &quot;Plot 7&quot;, 19, 21, latex_gap_space = &quot;2em&quot;): Please
+## specify format in kable. kableExtra can customize either HTML or LaTeX
+## outputs. See https://haozhu233.github.io/kableExtra/ for details.</code></pre>
+<pre><code>## Warning in group_rows(., &quot;Plot 8&quot;, 22, 24, latex_gap_space = &quot;2em&quot;): Please
+## specify format in kable. kableExtra can customize either HTML or LaTeX
+## outputs. See https://haozhu233.github.io/kableExtra/ for details.</code></pre>
+<pre><code>## Warning in group_rows(., &quot;Plot 9&quot;, 25, 27, latex_gap_space = &quot;2em&quot;): Please
+## specify format in kable. kableExtra can customize either HTML or LaTeX
+## outputs. See https://haozhu233.github.io/kableExtra/ for details.</code></pre>
+<pre><code>## Warning in group_rows(., &quot;Plot 10&quot;, 28, 30, latex_gap_space = &quot;2em&quot;):
+## Please specify format in kable. kableExtra can customize either HTML or
+## LaTeX outputs. See https://haozhu233.github.io/kableExtra/ for details.</code></pre>
+<pre><code>## Warning in group_rows(., &quot;Plot 11&quot;, 31, 33, latex_gap_space = &quot;2em&quot;):
+## Please specify format in kable. kableExtra can customize either HTML or
+## LaTeX outputs. See https://haozhu233.github.io/kableExtra/ for details.</code></pre>
+<pre><code>## Warning in group_rows(., &quot;Plot 12&quot;, 34, 36, latex_gap_space = &quot;2em&quot;):
+## Please specify format in kable. kableExtra can customize either HTML or
+## LaTeX outputs. See https://haozhu233.github.io/kableExtra/ for details.</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Treatment</th>
+<th align="left">Status</th>
+<th align="right">1984</th>
+<th align="right">1992</th>
+<th align="left">1984</th>
+<th align="left">1992</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">T0</td>
+<td align="left">Parametrised</td>
+<td align="right">123</td>
+<td align="right">127</td>
+<td align="left">67,14%</td>
+<td align="left">71,23%</td>
+</tr>
+<tr class="even">
+<td align="left">T0</td>
+<td align="left">Missing</td>
+<td align="right">217</td>
+<td align="right">219</td>
+<td align="left">32,86%</td>
+<td align="left">28,77%</td>
+</tr>
+<tr class="odd">
+<td align="left">T0</td>
+<td align="left">Total</td>
+<td align="right">340</td>
+<td align="right">346</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">T1</td>
+<td align="left">Parametrised</td>
+<td align="right">85</td>
+<td align="right">89</td>
+<td align="left">50,71%</td>
+<td align="left">55,75%</td>
+</tr>
+<tr class="odd">
+<td align="left">T1</td>
+<td align="left">Missing</td>
+<td align="right">130</td>
+<td align="right">138</td>
+<td align="left">49,29%</td>
+<td align="left">44,25%</td>
+</tr>
+<tr class="even">
+<td align="left">T1</td>
+<td align="left">Total</td>
+<td align="right">215</td>
+<td align="right">227</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">T2</td>
+<td align="left">Parametrised</td>
+<td align="right">120</td>
+<td align="right">128</td>
+<td align="left">54,97%</td>
+<td align="left">66,03%</td>
+</tr>
+<tr class="even">
+<td align="left">T2</td>
+<td align="left">Missing</td>
+<td align="right">190</td>
+<td align="right">211</td>
+<td align="left">45,03%</td>
+<td align="left">33,97%</td>
+</tr>
+<tr class="odd">
+<td align="left">T2</td>
+<td align="left">Total</td>
+<td align="right">310</td>
+<td align="right">339</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">T3</td>
+<td align="left">Parametrised</td>
+<td align="right">117</td>
+<td align="right">122</td>
+<td align="left">55,30%</td>
+<td align="left">73,39%</td>
+</tr>
+<tr class="odd">
+<td align="left">T3</td>
+<td align="left">Missing</td>
+<td align="right">158</td>
+<td align="right">185</td>
+<td align="left">44,70%</td>
+<td align="left">26,61%</td>
+</tr>
+<tr class="even">
+<td align="left">T3</td>
+<td align="left">Total</td>
+<td align="right">275</td>
+<td align="right">307</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">T2</td>
+<td align="left">Parametrised</td>
+<td align="right">80</td>
+<td align="right">82</td>
+<td align="left">52,83%</td>
+<td align="left">61,92%</td>
+</tr>
+<tr class="even">
+<td align="left">T2</td>
+<td align="left">Missing</td>
+<td align="right">123</td>
+<td align="right">121</td>
+<td align="left">47,17%</td>
+<td align="left">38,08%</td>
+</tr>
+<tr class="odd">
+<td align="left">T2</td>
+<td align="left">Total</td>
+<td align="right">203</td>
+<td align="right">203</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">T0</td>
+<td align="left">Parametrised</td>
+<td align="right">125</td>
+<td align="right">125</td>
+<td align="left">69,06%</td>
+<td align="left">72,10%</td>
+</tr>
+<tr class="odd">
+<td align="left">T0</td>
+<td align="left">Missing</td>
+<td align="right">216</td>
+<td align="right">226</td>
+<td align="left">30,94%</td>
+<td align="left">27,90%</td>
+</tr>
+<tr class="even">
+<td align="left">T0</td>
+<td align="left">Total</td>
+<td align="right">341</td>
+<td align="right">351</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">T1</td>
+<td align="left">Parametrised</td>
+<td align="right">84</td>
+<td align="right">88</td>
+<td align="left">53,13%</td>
+<td align="left">62,30%</td>
+</tr>
+<tr class="even">
+<td align="left">T1</td>
+<td align="left">Missing</td>
+<td align="right">121</td>
+<td align="right">121</td>
+<td align="left">46,87%</td>
+<td align="left">37,70%</td>
+</tr>
+<tr class="odd">
+<td align="left">T1</td>
+<td align="left">Total</td>
+<td align="right">205</td>
+<td align="right">209</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">T3</td>
+<td align="left">Parametrised</td>
+<td align="right">116</td>
+<td align="right">123</td>
+<td align="left">49,27%</td>
+<td align="left">68,79%</td>
+</tr>
+<tr class="odd">
+<td align="left">T3</td>
+<td align="left">Missing</td>
+<td align="right">142</td>
+<td align="right">173</td>
+<td align="left">50,73%</td>
+<td align="left">31,21%</td>
+</tr>
+<tr class="even">
+<td align="left">T3</td>
+<td align="left">Total</td>
+<td align="right">258</td>
+<td align="right">296</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">T1</td>
+<td align="left">Parametrised</td>
+<td align="right">101</td>
+<td align="right">105</td>
+<td align="left">60,80%</td>
+<td align="left">71,39%</td>
+</tr>
+<tr class="even">
+<td align="left">T1</td>
+<td align="left">Missing</td>
+<td align="right">177</td>
+<td align="right">188</td>
+<td align="left">39,20%</td>
+<td align="left">28,61%</td>
+</tr>
+<tr class="odd">
+<td align="left">T1</td>
+<td align="left">Total</td>
+<td align="right">278</td>
+<td align="right">293</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">T2</td>
+<td align="left">Parametrised</td>
+<td align="right">84</td>
+<td align="right">84</td>
+<td align="left">51,27%</td>
+<td align="left">63,45%</td>
+</tr>
+<tr class="odd">
+<td align="left">T2</td>
+<td align="left">Missing</td>
+<td align="right">121</td>
+<td align="right">120</td>
+<td align="left">48,73%</td>
+<td align="left">36,55%</td>
+</tr>
+<tr class="even">
+<td align="left">T2</td>
+<td align="left">Total</td>
+<td align="right">205</td>
+<td align="right">204</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">T0</td>
+<td align="left">Parametrised</td>
+<td align="right">114</td>
+<td align="right">116</td>
+<td align="left">73,83%</td>
+<td align="left">77,66%</td>
+</tr>
+<tr class="even">
+<td align="left">T0</td>
+<td align="left">Missing</td>
+<td align="right">193</td>
+<td align="right">195</td>
+<td align="left">26,17%</td>
+<td align="left">22,34%</td>
+</tr>
+<tr class="odd">
+<td align="left">T0</td>
+<td align="left">Total</td>
+<td align="right">307</td>
+<td align="right">311</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">T3</td>
+<td align="left">Parametrised</td>
+<td align="right">116</td>
+<td align="right">120</td>
+<td align="left">56,64%</td>
+<td align="left">73,11%</td>
+</tr>
+<tr class="odd">
+<td align="left">T3</td>
+<td align="left">Missing</td>
+<td align="right">170</td>
+<td align="right">182</td>
+<td align="left">43,36%</td>
+<td align="left">26,89%</td>
+</tr>
+<tr class="even">
+<td align="left">T3</td>
+<td align="left">Total</td>
+<td align="right">286</td>
+<td align="right">302</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># ?row_spec</span>
+ <span class="co"># add_header_above(c(&quot; &quot; = 1, &quot;Group 1&quot; = 2, &quot;Group 2&quot; = 2, &quot;Group 3&quot; = 2)) </span></code></pre></div>
+</div>
+<div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://master-thesis-1.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="datasets-used.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="multivariate-imputed-dataset.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/sylvainschmitt/master-thesis/blob/master/10-Species_draw.Rmd",
+"text": "Edit"
+},
+"download": ["master-thesis.pdf"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

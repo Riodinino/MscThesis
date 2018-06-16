@@ -1,0 +1,118 @@
+# Appendix 2: Including more species in TROLl's list - Supplementary material
+
+
+## Phosphorous measurements are mainly singletons
+
+```{r phosphorus, fig.cap = 'Histogram of the number of observations per species for Pmass. Most species are singletons.', echo = F,out.width = "0.5\\textwidth"}
+bridge2 %>%  
+  filter(!is.na(Pmass)) %>% 
+  group_by(species) %>% 
+  summarise(n = n()) %>% 
+  arrange(desc(n)) %>% 
+  ggplot(aes(x = n))+
+  geom_histogram(binwidth = 1)+
+  xlab("Number of observatons")+
+  ylab("Species count")
+  
+```
+
+
+## Distribution of traits for the newly inferred species
+
+```{r, eval = T, echo = F, message=F, warning=F}
+# miced_bridge <- miced_bridge %>% 
+  # rowwise() %>% 
+  # mutate(species = strsplit(as.character(species), "_NA")[[1]][1])
+traitmice <- miced_bridge %>% 
+  as.tbl() %>%
+   rename(Nmass = N, Pmass = P) %>% 
+  select(species, LMA, wsg,Nmass,Pmass) %>% 
+  filter(LMA < 250) %>% 
+  # group_by(sp) %>% 
+  # summarise(LMA = mean(LMA, na.rm = T),
+            # wsg = mean(wsg, na.rm = T),
+            # Nmass = mean(N, na.rm = T),
+            # Pmass = mean(P, na.rm = T),) %>% 
+  reshape2::melt(id.var = "species",
+       variable.name = "trait")  %>% 
+  mutate(origin = "Mice")
+
+traitmicemean <- miced_bridge %>% 
+  as.tbl() %>%
+   rename(Nmass = N, Pmass = P) %>%
+  select(species, LMA, wsg,Nmass,Pmass) %>% 
+  filter(LMA < 250) %>% 
+  group_by(species) %>%
+  summarise(LMA = mean(LMA, na.rm = T),
+            wsg = mean(wsg, na.rm = T),
+            Nmass = mean(Nmass, na.rm = T),
+            Pmass = mean(Pmass, na.rm = T)) %>%
+  reshape2::melt(id.var = "species",
+       variable.name = "trait")  %>% 
+  mutate(origin = "Mice") 
+```
+
+
+We obtained a new set of 599 species means for Nmass, Pmass, wsg and LMA. What appears obvious here is that the range of estimated species means is more narrow that the one of raw species means, estimated on the dataset we performed the inference from. This is due to shrinkage of the distributions by estimating hierarchically the species means distribution, to keep only punctual estimators (the mean of the MCMC sampled species means) as a final output. In more poetic terms, what happens here is an illustration of the precaution principle: species with extreme and with very few observations are attributed more reasonable estimates, because of the uncertainties.
+```{r, echo = F, message = F, warning = F}
+traitnew <-  baseline %>%
+  select(species, LMA,wsg,Nmass,Pmass) %>%
+  filter(Nmass > 0.005) %>% 
+  reshape2::melt(id.var = "species",
+       variable.name = "trait") %>% 
+  mutate(origin = "New dataset") 
+ghistbase <- traitnew %>% 
+  # filter(trait == "LMA") %>% 
+  ggplot(aes(value)) +
+  geom_histogram(aes(y = ..density..)) +
+  geom_density()+
+  facet_wrap(~trait, scales = "free")
+# ghistbase
+traitmice %>% filter(trait != "Height") %>%  rbind(traitnew%>% filter(trait != "Height")) %>%
+  # rbind(traitsp %>% filter(trait %in% c("LMA","Nmass","Pmass","wsg"))) %>% 
+  ggplot(aes(value, fill = origin)) +
+  geom_histogram(aes(y = ..density..), alpha = 0.7,position = "identity") +
+  # geom_density(aes(y = ..density..), alpha = 0.3)+
+  facet_wrap(~trait, scales = "free")
+```
+
+
+# Appendix 3: Predictive mean matching (PMM) explained
+
+
+Let $X$ be a single variable that has cases with missing data, and a set of variables $Z$ (with no missing data) that are used to impute x. PMM, as implemented on mice package, follows theses steps:
+
+1.  For cases with no missing data, it estimates a linear regression of $X$ on $Z$, producing a set of coefficients $\beta$.
+2.  It then makes a random draw from the “posterior predictive distribution” of $\beta$, producing a new set of coefficients $\beta*$. This would typically be a random draw from a multivariate normal distribution with mean $\beta$, and the estimated covariance matrix of $\beta$ (with an additional random draw for the residual variance). This step aims at producing variability in the imputed values, and is common to all efficient methods for multiple imputation.
+3.  Using $\beta*$, it generates predicted values for $x$ for all cases, both those with data missing on $x$ and those with data present.
+4.  For each case with missing $x$, if identifies a set of cases with observed $X$ whose predicted values are close to the predicted value for the case with missing data.
+5.  It then randomly chooses one and assign its observed value to substitute for the missing value.
+6.  Steps 2 through 5 are then repeated for each completed data set. 
+
+There are several variations to this method. Generally, each case with missing data on $X$ is matched to the $k$ cases (with data present) that have the closest predicted values, of which one is chosen at random and its $X$ value assigned to the case with missing data. We used the default $k=5$ proposed in the mice package and repeated the imputation 10 times, then pooled the datasets and averaged the obtained proposals for missing values. 
+
+
+# Appendix 4: Complementary fuelwood graphics
+
+
+```{r fuelwood2,  echo = FALSE, message=FALSE, warning=FALSE, fig.cap="Estimated usable fuelwood volumes during the 2 firsts cutting cycles, originating from : A - Rotten trees, with a comparison between cutting cycle durations (35 or 65), and target volumes (20 or 30); B - Main tracks, with the same label correspondence as A; and C - Secondary track, with separation on logging techniques (CL or RIL) and target volumes (20 or 30); Black horizontal lines point the median of the distributions. Color boxes encompass values between the 1st and 3rd quartile. Black points are extreme values."}
+load("./images/Output_fuelwood2.RData")
+g_fuelwood
+
+```
+
+The average usable fuelwood quantities (Figure \@ref(fig:fuelwood2)) over the two first cutting cycles, range mainly between 1 and 5 cubic meters per hectare from rotten trees, and between 2 and 4 $m^3/ha$ from main track damages. Secondary tracks are the main potential source of extractible fuelwood over two cutting cycles, with quantities ranging from 10 to 20 $m^3$ in most cases. The target volume is the principal factor influencing this quantity for the main track, because its extent depends on it. The duration of the cutting cycle has an impact, yet marginal, due to longer regrowth period. Concerning secondary tracks, CL obviously yields more damages than RIL, thus a higher quantity of reusable wastes. No factor apparently influenced the fuelwood quantities from rotten trees over two harvests, because of the quantity of designated trees that vary between both cutting cycles, due to the lack of stock regeneration exposed above. In fact, for the first rotation only it depends directly on the target volume.
+
+
+```{r fuelwoodsupp, echo = FALSE, message=FALSE, warning=FALSE, fig.cap="Same fuelwood estimates only for the first curring cycle. A - Rotten trees, with a comparison between target volumes (20 or 30); B - Main tracks, with the same label correspondence as A; and C - Secondary track, with separation on logging techniques (CL or RIL); Black horizontal lines point the median of the distributions. Color boxes encompass values between the 1st and 3rd quartile. Black points are extreme values."}
+load("./images/Output_fuelwood1.RData")
+ g_fuelwood
+```
+
+
+# Appendix 5: Mortality curve for Paracou
+
+```{r mortality, message=FALSE, echo = FALSE,warning=FALSE, fig.cap="Annual mortality rates at Paracou plots, pooled by treatment. T0 are control plots, T1 are conventionally logged plots, T2 are logged plots with additional Stand Improvement treatment (thinning by poison girdling), T3 are plots logged for timber and additional fuelwood, having also undergone Stand Improvement treatments. Grey bands around the curves are pseudo-confidence intervals generated with geom_smooth (package ggplot2). The plots were logged in 1986/1987. "}
+load("C:/Users/nino.page/Desktop/my_thesis/data_ready/ggplot_mortalite.RData")
+gmort
+```

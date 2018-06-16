@@ -1,0 +1,425 @@
+---
+title: "1- Simulating more species with TROLL"
+author: "Nino Page"
+date: "6 juin 2018"
+output:
+  pdf_document:
+    fig_caption: yes
+
+header-includes: \usepackage{float}
+csl: C:/Users/nino.page/Desktop/my_thesis/mee.csl
+bibliography: C:/Users/nino.page/Desktop/bibs/thesis.bib
+link-citations: yes
+---
+
+```{r setups, include=FALSE, warning = FALSE, message = FALSE}
+knitr::opts_chunk$set(echo = FALSE,
+                      include = TRUE,
+                      eval = TRUE,
+                      cache = TRUE,
+                      warning = FALSE,
+                    message = FALSE, 
+                    fig.pos = "H")
+rm(list = ls()); invisible(gc());
+library("knitr")
+library("tidyverse")
+library("gridExtra")
+library("kableExtra")
+setwd("C:/Users/nino.page/Desktop/TROLL project/logging/experiment/outputs_experiment/gather")
+```
+
+```{r load_logging}
+load("DOE_disturbance.RData")
+load("DOE_volume_com.RData")
+load("DOE_agb_com.RData")
+```
+
+# Results
+
+## General
+
+## Selective logging over 5 rotations
+
+```{r}
+totaux <- volume_com %>% 
+  mutate(total55 = AEC55+ECMP55+ECMA55+BP55) %>% 
+  mutate(total30 = AEC30+ECMP30+ECMA30+BP30) %>% 
+  select(-AEC55,-ECMP55,-ECMA55,-BP55,-AEC30,-ECMP30,-ECMA30,-BP30,-NC55,-NC30)
+inter = totaux %>% 
+  group_by(x, duration, log_type, targetvolume, forest) %>% 
+  summarise(
+    # q5_30 = quantile(total30, 0.05),
+            # q95_30 = quantile(total30, 0.95),
+            # mean_30 = mean(total30),
+            q5_55 = quantile(total55, 0.1),
+            q95_55 = quantile(total55, 0.8),
+            mean_55 = mean(total55)) 
+
+
+plotable <- inter %>% ungroup() %>% 
+  # select(-q5_30,-q95_30,-mean_30) %>% 
+  mutate(x = as.numeric(x)) %>% 
+  # mutate(vol_log = paste( targetvolume, sep = "_")) %>%
+  mutate(duration = as.factor(duration), 
+                    targetvolume = as.factor(targetvolume),
+         log_type = as.factor(log_type))  
+levels(plotable$duration) <- c("35\ years\ cutting\ cycle", "65\ years\ cutting\ cycle")
+levels(plotable$targetvolume) <- c("20\ m3", "30\ m3")
+levels(plotable$log_type) <- c("Conventional", "RIL")
+plotable$forest <- as.factor(plotable$forest)
+levels(plotable$forest) <- c("Poor (48.5 m3)", "Rich (74.3 m3)")
+ g_total_volume <- plotable %>%
+  filter(x > 1/12) %>% 
+  ggplot(aes(x=x))+
+  geom_ribbon(aes(ymin=q5_55, ymax=q95_55,fill = targetvolume), alpha = 0.5)+
+  geom_line(aes(y=mean_55, color = targetvolume))+
+  facet_wrap(~duration+forest, scales = "free")+
+  scale_color_discrete(name = "Target volume")+
+  scale_fill_discrete(name="Target volume")+
+  theme(legend.position = "right",
+        legend.title = element_text(size = 10.5),
+        legend.text = element_text(size = 10))+
+  xlab("Time (years)")+
+  ylab("Total timber volume (m3/ha)")
+ggsave(g_total_volume, file = "Output_total_timbervolume_forest.pdf", device = "pdf")
+save(g_total_volume, file = "Output_total_timbervolume_forest.RData")
+  
+```
+
+```{r}
+cat <- volume_com %>%
+  mutate(prop_tot =  ECMP55/(ECMP55+ECMA55+BP55+AEC55+NC55), prop_com =  ECMP55/(ECMP55+ECMA55+BP55+AEC55)) 
+categ$prop_com %>% summary
+
+categ <- cat%>% 
+  na.omit() %>% 
+           group_by(x,forest,duration,targetvolume, diversity) %>% 
+  summarise(
+    # q5_ECMA = quantile(ECMA55, 0.1),
+            # q95_ECMA = quantile(ECMA55, 0.8),
+            # mean_ECMA = mean(ECMA55),
+            q5_ECMP = quantile(ECMP55, 0.1),
+            q95_ECMP = quantile(ECMP55, 0.7),
+            mean_ECMP = mean(ECMP55),
+            # q5_prop_ECMP = quantile(prop_ECMP, 0.1),
+            # q95_prop_ECMP = quantile(prop_ECMP, 0.8),
+            # mean_prop_ECMP = mean(prop_ECMP),
+            q5_prop_tot = quantile(prop_tot, 0.2),
+            q95_prop_tot = quantile(prop_tot, 0.8),
+            mean_prop_tot = mean(prop_tot)
+            # q5_prop_com = quantile(prop_com, 0.1),
+            # q95_prop_com = quantile(prop_com, 0.7),
+            # mean_prop_com = mean(prop_com)
+            )
+            # q5_BP = quantile(BP55, 0.1),
+            # q95_BP = quantile(BP55, 0.8),
+            # mean_BP = mean(BP55),
+            # q5_AEC = quantile(AEC55, 0.1),
+            # q95_AEC = quantile(AEC55, 0.8),
+            # mean_AEC = mean(AEC55)) 
+  save(categ, file = "categ.RData")
+categ_plot <- categ %>% ungroup() %>% 
+  # select(-q5_30,-q95_30,-mean_30) %>% 
+  mutate(x = as.numeric(x), targetvolume = as.factor(targetvolume),duration = as.factor(duration)) 
+# %>% 
+  # mutate(vol_log = paste(log_type, targetvolume, sep = "_"))
+levels(categ_plot$duration) <- c("35\ years\ cutting\ cycle","65\ years\ cutting\ cycle")
+levels(categ_plot$targetvolume) <- c("30\ m3","40\ m3")
+
+gdiv <- categ_plot %>% 
+  filter(forest=="rich") %>%
+  ggplot(aes(x=x))+
+  geom_ribbon(aes(ymin=q5_prop_tot, ymax=q95_prop_tot,fill = diversity), alpha = 0.3)+
+  geom_line(aes(y=mean_prop_tot, color = diversity))+
+  facet_wrap(~targetvolume+duration, scales = "free")+
+  xlab("Time (years)")+
+  ylab("Proportion of ECMAs")
+
+save(gdiv, file = "Output_diversity.RData") 
+categ_plot %>% 
+  filter(x > 16/12) %>% 
+  ggplot(aes(x=x))+
+  geom_ribbon(aes(ymin=q5_ECMP, ymax=q95_ECMP,fill = diversity), alpha = 0.3)+
+  geom_line(aes(y=mean_ECMP, color = diversity))+
+  facet_wrap(~targetvolume+forest)
+
+categ_plot2 <- categ %>% ungroup() %>% 
+  # select(-q5_30,-q95_30,-mean_30) %>% 
+  mutate(x = as.numeric(x)) %>% 
+  mutate(vol_log =  targetvolume)
+
+
+ categ_plot2 %>% 
+  filter(x > 16/12) %>%
+  filter(duration == 65) %>% 
+  ggplot(aes(x=x))+
+  geom_ribbon(aes(ymin=q5_prop_tot, ymax=q95_prop_tot,fill = diversity), alpha = 0.3)+
+  geom_line(aes(y=mean_prop_tot, color = diversity))+
+  facet_wrap(~targetvolume+forest)
+
+g
+plotly::ggplotly(g)
+plotable %>% 
+  filter(x > 1) %>% 
+  ggplot(aes(x=x))+
+  geom_ribbon(aes(ymin=q5_55, ymax=q95_55,fill = diversity), alpha = 0.5)+
+  geom_line(aes(y=mean_55, color = diversity)) +facet_wrap(~targetvolume+log_type)
+
+
+categ_plot %>% 
+  filter(forest=="rich") %>%
+  ggplot(aes(x=x))+
+  geom_ribbon(aes(ymin=q5_prop_tot, ymax=q95_prop_tot,fill = diversity), alpha = 0.3)+
+  geom_line(aes(y=mean_prop_tot, color = diversity))+
+  facet_wrap(~targetvolume+duration, scales = "free")
+categ_plot %>% 
+  filter(forest=="rich") %>%
+  ggplot(aes(x=x))+
+  geom_ribbon(aes(ymin=q5_ECMP55, ymax=q95_ECMP55,fill = diversity), alpha = 0.3)+
+  geom_line(aes(y=mean_ECMP55, color = diversity))+
+  facet_wrap(~targetvolume+duration, scales = "free")
+```
+
+# Discussion
+
+In any simulated scenario, selective logging is unsustainable within TROLL model. 
+
+The difference between the target volumes tested (which correspond to plausible scenarii for French Guiana) made a significant, neat difference for the timber volumes available at the second cutting cycle, but later on, simulated trajectories converged towards an unescapable trend, that of timber stock depletion over cutting cycles. Commercial trees are either harvested, damaged during the operations,or fatally undergo post-logging residual mortality, which is modelled in TROLL one year after logging, and calibrated with the biggest field dataset available in French Guiana. The outcome is a dramatic diminution of timber stocks, which regeneration is not fast enough to balance, given the cutting cycles and the intensities we simulated.
+Are we compelled to draw the foregone conclusion that selective logging is unlikely to be sustainable, at all ?
+First, TROLL is a model, and every model is wrong by nature. Such a complicated model has a lot of discussable items and equations, but the impact of those weaknesses on the outcome is not very clear.
+
+Pro-sustainable:
+
+- No sylvicultural treatments are modeled.
+- We simulated only 2 intensities in total.
+- We simulated on two forests only.
+- The post-logging damages are discretized into a single-shot mortality, instead of what happens in 10 years for real forests, and may be slightly overestimated.
+
+Con-sustainable:
+- TROLL does not account for topography
+- TROLL does not account for differences in seed dispersion between species
+- TROLL does not account for soil disturbance that is in fact severe after logging.
+- TROLL does not account for lianas and vines, which can prosper after logging and slow the regeneration
+- Litterature: @Sist2007 estimated that, in the best scenario for growth and mortality, only 50% of the timber volume would be recovered 30 years after harvest, suggesting that current volumes are not sustainable. He adds that only silvicultural treatment ensuring that the remaining potential crop trees grow at 4–5 mm year−1 would guarantee a logging intensity of 3–4 trees ha−1 (10–14 m3 ha−1) 40 years after the first harvest In amazon ril is clearly not sufficient to ensure sustainability.
+
+- @Valle2007: SIMFLORA, individual based growth yield model with only 10 species groups,suggests that commercial volumes are recovered 30-40 years after RIL and over 60 years after CL. Despite benefits from RIL, as currently practiced this logging system does not result in long-term sustained timber yields, reinforcing results from previous studies indicating that RIL must be combined with appropriate systems for yield regulation. Even if this seems over-optimisting, they conclude that the absence of silvicultural treatment implies domination of pioneer species over commercial, and an increased proportion of defective trees.
+
+-@Dauber2005 simulated regeneration, and concluded that Growth increments of future crop trees (averaging from 0.22 to 0.41 cm/year) in the principal forest ecoregions of Bolivia are currently not high enough to allow for similar wood volumes to be cut in the second next harvest using current cutting cycles and minimum cutting diameters / Estimated recoverable volumes in the second harvest for regions varied from approximately 4 to 28% of the potentially harvestable volume in the first cycle considering all commercially marketable stems.
+
+It may be unrealistic to expect future yields equal to that of what is essentially primary tropical forest; however, forest managers should consider options that will allow for harvesting to move closer to sustainable wood production. These options include the implementation of silvicultural treatments to increase tree growth, focusing on fast-growing species with good regeneration, using fallow cycle rotations or a combination of these methods.
+
+-@Gourlet2005: felling regimes in FG may not be sustainable on longterm basis. no more than 60% of dicorynia stocks would be recovered, in any case.
+
+
+@Huth2003:
+Harvesting can cause or amplify a shift in species abundances leading to local extinctions, and ultimately, forest decline and dieback/ Yields are expecter to reduce significantly over time / recomment ril and long loggign cycles
+
+
+@Huth2001:
+for an malaysian forest, simulated cycles of 20-100 years. 
+conclude that cycles under 40 overuse forest
+
+truly sustainable in  terms of volume would be more than 60 years, but diversity erosion risk are high under 100 years.
+
+no common agreement on the time period to be simulated if one wand to explore sustainability. 400 years proposed by botkin.
+
+```{r}
+setwd("C:/Users/nino.page/Desktop/TROLL project/logging/experiment/outputs_experiment/gather")
+load("DOE_disturbance.RData")
+# data <- get(load("DOE_disturbance.RData"))
+data %>% filter(timber>0)%>% select(timber) %>% summary
+data[which(data$log_type == "ril"), "cause"] %>% unique
+library(tidyverse)
+pre_diagnostic <- data %>%
+  as.tbl() %>%
+  # rename(ntrees = count) %>%
+  group_by(log_type,
+           duration,
+           targetvolume,
+           duration,
+           replicat,
+           forest,
+           cause,
+           diversity,
+           cycle)%>%
+  summarise(ba = sum(ba),
+            energy = sum(energy),
+            count = sum(count),
+            agb = sum(agb)) 
+# %>% 
+# %>%cause != "L"&
+  # filter(  cause != "R")
+  # full_join(x)
+
+x <- data %>%
+  as.tbl() %>%
+  group_by(log_type,
+           duration,
+           targetvolume,
+           duration,
+           replicat,
+           forest,
+           diversity,
+           cycle)%>%
+  summarise(ba = sum(ba),
+            timber = sum(timber))
+
+total_diagnostic <- pre_diagnostic %>%
+  filter(cause != "R" & cause != "MT") %>%
+  as.tbl() %>%
+  # rename(ntrees = count) %>%
+  group_by(log_type,
+           duration,
+           targetvolume,
+           duration,
+           replicat,
+           forest,
+           # cause,
+           diversity,
+           cycle)%>%
+  summarise(ba = sum(ba),
+            energy = sum(energy),
+            count = sum(count),
+            agb = sum(agb)) %>% cbind(timber = x$timber) %>% 
+  filter(ba > 7)
+
+
+  total_diagnostic %>%
+    fi
+  mutate(count = count/24, ba = ba/24, agb = agb/24, energy = energy/20) %>% 
+  rename('Basal\ Area' = ba, 'Above\ Ground\ Biomass' = agb, 'Fuelwood\ volume' = energy,'Stem\ number' = count) %>% 
+  reshape2::melt(id.vars = c("log_type",
+                             "timber",
+                             "cycle",
+                             "duration",
+                             "targetvolume",
+                             "replicat",
+                             "forest",
+                             "diversity"),
+                 measured.vars = c("Basal\ Area",
+                                   "Above\ Ground\ Biomass",
+                                   "Stem\ number",
+                                   "Fuelwood\ volume")) %>% as.tbl %>%
+  # filter(variable == "ba") %>% 
+  mutate(timber = as.numeric(timber/24)) %>%
+  mutate(cycle=as.factor(cycle)) %>% 
+  ggplot(aes(x = timber, y = value, color = log_type))+
+  geom_point(alpha = 0.2)+
+  geom_smooth( aes(fill = log_type),level = 0.9999999999999993, alpha = 0.5)+
+  
+  # geom_smooth(aes(fill = "log_type"))+
+  # geom_density_2d()+
+  # geom_smooth(alpha = 0.5, level = 0.9999, n = 1500, span = 0.9)+
+  facet_wrap(~variable, scales = "free_y")+
+  scale_color_discrete(name="Logging type", labels = c("CL", "RIL"))+
+  scale_fill_discrete(name="Logging type", labels = c("CL", "RIL"))+
+  xlab("Harvested timber volume (cubic meters/ha)")+
+  ylab("Logging damages (variable units)")+
+  theme(legend.title = element_text(size = 11))
+
+
+ggsave(g_disturbance, file = "Output_disturbance_annexe.pdf", device = "pdf")
+save(g_disturbance, file = "Output_disturbance_annexe.RData")
+
+
+```
+
+
+```{r}
+agbs <- agb_com %>% 
+  group_by(duration, targetvolume, x)%>%
+  summarise(meanagb= mean(agb10),
+            q5 = quantile(agb10, 0.05),
+            q95 = quantile(agb10, 0.95)) %>% 
+  ungroup %>% 
+  mutate(duration = as.factor(duration)) %>% 
+  mutate(targetvolume = as.factor(targetvolume)) %>%
+  mutate(Intensity = paste0(targetvolume,' m3')) %>% 
+  mutate(Intensity = as.factor(Intensity))
+levels(agbs$duration) <- c("35\ years cutting cycle", "65\ years cutting cycle")
+g_biomass <- agbs %>% 
+  mutate(meanagb = meanagb/1000, q5 =q5/1000, q95=q95/1000) %>% 
+  ggplot(aes(x = x))+
+  geom_ribbon(aes(ymin=q5, ymax=q95, fill = Intensity), alpha = 0.3)+
+  geom_line(aes(y=meanagb, col = Intensity))+
+  facet_wrap(~duration,scales = "free")+
+  ylab("Above Ground Biomass (TC/ha)")+
+  xlab("Time (Years)")+
+  theme(legend.text = element_text(size = 12),
+        legend.position = "bottom")
+g_biomass
+ ggsave(g_biomass, file = "Output_agb.pdf", device = "pdf", height = 6, width = 10)
+ save(g_biomass, file = "Output_agb.RData")
+ dev.off()
+```
+
+
+```{r}
+fuelwood <- data %>% 
+  filter(energy > 0) %>% 
+  filter
+  group_by(cause, duration, log_type, cycle, targetvolume, replicat, diversity, forest) %>% 
+  summarise(energy = sum(energy)/24)
+ fuelwood1 <- fuelwood %>% filter(cycle == 1)
+ fuel_mt <-fuelwood1 %>% 
+  filter(cause == "MT") %>%
+   rowwise %>% 
+   mutate(cond = paste0(targetvolume," m3")) %>% ungroup
+  # mutate(cond = paste0(duration," years / ",targetvolume," m3")) %>% ungroup
+  g_mt <-fuel_mt %>% 
+    ggplot(aes(fill=cond,y=energy))+
+    geom_boxplot()+
+    ylab("")+theme(legend.position = "top")+
+    scale_fill_discrete(name = "")
+  # , labels = c("35/20","35/30","65/20","65/30"))
+ 
+ fuel_st <-fuelwood1 %>% 
+  filter(cause == "ST") %>%
+   rowwise %>% 
+  mutate(cond = paste0(log_type," / ",targetvolume," m3")) %>% ungroup
+  g_st <- fuel_st %>% 
+    ggplot(aes(fill=cond,y=energy))+
+    geom_boxplot()+
+    ylab("")+theme(legend.position = "top")+
+    scale_fill_discrete(name = "", labels = c("CL/20","CL/30","RIL/20","RIL/30"))
+
+  fuel_rot <-fuelwood1 %>% 
+  filter(cause == "R") %>%
+  # mutate(cond = paste0(duration," years / ",targetvolume," m3")) %>% ungroup  
+  mutate(cond = paste0(targetvolume," m3")) %>% ungroup 
+   # rowwise %>% 
+  # mutate(rotation = ifelse(cycle == 1, "First","Second")) %>% 
+  # mutate(rotation = ifelse(cycle > 2, "Third or more",rotation)) %>% 
+    # mutate(rotation = as.factor(rotation))
+
+  g_rot <- fuel_rot %>% 
+    ggplot(aes(fill=cond,y=energy))+
+    geom_boxplot()+
+    ylab("Quantity of fuelwood extracted (m3/ha)")+theme(legend.position = "top")+
+     scale_fill_discrete(name = "")
+    # scale_fill_discrete(name = "", labels = c("First","Second","Third and more"))
+  g_rot
+  cowplot::plot_grid(g_rot, g_st, g_mt, align = "h", nrow = 1)
+  
+  gridExtra::grid.arrange(
+  grobs = list(g_rot, g_st, g_mt),
+  widths = c(2, 1, 1),
+  layout_matrix = rbind(c(1, 2),
+                        c(1, 3)),
+  labels = c("A","B","C")
+)
+  ?grid.arrange
+  ?draw_plot
+ library(cowplot) 
+  g_fuelwood <-  ggdraw() +
+  draw_plot(g_rot, 0, 0, .5,0.9 ) +
+  draw_plot(g_st, .45, .5, 0.5, 0.5) +
+  draw_plot(g_mt, .45, 0, 0.5, .5) +
+  draw_plot_label(c("A", "B", "C"), c(0, 0.5, 0.5), c(1, 0.5, 1), size = 15)
+  ggsave(g_fuelwood, file = "Output_fuelwood1.pdf", device = "pdf")
+  g_fuelwood
+  save(g_fuelwood, file = "Output_fuelwood1.RData")
+getwd()
+dev.off
+```
+

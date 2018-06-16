@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Master thesis</title>
+  <meta name="description" content="Master thesis">
+  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
+
+  <meta property="og:title" content="Master thesis" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:image" content="images/main.png" />
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Master thesis" />
+  
+  
+  <meta name="twitter:image" content="images/main.png" />
+
+<meta name="author" content="Nino PAGE">
+
+
+<meta name="date" content="2018-06-16">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="including-more-species-in-troll-simulations.html">
+<link rel="next" href="modelling-silviculture-with-troll-from-reality-to-simulations.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="html\style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Master thesis</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
+<li class="chapter" data-level="" data-path="resume.html"><a href="resume.html"><i class="fa fa-check"></i>Résumé</a></li>
+<li class="chapter" data-level="1" data-path="abstract.html"><a href="abstract.html"><i class="fa fa-check"></i><b>1</b> Abstract</a></li>
+<li class="chapter" data-level="2" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>2</b> Introduction</a></li>
+<li class="chapter" data-level="3" data-path="troll-model.html"><a href="troll-model.html"><i class="fa fa-check"></i><b>3</b> TROLL model</a><ul>
+<li class="chapter" data-level="3.1" data-path="troll-model.html"><a href="troll-model.html#overview"><i class="fa fa-check"></i><b>3.1</b> Overview</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="including-more-species-in-troll-simulations.html"><a href="including-more-species-in-troll-simulations.html"><i class="fa fa-check"></i><b>4</b> Including more species in TROLL simulations</a><ul>
+<li class="chapter" data-level="4.1" data-path="including-more-species-in-troll-simulations.html"><a href="including-more-species-in-troll-simulations.html#introduction-1"><i class="fa fa-check"></i><b>4.1</b> Introduction</a></li>
+<li class="chapter" data-level="4.2" data-path="including-more-species-in-troll-simulations.html"><a href="including-more-species-in-troll-simulations.html#context-and-problem"><i class="fa fa-check"></i><b>4.2</b> Context and Problem</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="including-more-species-in-troll-simulations.html"><a href="including-more-species-in-troll-simulations.html#the-initial-species-list"><i class="fa fa-check"></i><b>4.2.1</b> The initial species list</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="including-more-species-in-troll-simulations.html"><a href="including-more-species-in-troll-simulations.html#can-we-represent-paracou-plots-composition-with-trolls-species-list"><i class="fa fa-check"></i><b>4.3</b> Can we represent Paracou plots composition with TROLL’s species list ?</a></li>
+<li class="chapter" data-level="4.4" data-path="including-more-species-in-troll-simulations.html"><a href="including-more-species-in-troll-simulations.html#how-to-parametrise-more-species"><i class="fa fa-check"></i><b>4.4</b> How to parametrise more species ?</a><ul>
+<li class="chapter" data-level="4.4.1" data-path="including-more-species-in-troll-simulations.html"><a href="including-more-species-in-troll-simulations.html#datasets"><i class="fa fa-check"></i><b>4.4.1</b> Datasets</a></li>
+<li class="chapter" data-level="4.4.2" data-path="including-more-species-in-troll-simulations.html"><a href="including-more-species-in-troll-simulations.html#preliminary-completion-with-predictive-mean-matching"><i class="fa fa-check"></i><b>4.4.2</b> Preliminary completion with Predictive mean matching</a></li>
+<li class="chapter" data-level="4.4.3" data-path="including-more-species-in-troll-simulations.html"><a href="including-more-species-in-troll-simulations.html#hierarchical-modeling-framework"><i class="fa fa-check"></i><b>4.4.3</b> Hierarchical modeling framework</a></li>
+<li class="chapter" data-level="4.4.4" data-path="including-more-species-in-troll-simulations.html"><a href="including-more-species-in-troll-simulations.html#leaf-and-stem-traits"><i class="fa fa-check"></i><b>4.4.4</b> Leaf and stem traits</a></li>
+<li class="chapter" data-level="4.4.5" data-path="including-more-species-in-troll-simulations.html"><a href="including-more-species-in-troll-simulations.html#michaelis-menten-hierarchical-model"><i class="fa fa-check"></i><b>4.4.5</b> Michaelis-Menten hierarchical model</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="including-more-species-in-troll-simulations.html"><a href="including-more-species-in-troll-simulations.html#more-species-for-troll"><i class="fa fa-check"></i><b>4.5</b> More species for TROLL</a></li>
+<li class="chapter" data-level="4.6" data-path="including-more-species-in-troll-simulations.html"><a href="including-more-species-in-troll-simulations.html#discussion"><i class="fa fa-check"></i><b>4.6</b> Discussion</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="can-troll-simulate-real-forests-and-post-logging-trajectories.html"><a href="can-troll-simulate-real-forests-and-post-logging-trajectories.html"><i class="fa fa-check"></i><b>5</b> Can TROLL simulate real forests and post-logging trajectories ?</a><ul>
+<li class="chapter" data-level="5.1" data-path="can-troll-simulate-real-forests-and-post-logging-trajectories.html"><a href="can-troll-simulate-real-forests-and-post-logging-trajectories.html#overview-1"><i class="fa fa-check"></i><b>5.1</b> Overview</a></li>
+<li class="chapter" data-level="5.2" data-path="can-troll-simulate-real-forests-and-post-logging-trajectories.html"><a href="can-troll-simulate-real-forests-and-post-logging-trajectories.html#methods"><i class="fa fa-check"></i><b>5.2</b> Methods</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="can-troll-simulate-real-forests-and-post-logging-trajectories.html"><a href="can-troll-simulate-real-forests-and-post-logging-trajectories.html#handling-missing-species"><i class="fa fa-check"></i><b>5.2.1</b> Handling missing species</a></li>
+<li class="chapter" data-level="5.2.2" data-path="can-troll-simulate-real-forests-and-post-logging-trajectories.html"><a href="can-troll-simulate-real-forests-and-post-logging-trajectories.html#residual-mortality-after-logging-where-to-start-from"><i class="fa fa-check"></i><b>5.2.2</b> Residual mortality after logging: where to start from ?</a></li>
+<li class="chapter" data-level="5.2.3" data-path="can-troll-simulate-real-forests-and-post-logging-trajectories.html"><a href="can-troll-simulate-real-forests-and-post-logging-trajectories.html#coordinates-and-duplicates-moving-or-removing"><i class="fa fa-check"></i><b>5.2.3</b> Coordinates and duplicates: moving, or removing</a></li>
+<li class="chapter" data-level="5.2.4" data-path="can-troll-simulate-real-forests-and-post-logging-trajectories.html"><a href="can-troll-simulate-real-forests-and-post-logging-trajectories.html#missing-understoreys"><i class="fa fa-check"></i><b>5.2.4</b> Missing understoreys</a></li>
+<li class="chapter" data-level="5.2.5" data-path="can-troll-simulate-real-forests-and-post-logging-trajectories.html"><a href="can-troll-simulate-real-forests-and-post-logging-trajectories.html#simulation-parameters"><i class="fa fa-check"></i><b>5.2.5</b> Simulation parameters</a></li>
+<li class="chapter" data-level="5.2.6" data-path="can-troll-simulate-real-forests-and-post-logging-trajectories.html"><a href="can-troll-simulate-real-forests-and-post-logging-trajectories.html#spatial-structure-analysis"><i class="fa fa-check"></i><b>5.2.6</b> Spatial structure analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="can-troll-simulate-real-forests-and-post-logging-trajectories.html"><a href="can-troll-simulate-real-forests-and-post-logging-trajectories.html#results-and-discussion"><i class="fa fa-check"></i><b>5.3</b> Results and discussion</a><ul>
+<li class="chapter" data-level="5.3.1" data-path="can-troll-simulate-real-forests-and-post-logging-trajectories.html"><a href="can-troll-simulate-real-forests-and-post-logging-trajectories.html#simulated-trajectories"><i class="fa fa-check"></i><b>5.3.1</b> Simulated trajectories</a></li>
+<li class="chapter" data-level="5.3.2" data-path="can-troll-simulate-real-forests-and-post-logging-trajectories.html"><a href="can-troll-simulate-real-forests-and-post-logging-trajectories.html#spatial-statistics"><i class="fa fa-check"></i><b>5.3.2</b> Spatial statistics</a></li>
+<li class="chapter" data-level="5.3.3" data-path="can-troll-simulate-real-forests-and-post-logging-trajectories.html"><a href="can-troll-simulate-real-forests-and-post-logging-trajectories.html#synthesis"><i class="fa fa-check"></i><b>5.3.3</b> Synthesis</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="modelling-silviculture-with-troll-from-reality-to-simulations.html"><a href="modelling-silviculture-with-troll-from-reality-to-simulations.html"><i class="fa fa-check"></i><b>6</b> Modelling silviculture with TROLL: from reality to simulations</a><ul>
+<li class="chapter" data-level="6.1" data-path="modelling-silviculture-with-troll-from-reality-to-simulations.html"><a href="modelling-silviculture-with-troll-from-reality-to-simulations.html#introduction-2"><i class="fa fa-check"></i><b>6.1</b> Introduction</a></li>
+<li class="chapter" data-level="6.2" data-path="modelling-silviculture-with-troll-from-reality-to-simulations.html"><a href="modelling-silviculture-with-troll-from-reality-to-simulations.html#choosing-area-and-trees"><i class="fa fa-check"></i><b>6.2</b> Choosing area and trees</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="modelling-silviculture-with-troll-from-reality-to-simulations.html"><a href="modelling-silviculture-with-troll-from-reality-to-simulations.html#harvestable-areas"><i class="fa fa-check"></i><b>6.2.1</b> Harvestable areas</a></li>
+<li class="chapter" data-level="6.2.2" data-path="modelling-silviculture-with-troll-from-reality-to-simulations.html"><a href="modelling-silviculture-with-troll-from-reality-to-simulations.html#designation"><i class="fa fa-check"></i><b>6.2.2</b> Designation</a></li>
+<li class="chapter" data-level="6.2.3" data-path="modelling-silviculture-with-troll-from-reality-to-simulations.html"><a href="modelling-silviculture-with-troll-from-reality-to-simulations.html#tree-probing"><i class="fa fa-check"></i><b>6.2.3</b> Tree Probing</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="modelling-silviculture-with-troll-from-reality-to-simulations.html"><a href="modelling-silviculture-with-troll-from-reality-to-simulations.html#then-harvesting"><i class="fa fa-check"></i><b>6.3</b> Then, harvesting</a><ul>
+<li class="chapter" data-level="6.3.1" data-path="modelling-silviculture-with-troll-from-reality-to-simulations.html"><a href="modelling-silviculture-with-troll-from-reality-to-simulations.html#felling-trees"><i class="fa fa-check"></i><b>6.3.1</b> Felling trees</a></li>
+<li class="chapter" data-level="6.3.2" data-path="modelling-silviculture-with-troll-from-reality-to-simulations.html"><a href="modelling-silviculture-with-troll-from-reality-to-simulations.html#main-track"><i class="fa fa-check"></i><b>6.3.2</b> Main Track</a></li>
+<li class="chapter" data-level="6.3.3" data-path="modelling-silviculture-with-troll-from-reality-to-simulations.html"><a href="modelling-silviculture-with-troll-from-reality-to-simulations.html#secondary-tracks"><i class="fa fa-check"></i><b>6.3.3</b> Secondary tracks</a></li>
+<li class="chapter" data-level="6.3.4" data-path="modelling-silviculture-with-troll-from-reality-to-simulations.html"><a href="modelling-silviculture-with-troll-from-reality-to-simulations.html#residual-mortality"><i class="fa fa-check"></i><b>6.3.4</b> Residual mortality</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="selective-logging-experiment.html"><a href="selective-logging-experiment.html"><i class="fa fa-check"></i><b>7</b> Selective Logging experiment</a><ul>
+<li class="chapter" data-level="7.1" data-path="selective-logging-experiment.html"><a href="selective-logging-experiment.html#experiment-design"><i class="fa fa-check"></i><b>7.1</b> Experiment design</a><ul>
+<li class="chapter" data-level="7.1.1" data-path="selective-logging-experiment.html"><a href="selective-logging-experiment.html#simulated-forests"><i class="fa fa-check"></i><b>7.1.1</b> Simulated forests</a></li>
+<li class="chapter" data-level="7.1.2" data-path="selective-logging-experiment.html"><a href="selective-logging-experiment.html#diversification-of-the-harvested-species"><i class="fa fa-check"></i><b>7.1.2</b> Diversification of the harvested species</a></li>
+<li class="chapter" data-level="7.1.3" data-path="selective-logging-experiment.html"><a href="selective-logging-experiment.html#silvicultural-parameters"><i class="fa fa-check"></i><b>7.1.3</b> Silvicultural parameters</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="selective-logging-experiment.html"><a href="selective-logging-experiment.html#results"><i class="fa fa-check"></i><b>7.2</b> Results</a><ul>
+<li class="chapter" data-level="7.2.1" data-path="selective-logging-experiment.html"><a href="selective-logging-experiment.html#model-features"><i class="fa fa-check"></i><b>7.2.1</b> Model features</a></li>
+<li class="chapter" data-level="7.2.2" data-path="selective-logging-experiment.html"><a href="selective-logging-experiment.html#selective-logging-sustainability"><i class="fa fa-check"></i><b>7.2.2</b> Selective logging sustainability</a></li>
+<li class="chapter" data-level="7.2.3" data-path="selective-logging-experiment.html"><a href="selective-logging-experiment.html#diversification"><i class="fa fa-check"></i><b>7.2.3</b> Diversification</a></li>
+<li class="chapter" data-level="7.2.4" data-path="selective-logging-experiment.html"><a href="selective-logging-experiment.html#carbon"><i class="fa fa-check"></i><b>7.2.4</b> Carbon</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="selective-logging-experiment.html"><a href="selective-logging-experiment.html#discussion-1"><i class="fa fa-check"></i><b>7.3</b> Discussion</a><ul>
+<li class="chapter" data-level="7.3.1" data-path="selective-logging-experiment.html"><a href="selective-logging-experiment.html#timber-volumes-are-not-sustained"><i class="fa fa-check"></i><b>7.3.1</b> Timber volumes are not sustained</a></li>
+<li class="chapter" data-level="7.3.2" data-path="selective-logging-experiment.html"><a href="selective-logging-experiment.html#carbon-stocks-decrease"><i class="fa fa-check"></i><b>7.3.2</b> Carbon stocks decrease</a></li>
+<li class="chapter" data-level="7.3.3" data-path="selective-logging-experiment.html"><a href="selective-logging-experiment.html#in-a-nutshell"><i class="fa fa-check"></i><b>7.3.3</b> In a nutshell</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="conclusions-and-perspectives.html"><a href="conclusions-and-perspectives.html"><i class="fa fa-check"></i><b>8</b> Conclusions and perspectives</a></li>
+<li class="appendix"><span><b>Appendix</b></span></li>
+<li class="chapter" data-level="A" data-path="appendix-1-troll-model.html"><a href="appendix-1-troll-model.html"><i class="fa fa-check"></i><b>A</b> Appendix 1: TROLL model</a><ul>
+<li class="chapter" data-level="A.1" data-path="appendix-1-troll-model.html"><a href="appendix-1-troll-model.html#abiotic-environment"><i class="fa fa-check"></i><b>A.1</b> Abiotic environment</a></li>
+<li class="chapter" data-level="A.2" data-path="appendix-1-troll-model.html"><a href="appendix-1-troll-model.html#photosynthesis"><i class="fa fa-check"></i><b>A.2</b> Photosynthesis</a><ul>
+<li class="chapter" data-level="A.2.1" data-path="appendix-1-troll-model.html"><a href="appendix-1-troll-model.html#theory"><i class="fa fa-check"></i><b>A.2.1</b> Theory</a></li>
+<li class="chapter" data-level="A.2.2" data-path="appendix-1-troll-model.html"><a href="appendix-1-troll-model.html#parametrization"><i class="fa fa-check"></i><b>A.2.2</b> Parametrization</a></li>
+</ul></li>
+<li class="chapter" data-level="A.3" data-path="appendix-1-troll-model.html"><a href="appendix-1-troll-model.html#autotrophic-respiration"><i class="fa fa-check"></i><b>A.3</b> Autotrophic respiration</a></li>
+<li class="chapter" data-level="A.4" data-path="appendix-1-troll-model.html"><a href="appendix-1-troll-model.html#net-carbon-uptake"><i class="fa fa-check"></i><b>A.4</b> Net carbon uptake</a></li>
+<li class="chapter" data-level="A.5" data-path="appendix-1-troll-model.html"><a href="appendix-1-troll-model.html#tree-growth"><i class="fa fa-check"></i><b>A.5</b> Tree growth</a></li>
+<li class="chapter" data-level="A.6" data-path="appendix-1-troll-model.html"><a href="appendix-1-troll-model.html#mortality"><i class="fa fa-check"></i><b>A.6</b> Mortality</a></li>
+<li class="chapter" data-level="A.7" data-path="appendix-1-troll-model.html"><a href="appendix-1-troll-model.html#recruitment"><i class="fa fa-check"></i><b>A.7</b> Recruitment</a></li>
+</ul></li>
+<li class="chapter" data-level="B" data-path="appendix-2-including-more-species-in-trolls-list-supplementary-material.html"><a href="appendix-2-including-more-species-in-trolls-list-supplementary-material.html"><i class="fa fa-check"></i><b>B</b> Appendix 2: Including more species in TROLl’s list - Supplementary material</a><ul>
+<li class="chapter" data-level="B.1" data-path="appendix-2-including-more-species-in-trolls-list-supplementary-material.html"><a href="appendix-2-including-more-species-in-trolls-list-supplementary-material.html#phosphorous-measurements-are-mainly-singletons"><i class="fa fa-check"></i><b>B.1</b> Phosphorous measurements are mainly singletons</a></li>
+<li class="chapter" data-level="B.2" data-path="appendix-2-including-more-species-in-trolls-list-supplementary-material.html"><a href="appendix-2-including-more-species-in-trolls-list-supplementary-material.html#distribution-of-traits-for-the-newly-inferred-species"><i class="fa fa-check"></i><b>B.2</b> Distribution of traits for the newly inferred species</a></li>
+</ul></li>
+<li class="chapter" data-level="C" data-path="appendix-3-predictive-mean-matching-pmm-explained.html"><a href="appendix-3-predictive-mean-matching-pmm-explained.html"><i class="fa fa-check"></i><b>C</b> Appendix 3: Predictive mean matching (PMM) explained</a></li>
+<li class="chapter" data-level="D" data-path="appendix-4-complementary-fuelwood-graphics.html"><a href="appendix-4-complementary-fuelwood-graphics.html"><i class="fa fa-check"></i><b>D</b> Appendix 4: Complementary fuelwood graphics</a></li>
+<li class="chapter" data-level="E" data-path="appendix-5-mortality-curve-for-paracou.html"><a href="appendix-5-mortality-curve-for-paracou.html"><i class="fa fa-check"></i><b>E</b> Appendix 5: Mortality curve for Paracou</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/sylvainschmitt/master-thesis" target="blank">work in progress</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Master thesis</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="can-troll-simulate-real-forests-and-post-logging-trajectories" class="section level1">
+<h1><span class="header-section-number">5</span> Can TROLL simulate real forests and post-logging trajectories ?</h1>
+<div id="overview-1" class="section level2">
+<h2><span class="header-section-number">5.1</span> Overview</h2>
+<p>The original goal of this section was to evaluate TROLL’s aptitude to simulate post-logging trajectories by using real data. Preliminary comparison of the model understoreys with seedling and sapling censuses in Paracou (from the Mariwenn Database), showed that TROLL underestimates seedling <em>abundances</em>, due to discrete space assumptions (data not shown). It however reliably depicts diameter structure for higher <span class="math inline">\(dbh\)</span> categories (<span class="citation">Marechaux (<a href="#ref-Marechaux2017">2017</a>)</span>). We compared simulated ecosystem trajectories with regular censuses (<span class="math inline">\(&gt;10\ cm\ dbh\)</span>), after adapting the data to the model input format and simulating the understorey strata. Since the obtained results showed anomalies, this yielded another question: is TROLL adapted to simulate forests from real data? We used a spatial statistic approach, comparing real censuses with mature forests simulated with comparable species composition.</p>
+</div>
+<div id="methods" class="section level2">
+<h2><span class="header-section-number">5.2</span> Methods</h2>
+<div id="handling-missing-species" class="section level3">
+<h3><span class="header-section-number">5.2.1</span> Handling missing species</h3>
+<p>We used our new species dataset to simulate post-logging trajectories at Paracou. Overall, 347 Paracou species matched with our dataset, resulting in higher yet still high proportions of individuals belonging to missing species. The number of species matching at a plot’s scale was enhanced with the new dataset, but still low (100 to 220), compared to the 200-350 species that can occur in a single plot (<a href="can-troll-simulate-real-forests-and-post-logging-trajectories.html#fig:newhistrol">5.1</a>. The representativities of these subsets was overall correct (data not shown). To handle species that were still missing, we replaced the individuals belonging to missing species by individuals of parametrized species, by diameter class.</p>
+<div class="figure"><span id="fig:newhistrol"></span>
+<img src="master-thesis_files/figure-html/newhistrol-1.png" alt="Comparison of the coverage (species and individuals) between the initial and new dataset. A: Total number of species in the plots. B: Proportion of missing (uncovered) individuals. C: Proportion of missing species. Colors indicate the dataset used: blue for the initial set, red for the new one. " width="0.7\textwidth" />
+<p class="caption">
+Figure 5.1: Comparison of the coverage (species and individuals) between the initial and new dataset. A: Total number of species in the plots. B: Proportion of missing (uncovered) individuals. C: Proportion of missing species. Colors indicate the dataset used: blue for the initial set, red for the new one.
+</p>
+</div>
+</div>
+<div id="residual-mortality-after-logging-where-to-start-from" class="section level3">
+<h3><span class="header-section-number">5.2.2</span> Residual mortality after logging: where to start from ?</h3>
+<p>Residual mortality after selective logging is a well-observed phenomenon, which has been documented for seven sites in the Amazon <span class="citation">(five in Brazil, one in Suriname, and Paracou - see Blanc <em>et al.</em> <a href="#ref-Blanc2009">2009</a> for a summary table and references)</span>. During six to sixteen years after disturbance, logged stands undergo high persistent mortality which is due to several factors:</p>
+<ul>
+<li>Many trees are hurt during operations. They do not die immediately, but rather a few years after being hurt, especially when poison girdling is carried out.</li>
+<li>Soil modifications (compaction, degradation, and ultimately erosion) can also stress the trees located near the main or secondary tracks.</li>
+<li>Changes in the abiotic environment due to gap opening can be detrimental to some trees.</li>
+</ul>
+<p>We used Paracou data and Geraldine Derroire’s mortality function (unpublished) to check the annual mortality rates in the 12 plots at Paracou. Paracou plots have undergone different treatments, consisting in conventional selective logging (T1), additional Timber Stand Improvement (TSI - thinning by poison girdling: T2, T3), and additional fuelwood harvest (T3). Control plots (natural forests, T0) are also included. The annual mortality rates observed at logged plots to go back to levels comparable to control plots about ten years after logging (Figure <a href="appendix-5-mortality-curve-for-paracou.html#fig:mortality">E.1</a> in appendix 5, and see <span class="citation">Blanc <em>et al.</em> (<a href="#ref-Blanc2009">2009</a>)</span>), although there is no neat transition. Still, for treatments 1 to 3, the mortality levels six years after logging are reasonable compared to rates observed in the first three years following disturbance.</p>
+<p>Considering that 1. the number of botanical indeterminations decreased, and the “coverage” by TROLL species list increased over time at Paracou; 2. residual mortality decreases between 6 and 8 years after logging in this dataset; and 3. we want to model as much as possible the entire trajectory following logging; we started the simulations from 1992, which is an acceptable compromise.</p>
+</div>
+<div id="coordinates-and-duplicates-moving-or-removing" class="section level3">
+<h3><span class="header-section-number">5.2.3</span> Coordinates and duplicates: moving, or removing</h3>
+<p>Paracou inventories are real forest data at a <span class="math inline">\(0.5m*0.5m\)</span> resolution, and TROLL simulates forests with horizontal cell size set to 1m². Other resolutions are technically possible, but were not further explored, and increase computation time. As TROLL supports only one tree per cell, we handled cells containing several trees: the solution was either to keep only the most prominent tree in each conflicting cell or to replace the smallest trees in a randomly sampled, nearby free cell with an algorithm (details available on demand). Both introduce some bias, as it consists of direct modification of the raw data. Deleting trees is, in our opinion, worse than moving them of 1 or 2 meters, because it has more impact on canopy structure, thus on competition for light, which is the central process modeled with TROLL.</p>
+</div>
+<div id="missing-understoreys" class="section level3">
+<h3><span class="header-section-number">5.2.4</span> Missing understoreys</h3>
+<p>Paracou censuses only include trees over 10 cm dbh, whereas TROLL simulates trees from 1 cm dbh (or 1m height). Direct similation from Paracou censuses, without any tree under 10 cm dbh initially present, is highly erroneous. The regeneration of the understorey strata from scratch would inducs a latency between the beginning of the simulation and the first “recruitment” events(<em>sensu</em> reaching <span class="math inline">\(10\ cm\ dbh\)</span>). In reality, recruitment happens continuously and new trees over <span class="math inline">\(10\ cm\ dbh\)</span> are registered every year. We thus had to dodge this problem the most reasonably as can be: We first simulated the forests’ understoreys, that we re-injected in the initial maps.</p>
+<p>We considered the following simplifying assumptions:</p>
+<ul>
+<li>To simulate an understorey with TROLL in order to simulate a plot with TROLL is than using another solution (for consistency).</li>
+<li>TROLL simulates explicitely competition for ligth, so the upper-stratae spatial structure impact the lower-stratae.</li>
+<li>Even if logging damages let part of the &gt;10cm trees survive, the understorey must have been more impacted in the corresponding areas : skidders and bulldozers tend to avoid big trees, but slaughter small trees.</li>
+<li>Thus, the understorey of a logged plot is finally a spatial mixture of “mature state” and “early stage” understoreys.</li>
+</ul>
+<p>We derived modeling choices considering these assumptions:</p>
+<ul>
+<li><p>The final understorey we use to inject to the <span class="math inline">\(&gt;10dbh\)</span> census for logged plots is constructed from two distinct TROLL simulations of two different censuses, and spatially consistent with the geographic data available for the plots and the upper strata structure.</p></li>
+<li><p>For undamaged zones in disturbed plots, we simulated the understoreys from the last Paracou prelogging census during 30 years, which was a compromise between a “mature state” understorey and having initial (real) trees still alive, for spatial consistency.</p></li>
+<li><p>For areas located within damaged zones, we simulated an understorey from the 1992 censuses for 5 years, to obtain a young understorey that has undergone high enlightenment in opened areas</p></li>
+<li><p>For control plots, a single understorey was simulated for 30 years and reinjected in the census.</p></li>
+</ul>
+<p>We used damaged areas shapefiles obtained from <a href="https://paracoumaps.cirad.fr" class="uri">https://paracoumaps.cirad.fr</a>.</p>
+</div>
+<div id="simulation-parameters" class="section level3">
+<h3><span class="header-section-number">5.2.5</span> Simulation parameters</h3>
+<p>The simulation parameters were all TROLL default parameters (calibrated in <span class="citation">Marechaux (<a href="#ref-Marechaux2017">2017</a>)</span>, adapted for the new version by Fabian Fischer (<em>pers. comm.</em>), except the seedrain scaling constant and the mortality rate parameters.</p>
+<p>We initlally tested a wide range of seedrain parameters to determine the values that gave realistic results, to use if for our subsequent <em>in silico</em> experiment. This constant can have a strong influence on commercial tree species regeneration, of which depends directly the conclusions we can draw from logging experiments. TROLL’s default to simulate forests from bare ground is C_seedrain = 50000 seeds/ha, and certainly overestimates the importance of this process in our framework. We tested 100%, 50%, 25%, 10% and 5% of the default value.</p>
+<p>Mortality parameters were first let to default values (i.e. the minimum mortality rate, m0 = 0.025; and the slope, m1 = 0.025), but we tested softer mortality rates <em>a posteriori</em>, decreasing from 0.020 to 0.010 since the results were highly unrealistic.</p>
+</div>
+<div id="spatial-structure-analysis" class="section level3">
+<h3><span class="header-section-number">5.2.6</span> Spatial structure analysis</h3>
+<p>After seeing the first outputs, we simulated mature forests corresponding to each plot in terms of species composition (regional frequencies set to plot frequencies and default seed-rain scaling constant). Simulations lasted 600 years, which is assumed to be the time needed to reach ecosystem maturity in TROLL for high seed-rain constant values <span class="citation">(Marechaux <a href="#ref-Marechaux2017">2017</a>)</span>.</p>
+<p>Spatial statistical analyses were performed using the ads R-package <span class="citation">(Pelissier <a href="#ref-Amap2015">2015</a>)</span>. We compared the spatial structure of TROLL and Paracou forests using classical spatial indices, based upon Ripley’s K function <span class="citation">(Ripley <a href="#ref-Ripley1977">1977</a>)</span>: L(r), a linearization of Ripley’s K <span class="citation">(Besag <a href="#ref-Besag1977">1977</a>)</span>; and g(r), the pair density function;. The first (L) is linked to the expected number of neighbours present in a circle of radii r and centered on each point of the map. The second (g) is linked to the mean number of neighbours present between two consecutive circles at a distance r and r+dr, for all the points in the map.</p>
+</div>
+</div>
+<div id="results-and-discussion" class="section level2">
+<h2><span class="header-section-number">5.3</span> Results and discussion</h2>
+<div id="simulated-trajectories" class="section level3">
+<h3><span class="header-section-number">5.3.1</span> Simulated trajectories</h3>
+<div class="figure"><span id="fig:paracoutest"></span>
+<img src="master-thesis_files/figure-html/paracoutest-1.png" alt="Trajectories obtained with TROLL, using real data as an input. A and B are outputs obtained with the plot number 11 (undisturbed). D and C are the results obtained with plot 2 (selectively logged). A and D show tree density per hectare for individuals above 30 cm dbh over time. B and D display the evolution of above-ground biomass over time. Each curve is a distinct simulation. Simulations lasted 5 years. " width="0.8\textwidth" />
+<p class="caption">
+Figure 5.2: Trajectories obtained with TROLL, using real data as an input. A and B are outputs obtained with the plot number 11 (undisturbed). D and C are the results obtained with plot 2 (selectively logged). A and D show tree density per hectare for individuals above 30 cm dbh over time. B and D display the evolution of above-ground biomass over time. Each curve is a distinct simulation. Simulations lasted 5 years.
+</p>
+</div>
+<p>Figure <a href="can-troll-simulate-real-forests-and-post-logging-trajectories.html#fig:paracoutest">5.2</a> shows the trajectories obtained for a control plot (T0) and a logged plot (T1), in terms of above-ground carbon biomass (AGB, <span class="math inline">\(kgC.ha^{-1}\)</span>) and densities of canopy trees (<span class="math inline">\(dbh &gt; 30\)</span>,N30,<span class="math inline">\(ha^{-1}\)</span>). In every plot and for every simulation, we observed an anormal decrease in AGB and N30. This pattern holded at every mortality rate tested, although high mortality lead to stronger decreases in AGB and N30. This surprinsing behavior is not likely to be linked to the way we simulated the understorey, because it affects trees over 30 dbh. To understand these results, we adopted a spatial analysis approch, wich results are presented hereafter.</p>
+</div>
+<div id="spatial-statistics" class="section level3">
+<h3><span class="header-section-number">5.3.2</span> Spatial statistics</h3>
+<p>The spatial distribution of trees over 30 cm dbh differed greatly between real forests (year 1992) and mature simulated forests, regardless if real plots have been logged or are undisturbed (Figures <a href="can-troll-simulate-real-forests-and-post-logging-trajectories.html#fig:spatialcontrol">5.3</a> and <a href="can-troll-simulate-real-forests-and-post-logging-trajectories.html#fig:spatiallogged">5.4</a>). This pattern holds for every plot (not shown). The <span class="math inline">\(L(r)\)</span> function (C and D, on both) curves slightly differ for logged and disturbed plots, with a slightly overdispersed spatial structure for radii between 3 and 10 meters in control plots. In simulated mature forests, <span class="math inline">\(L(r)\)</span> reaches extremely low values for radii up to 10 meters. The rest of the curve probably stays out of the confidence interval because of the well-known autocorrelation inherent to <span class="math inline">\(L(r)\)</span>. The <span class="math inline">\(g(r)\)</span> function curves bring more reasonable results, yet still showing an stong significant overdispersion in simulated mature forests, for radii between 1 and 5 meters. The <span class="math inline">\(g(r)\)</span> curves are computed for consecutive crowns (the inner-most circle is eliminated). This yields more reasonable, autocorrelation-free results, yet loosing discrimination power. These results show that TROLL severely overdisperses trees over 30 cm dbh compared to real forests at relatively small scale (radius &lt; 5m).</p>
+<div class="figure"><span id="fig:spatialcontrol"></span>
+<img src="plots/p01/Plot_1.pdf" alt="Spatial structure of simulated (A and C) and real (B and D) forests for Paracou plot P1 (undisturbed). A and B show the distribution of g(r), the pair density function. C and D show the distribution or L(r), a linearization of Ripley's K. Both were computed for 30 radii ranging from 1 to 30 meters. Solid black lines are the observed distributions, dotted red lines represent the expected mean distribution under null hypothesis (Complete Spatial Randomness, CSR). Green areas are 99% confidence intervals (CIs) around the CSR null distribution means (for each radius), that were obtained by resampling randomly trees coordinates (1000 simulations). Parts of the curves that are out the CIs, for a given radius, violate the assumption of CSR for this radius. Values under the CIs indicate an overdispersed repartition, and values over the CIs, a clustered repartition" width="0.8\textwidth" />
+<p class="caption">
+Figure 5.3: Spatial structure of simulated (A and C) and real (B and D) forests for Paracou plot P1 (undisturbed). A and B show the distribution of g(r), the pair density function. C and D show the distribution or L(r), a linearization of Ripley’s K. Both were computed for 30 radii ranging from 1 to 30 meters. Solid black lines are the observed distributions, dotted red lines represent the expected mean distribution under null hypothesis (Complete Spatial Randomness, CSR). Green areas are 99% confidence intervals (CIs) around the CSR null distribution means (for each radius), that were obtained by resampling randomly trees coordinates (1000 simulations). Parts of the curves that are out the CIs, for a given radius, violate the assumption of CSR for this radius. Values under the CIs indicate an overdispersed repartition, and values over the CIs, a clustered repartition
+</p>
+</div>
+<div class="figure"><span id="fig:spatiallogged"></span>
+<img src="plots/p01/Plot_3.pdf" alt="Spatial structure of simulated (A and B) and real (C and D) forests for Paracou plot P1 (logged). These graphics correspond rigourously to the figure, please refer to its label for description and interpretation tips." width="0.8\textwidth" />
+<p class="caption">
+Figure 5.4: Spatial structure of simulated (A and B) and real (C and D) forests for Paracou plot P1 (logged). These graphics correspond rigourously to the figure, please refer to its label for description and interpretation tips.
+</p>
+</div>
+</div>
+<div id="synthesis" class="section level3">
+<h3><span class="header-section-number">5.3.3</span> Synthesis</h3>
+<p>There are several possible reasons to the results of the simulations from real data. First, it might an inaccurate parametrization of the model, but <span class="citation">Maréchaux &amp; Chave (<a href="#ref-Marechaux2017a">2017</a>)</span> intensively calibrated TROLL. Another can be an overestimated basal mortality rate, we tested a wide range of values, and the lowest (0.001) attenuated the phenomenon (not shown). However, this mortality event was always conspicuously displayed in the output graphs, for . A factor also influencing the results may be our data pre-treatment, consisting in replacing trees with duplicated coordinates. The observed pattern is however homogen for all simulations, that were led with different random seeds. Our last hypothesis is that the observed result are due to a difference in spatial structure between TROLL and real forests, influencing the modeled light competition effects.</p>
+<p>It may seem difficult to disentangle the effects of light competition and discretisation (cells of 1m²) on TROLL’s spatiallisation. We are comparing two structurally different objects. TROLL is constrained to homogen spatial structure at fine scale (say, from 1-2 m radius) because of its assumption of a discrete space, with maximum 1 tree per cell, while Paracou plots are mapped with a 0.5m resolution. Whilst the same analysis for saplings or poles (<em>sensu</em> <span class="math inline">\(&lt;10\)</span> and <span class="math inline">\(&lt;20\)</span> cm dbh) might only reveal the obvious effects of TROLL’s design, focusing on big trees (over 30cm dbh) brings interesting clues to explain the results observed with simulations from real data.</p>
+<p>Competition for light is the principal ressource-limiting process modelled in TROLL, which reproduces realistic forests in terms of global variables and floristic composition <span class="citation">(see Marechaux <a href="#ref-Marechaux2017">2017</a>)</span>. It seems likely that TROLL underestimates trees’ tolerance to shade or vicinity with other big trees, thus making simulation from real data irrelevant for structural reasons.</p>
+<p>We can question the validity of the model, because in natural forest, certain demographic and successional processes rely on trees vicinity, for example what we can call <em>substitution</em>, a successful strategy some trees, consisting in thriving close to bigger “pairs” to benefit additional water and nutrients (Stéphane Traissac, <em>pers. comm.</em>). However, the fact that TROLL might overestimate competition for light, and makes forest with overdispersion of big trees, certainly does not take away its numerous strengths. TROLL is still an valuable tool for various purposes, such as jointly simulating carbon and biodiversity (<span class="citation">Marechaux (<a href="#ref-Marechaux2017">2017</a>)</span>), exploring the impact of forests composition on ecosystem resilience (<span class="citation">Schmitt (<a href="#ref-Schmitt2017">2017</a>)</span>), or simulate selective logging with unequalized spatial resolution. Modelling real forest with TROLL is just not what it is meant to… for now. Future developments may enable to do it.</p>
+
+</div>
+</div>
+</div>
+<h3>References</h3>
+<div id="refs" class="references">
+<div id="ref-Marechaux2017">
+<p>Marechaux, I. (2017). Biodiversity and Responses To Drought. </p>
+</div>
+<div id="ref-Blanc2009">
+<p>Blanc, L., Echard, M., Herault, B., Bonal, D., Marcon, E., Baraloto, C. &amp; Chave, J. (2009). carbon stocks Dynamics of aboveground in a selectively logged tropical forest. <em>Ecological Applications</em>, <strong>19</strong>, 1397–1404.</p>
+</div>
+<div id="ref-Amap2015">
+<p>Pelissier, B. (2015). ads Package for R : A Fast Unbiased Implementation of the K -function Family for Studying Spatial Point. <strong>63</strong>.</p>
+</div>
+<div id="ref-Ripley1977">
+<p>Ripley, B. (1977). Modelling spatial patterns. <em>Journal of the Royal Statistical Society B</em>, <strong>39</strong>, 172–192.</p>
+</div>
+<div id="ref-Besag1977">
+<p>Besag, J. (1977). Discussion on Dr Ripley’s paper. <em>Journal of the Royal Statistical Society B</em>, <strong>39</strong>, 193–195.</p>
+</div>
+<div id="ref-Marechaux2017a">
+<p>Maréchaux, I. &amp; Chave, J. (2017). An individual-based forest model to jointly simulate carbon and tree diversity in Amazonia: description and applications. <em>Ecological Monographs</em>, <strong>87</strong>, 632–664.</p>
+</div>
+<div id="ref-Schmitt2017">
+<p>Schmitt, S. (2017). <em>Rôle de la biodiversité dans la résilience des écosystèmes forestiers tropicaux après perturbation</em>.</p>
+</div>
+</div>
+<div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://master-thesis-1.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="including-more-species-in-troll-simulations.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="modelling-silviculture-with-troll-from-reality-to-simulations.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/sylvainschmitt/master-thesis/blob/master/04-Paracou.Rmd",
+"text": "Edit"
+},
+"download": ["master-thesis.pdf"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

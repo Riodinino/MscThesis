@@ -1,0 +1,126 @@
+/* This is a STAN model for hierarchical inference of allometries */
+/* We use a Michaelis Menten type allometry */
+/* grouping is done per species and per individual (several observations per individual possible) */
+
+data {
+    int<lower=0> Ntotal ;                           // Observations
+    int<lower=0,upper=Ntotal> Nspecies ;                         // grouping entity: species
+    int<lower=0,upper=Nspecies> ID_species[Ntotal] ;         // ID of species
+    vector<lower=0,upper=100>[Ntotal] h ;                          // predicted value h, to be given in m
+    vector<lower=0,upper=5>[Ntotal] dbh ;                            // predictor value dbh, to be given in m
+}
+
+transformed data {
+    vector[Ntotal] h_log ;                            // h transformed to log dimension
+    vector<lower=0>[Ntotal] dbh_adjusted ;
+
+    /* we reduce h beforehand to bring the parameter hmax closer to range between 0 and 1:
+        - maximum heights are usually around 50
+        - given lognormal errors hmax (the asymptotic height in MM model) should be well below this value
+    */
+    h_log = log(h) ;                 
+
+    /* similar reasoning to bring beta closer to range between 0 and 1 */
+    dbh_adjusted = dbh ; 
+
+}
+
+parameters {
+    
+    real<lower=0> sigma ;                                       // overall model error
+    real<lower=0> beta ;
+    real<lower=0> hmax ;
+    real<lower=0> beta_sigma_species ;                              // could be vectors, right?
+    real<lower=0> hmax_sigma_species ;                              // could be vectors, right?
+    
+    /* raw vectors for non-centered parameterisation */
+    
+    vector[Nspecies] beta_dev_species_raw ;          // beta raw deviation derived for every species    
+    vector[Nspecies] hmax_dev_species_raw ;          // hmax raw deviation derived for every species
+}
+
+transformed parameters {
+
+    
+    /* the individual and species means */
+
+    vector<lower=0>[Nspecies] beta_species ;
+    vector<lower=0>[Nspecies] hmax_species ;    
+
+    /* deriving actual deviations from raw deviations */
+    
+    vector[Nspecies] beta_dev_species ;          // beta deviation derived for every species    
+    vector[Nspecies] hmax_dev_species ;          // hmax deviation derived for every species
+    
+    vector<lower=0>[Ntotal] hm_sp ; 
+    vector<lower=0>[Ntotal] be_sp ;
+    
+    for(i in 1:Ntotal){
+      hm_sp[i] = hmax_species[ID_species[i]];
+    }
+    for(i in 1:Ntotal){
+      be_sp[i] = beta_species[ID_species[i]];
+    }
+
+    beta_dev_species = beta_sigma_species * beta_dev_species_raw ;
+    hmax_dev_species = hmax_sigma_species * hmax_dev_species_raw ;
+    
+    // species level 
+
+    beta_species = beta + beta_dev_species ;
+    hmax_species = hmax + hmax_dev_species ;
+    // for(s in 1:Nspecies){
+    // beta_species[s] = beta + beta_dev_species[s] ;
+    // hmax_species[s] = hmax + hmax_dev_species[s] ;}    
+    
+
+}
+
+model {
+
+  
+    vector[Ntotal] h_hat ;
+//    vector[Ntotal] hm_sp ; 
+//    vector[Ntotal] be_sp ;
+    
+
+    //choose informative priors for beta and hmax
+
+    beta ~ normal(200,100) ;
+    hmax ~ normal(30,20) ;
+    
+    // weakly informative prior for standard deviations
+
+    // of the Michaelis Menten model
+    sigma ~ cauchy(0,2.5);
+
+    // of hierarchical parameters
+    beta_sigma_species ~ cauchy(0,2.5);
+    hmax_sigma_species ~ cauchy(0,2.5);
+    
+    // modelling the parameter distributions
+    beta_dev_species_raw ~ normal(0,1) ;
+    hmax_dev_species_raw ~ normal(0,1) ;
+
+    // the Michaelis Menten distribution
+
+    for (i in 1:Ntotal)
+		h_hat[i] = log(1/(1/hm_sp[i] + 1/(be_sp[i]*dbh_adjusted[i]))) ; // h_hat vectoris? ?
+    h_log ~ normal(h_hat, sigma) ;
+
+}
+
+generated quantities {
+    vector[Nspecies] ah_species ;
+    vector[Nspecies] hmax_species_backtransform ;
+    real hmax_backtransform ;
+    hmax_backtransform = hmax ;
+    hmax_species_backtransform = hmax_species ;
+    for (j in 1:Nspecies) {
+        ah_species[j] = hmax_species[j] / beta_species[j] ;
+    }
+    
+    // generate values for posterior predictive checks
+    // vector[1000] h_pred ;
+    // for(n in 1:1000) h_pred[n] = normal_rng(h_hat, sigma);
+}
